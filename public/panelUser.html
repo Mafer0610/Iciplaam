@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Datos</title>
+    <link rel="stylesheet" href="css/stylesIniAdmin.css">
+    <script src="btn/delete.js"></script>
+    <script src="btn/agregar.js"></script>
+    <script>
+        async function cargarTabla() {
+            const tbody = document.getElementById("tabla-lapidas");
+            tbody.innerHTML = "";
+            try {
+                const response = await fetch('http://localhost:5000/lapidas');
+                let lapidas = await response.json();
+                lapidas = lapidas.slice(0, 15);
+
+                lapidas.forEach(lapida => {
+                    let fila = `
+                    <tr>
+                        <td>${lapida.NOM_REG}</td>
+                        <td>${lapida.NOMBRE_PROPIE}</td>
+                        <td>${lapida.EDO_CONTRI}</td>
+                        <td>${lapida.MEDIDAS}</td>
+                        <td>${lapida.ZONA}</td>
+                        <td>${lapida.FILA}</td>
+                        <td>${lapida.X}</td>
+                        <td>${lapida.Y}</td>
+                        <td>${lapida.CUENTA}</td>
+                    </tr>
+                    `;
+                    tbody.innerHTML += fila;
+                });
+            } catch (error) {
+                console.error("Error al cargar los datos:", error);
+            }
+        }
+
+        async function buscarRegistro() {
+            const filtro = document.getElementById("txtbuscar").value.toLowerCase();
+            try {
+                const response = await fetch('http://localhost:5000/lapidas');
+                const lapidas = await response.json();
+
+                const resultados = lapidas.filter(lapida =>
+                    lapida.NOM_REG.toLowerCase().includes(filtro) ||
+                    lapida.NOMBRE_PROPIE.toLowerCase().includes(filtro)
+                );
+
+                mostrarResultados(resultados, filtro);
+            } catch (error) {
+                console.error("Error al buscar registros:", error);
+            }
+        }
+
+        function mostrarResultados(resultados, filtro) {
+            const tbody = document.getElementById("tabla-lapidas");
+            tbody.innerHTML = "";
+
+            resultados.slice(0, 20).forEach(lapida => {
+                let fila = `
+                <tr>
+                    <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
+                    <td>${resaltarCoincidencia(lapida.NOMBRE_PROPIE, filtro)}</td>
+                    <td>${lapida.EDO_CONTRI}</td>
+                    <td>${lapida.MEDIDAS}</td>
+                    <td>${lapida.ZONA}</td>
+                    <td>${lapida.FILA}</td>
+                    <td>${lapida.X}</td>
+                    <td>${lapida.Y}</td>
+                    <td>${lapida.CUENTA}</td>
+                </tr>
+                `;
+                tbody.innerHTML += fila;
+            });
+        }
+
+        function resaltarCoincidencia(texto, filtro) {
+            if (!filtro) return texto;
+            const regex = new RegExp(`(${filtro})`, "gi");
+            return texto.replace(regex, '<span style="background-color: yellow;">$1</span>');
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarTabla);
+    </script>
+</head>
+<body>
+    <header>Gestión de Datos</header>
+    <div class="contenedor-tabla">
+        <div class="table-container">
+            <div class="barra-busqueda">
+                <input type="text" id="txtbuscar" placeholder="Buscar por nombre de registro o propietario" onkeyup="buscarRegistro()">
+                <button class="btn-buscar" onclick="buscarRegistro()">Buscar</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>REGION</th>
+                        <th>PROPIETARIO</th>
+                        <th>CONTRATO</th>
+                        <th>MEDIDAS</th>
+                        <th>ZONA</th>
+                        <th>FILA</th>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>CUENTA</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-lapidas"></tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
