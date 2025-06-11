@@ -14,7 +14,6 @@ header {
     font-weight: bold;
 }
 
-.barra-busqueda .btn-buscar,
 .barra-busqueda .btn-agregar {
     background-color: #2E7FCF;
     color: white;
@@ -26,7 +25,6 @@ header {
     display: inline-block;
 }
 
-.barra-busqueda .btn-buscar:hover,
 .barra-busqueda .btn-agregar:hover {
     background-color: #398de0;
 }

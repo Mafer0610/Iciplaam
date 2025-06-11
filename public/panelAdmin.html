@@ -28,10 +28,14 @@
                         <td>${lapida.FILA}</td>
                         <td>${lapida.X}</td>
                         <td>${lapida.Y}</td>
-                        <td>${lapida.CUENTA}</td>
-                        <td><button onclick="eliminarRegistro('${lapida._id}')">
-                            <img src="img/basura.svg" alt="Eliminar" width="20">
-                        </button></td>
+                        <td>
+                            <button onclick="eliminarRegistro('${lapida._id}')">
+                                <img src="img/basura.svg" alt="Eliminar" width="20">
+                            </button>
+                            <a href="editar.html?id=${lapida._id}">
+                                <img src="img/editar.svg" alt="Editar" width="20" style="margin-left: 5px;">
+                            </a>
+                        </td>
                     </tr>
                     `;
                     tbody.innerHTML += fila;
@@ -73,10 +77,14 @@
                     <td>${lapida.FILA}</td>
                     <td>${lapida.X}</td>
                     <td>${lapida.Y}</td>
-                    <td>${lapida.CUENTA}</td>
-                    <td><button onclick="eliminarRegistro('${lapida._id}')">
-                        <img src="img/basura.svg" alt="Eliminar" width="20">
-                    </button></td>
+                    <td>
+                        <button onclick="eliminarRegistro('${lapida._id}')">
+                            <img src="img/basura.svg" alt="Eliminar" width="20">
+                        </button>
+                        <a href="editar.html?id=${lapida._id}">
+                            <img src="img/editar.svg" alt="Editar" width="20" style="margin-left: 5px;">
+                        </a>
+                    </td>
                 </tr>
                 `;
                 tbody.innerHTML += fila;
@@ -98,8 +106,7 @@
         <div class="table-container">
             <div class="barra-busqueda">
                 <input type="text" id="txtbuscar" placeholder="Buscar por nombre de registro o propietario" onkeyup="buscarRegistro()">
-                <button class="btn-buscar" onclick="buscarRegistro()">Buscar</button>
-                <button class="btn-agregar" onclick="document.getElementById('register-form').style.display='block'">Agregar Registro</button>
+                <a href="btn/agregarInfo.html" class="btn-agregar">Agregar información</a>
             </div>
             <table>
                 <thead>
@@ -112,7 +119,6 @@
                         <th>FILA</th>
                         <th>X</th>
                         <th>Y</th>
-                        <th>CUENTA</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
