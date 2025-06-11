@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Datos</title>
-    <link rel="stylesheet" href="css/stylesIniAdmin.css">
+    <link rel="stylesheet" href="css/stylesInicio.css">
     <script src="btn/delete.js"></script>
     <script src="btn/agregar.js"></script>
     <script>
@@ -14,7 +14,7 @@
             try {
                 const response = await fetch('http://localhost:5000/lapidas');
                 let lapidas = await response.json();
-                lapidas = lapidas.slice(0, 15);
+                lapidas = lapidas.slice(0, 7);
 
                 lapidas.forEach(lapida => {
                     let fila = `
@@ -58,7 +58,7 @@
             const tbody = document.getElementById("tabla-lapidas");
             tbody.innerHTML = "";
 
-            resultados.slice(0, 20).forEach(lapida => {
+            resultados.slice(0, 50).forEach(lapida => {
                 let fila = `
                 <tr>
                     <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
