@@ -4,38 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="form-container">
         <h2>Registro de Usuario</h2>
-        NOM_REG, NOMBRE_PROPIE, DIRECCION, UBICACION, LOTE, MEDIDAS_NO, EDO_CONTRI, 
-        COLONIA, MEDIDAS, LOTES_A, ZONA, FILA, RUTA, X, Y, CVE_POB, CVE_PANTEO, 
-        CVE_ZONA, CVE_LOTE, CUENTA
         <form id="register-form">
             <input type="text" name="NOM_REG" placeholder="Número Registro" required>
             <input type="text" name="NOMBRE_PROPIE" placeholder="Nombre Propietario" required>
-            <input type="text" name="DIRECCION" placeholder="Dirección" required>
+            <input type="text" name="DIRECCION" placeholder="Dirección">
             <input type="text" name="UBICACION" placeholder="Ubicación" required>
             <input type="text" name="LOTE" placeholder="Lote" required>
-            <input type="text" name="MEDIDAS_NO" placeholder="Número de medidas" required>
+            <input type="text" name="MEDIDAS_NO" placeholder="Medidas no convencionales" required>
             <input type="text" name="EDO_CONTRI" placeholder="Estado Contribución" required>
-            <input type="text" name="COLONIA" placeholder="Colonia" required>
-            <input type="text" name="MEDIDAS" placeholder="Medidas" required>
+            <input type="text" name="COLONIA" placeholder="Colonia">
+            <input type="text" name="MEDIDAS" placeholder="Medidas">
             <input type="text" name="LOTE_A" placeholder="Lote aprox" required>
             <input type="text" name="ZONA" placeholder="Zona" required>
             <input type="text" name="FILA" placeholder="Fila" required>
             <input type="text" name="RUTA" placeholder="Ruta" required>
             <input type="text" name="X" placeholder="Coordenada X" required>
             <input type="text" name="Y" placeholder="Coordenada Y" required>
-            <input type="text" name="CVE_POB" placeholder="Lote" required>
-            <input type="text" name="CVE_PANTEO" placeholder="Lote" required>
-            <input type="text" name="CVE_ZONA" placeholder="Lote" required>
-            <input type="text" name="CVE_LOTE" placeholder="Lote" required>
+            <input type="text" name="CVE_POB" placeholder="CVE población" required>
+            <input type="text" name="CVE_PANTEO" placeholder="CVE panteón" required>
+            <input type="text" name="CVE_ZONA" placeholder="CVE zona" required>
+            <input type="text" name="CVE_LOTE" placeholder="CVE lote" required>
             <input type="text" name="CUENTA" placeholder="Cuenta" required>
             <button type="submit">Agregar Lápida</button>
         </form>
     </div>
-    <script src="js/script.js"></script>
+    <script src="agregar.js"></script>
 </body>
 </html>
