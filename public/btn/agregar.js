@@ -11,7 +11,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         EDO_CONTRI: document.getElementById('EDO_CONTRI').value,
         COLONIA: document.getElementById('COLONIA').value,
         MEDIDAS: document.getElementById('MEDIDAS').value,
-        LOTES_A: document.getElementById('LOTES_A').value,
+        LOTE_A: document.getElementById('LOTE_A').value,
         ZONA: document.getElementById('ZONA').value,
         FILA: document.getElementById('FILA').value,
         RUTA: document.getElementById('RUTA').value,
@@ -35,8 +35,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
 
         if (data.message) {
             alert(data.message);
-            document.getElementById('register-form').style.display = 'none';
-            cargarTabla();
+            document.getElementById('register-form').reset(); // Limpia el formulario
         } else {
             alert("Error al agregar el registro, intenta de nuevo.");
         }
