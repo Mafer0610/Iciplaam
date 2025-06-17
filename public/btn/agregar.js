@@ -13,7 +13,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         MEDIDAS: document.getElementById('MEDIDAS').value,
         LOTE_A: document.getElementById('LOTE_A').value,
         ZONA: document.getElementById('ZONA').value,
-        FILA: document.getElementById('FILA').value,
+        FILA: document.getElementById('FILA').value, 
         RUTA: document.getElementById('RUTA').value,
         X: document.getElementById('X').value,
         Y: document.getElementById('Y').value,
@@ -24,6 +24,8 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         CUENTA: document.getElementById('CUENTA').value
     };
 
+    console.log("Datos enviados:", formData); // ✅ Verificación en consola
+
     try {
         const response = await fetch('http://localhost:5000/lapidas', {
             method: 'POST',
@@ -31,16 +33,17 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
             body: JSON.stringify(formData)
         });
 
-        const data = await response.json();
-
-        if (data.message) {
-            alert(data.message);
-            document.getElementById('register-form').reset(); // Limpia el formulario
-        } else {
-            alert("Error al agregar el registro, intenta de nuevo.");
+        if (!response.ok) {
+            throw new Error("Error al agregar el registro, intenta de nuevo.");
         }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        alert("Registro agregado correctamente.");
+        document.getElementById('register-form').reset();
     } catch (error) {
         console.error("Error en la solicitud:", error);
-        alert("Hubo un problema al agregar el registro. Inténtalo más tarde.");
+        alert(error.message);
     }
 });
