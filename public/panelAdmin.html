@@ -15,9 +15,7 @@
             try {
                 const response = await fetch('http://localhost:5000/lapidas');
                 let lapidas = await response.json();
-                lapidas = lapidas.slice(0, 6);
-
-                lapidas.forEach(lapida => {
+                lapidas.slice(0, 6).forEach(lapida => {
                     let fila = `
                     <tr>
                         <td>${lapida.NOM_REG}</td>
@@ -48,15 +46,10 @@
         async function buscarRegistro() {
             const filtro = document.getElementById("txtbuscar").value.toLowerCase();
             try {
-                const response = await fetch('http://localhost:5000/lapidas');
+                const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
                 const lapidas = await response.json();
 
-                const resultados = lapidas.filter(lapida =>
-                    lapida.NOM_REG.toLowerCase().includes(filtro) ||
-                    lapida.NOMBRE_PROPIE.toLowerCase().includes(filtro)
-                );
-
-                mostrarResultados(resultados, filtro);
+                mostrarResultados(lapidas, filtro);
             } catch (error) {
                 console.error("Error al buscar registros:", error);
             }
@@ -66,7 +59,7 @@
             const tbody = document.getElementById("tabla-lapidas");
             tbody.innerHTML = "";
 
-            resultados.slice(0, 50).forEach(lapida => {
+            resultados.forEach(lapida => {
                 let fila = `
                 <tr>
                     <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
