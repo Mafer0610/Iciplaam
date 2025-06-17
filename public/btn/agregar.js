@@ -24,7 +24,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         CUENTA: document.getElementById('CUENTA').value
     };
 
-    console.log("Datos enviados:", formData); // ✅ Verificación en consola
+    console.log("Datos enviados:", formData); 
 
     try {
         const response = await fetch('http://localhost:5000/lapidas', {
