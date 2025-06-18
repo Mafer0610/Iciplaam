@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const lapidaId = urlParams.get("lapida");
+    const lapidaId = urlParams.get("id");
 
     if (lapidaId) {
         try {
