@@ -40,6 +40,20 @@ app.get('/lapidas', async (req, res) => {
     }
 });
 
+//ver
+app.get('/lapidas/:NOM_REG', async (req, res) => {
+    try {
+        const lapida = await Lapida.findOne({ NOM_REG: req.params.NOM_REG });
+        if (!lapida) {
+            return res.status(404).json({ error: "Lápida no encontrada" });
+        }
+        res.json(lapida);
+    } catch (err) {
+        console.error("Error al buscar lápida:", err);
+        res.status(500).json({ error: "Error en el servidor" });
+    }
+});
+
 //Agregar
 app.post('/lapidas', async (req, res) => {
     try {
@@ -60,6 +74,7 @@ app.delete('/lapidas/:id', async (req, res) => {
     }
 });
 
+//actualizar
 app.put('/lapidas/:NOM_REG', async (req, res) => {
     try {
         const lapidaActualizada = await Lapida.findOneAndUpdate(

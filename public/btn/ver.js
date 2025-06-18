@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CVE_LOTE").textContent = lapida.CVE_LOTE || "Sin clave";
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
         
-        // Si hay una imagen, mostrarla
         if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
             const rutaElement = document.getElementById("RUTA");
             rutaElement.innerHTML = `<a href="${lapida.RUTA}" target="_blank">Ver imagen</a>`;

@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const lapidaData = Object.fromEntries(formData);
 
         try {
-            // Usar NOM_REG para actualizar
             const response = await fetch(`http://localhost:5000/lapidas/${lapidaData.NOM_REG}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
