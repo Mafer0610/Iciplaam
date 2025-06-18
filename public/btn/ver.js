@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const params = new URLSearchParams(window.location.search);
     const registroId = params.get("NOM_REG");
+    
     if (!registroId) {
         console.warn("No se proporcionó un NOM_REG en la URL.");
+        document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>⚠️ No se proporcionó ID de registro.</td></tr>";
         return;
     }
 
@@ -32,8 +34,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CVE_ZONA").textContent = lapida.CVE_ZONA || "Sin clave";
         document.getElementById("CVE_LOTE").textContent = lapida.CVE_LOTE || "Sin clave";
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
+        
+        // Si hay una imagen, mostrarla
+        if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
+            const rutaElement = document.getElementById("RUTA");
+            rutaElement.innerHTML = `<a href="${lapida.RUTA}" target="_blank">Ver imagen</a>`;
+        }
+        
     } catch (error) {
         console.error("Error al obtener los datos:", error);
-        document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>⚠️ No se pudo cargar la información.</td></tr>";
+        document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>No se pudo cargar la información.</td></tr>";
     }
 });

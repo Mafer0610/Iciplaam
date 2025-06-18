@@ -1,20 +1,23 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const lapidaId = urlParams.get("id");
+    const nomReg = urlParams.get("NOM_REG");
 
-    if (lapidaId) {
+    if (nomReg) {
         try {
-            const response = await fetch(`http://localhost:5000/lapidas/${lapidaId}`);
+            const response = await fetch(`http://localhost:5000/lapidas/${nomReg}`);
             if (!response.ok) throw new Error("Error al obtener los datos");
 
             const lapida = await response.json();
+            
             for (const key in lapida) {
-                if (document.getElementById(key)) {
-                    document.getElementById(key).value = lapida[key];
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = lapida[key] || "";
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error al cargar los datos:", error);
+            alert("Error al cargar los datos de la lápida");
         }
     }
 
@@ -24,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const lapidaData = Object.fromEntries(formData);
 
         try {
+            // Usar NOM_REG para actualizar
             const response = await fetch(`http://localhost:5000/lapidas/${lapidaData.NOM_REG}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -31,11 +35,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             if (!response.ok) throw new Error("Error al actualizar datos");
+            
+            const result = await response.json();
             alert("Registro actualizado correctamente");
-            window.location.href = "panelAdmin.html";
+            window.location.href = "../panelAdmin.html";
         } catch (error) {
-            console.error(error);
-            alert(error.message);
+            console.error("Error al actualizar:", error);
+            alert("Error al actualizar el registro: " + error.message);
         }
     });
 });
