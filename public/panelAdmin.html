@@ -15,7 +15,7 @@
             try {
                 const response = await fetch('http://localhost:5000/lapidas');
                 let lapidas = await response.json();
-                lapidas.slice(0, 7).forEach(lapida => {
+                lapidas.slice(0, 6).forEach(lapida => {
                     let fila = `
                     <tr>
                         <td>${lapida.NOM_REG}</td>
