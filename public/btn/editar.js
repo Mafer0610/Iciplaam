@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         } catch (error) {
             console.error(error);
-            window.location.href = "index.html";
         }
     }
 
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!response.ok) throw new Error("Error al actualizar datos");
             alert("Registro actualizado correctamente");
-            window.location.href = "lapidas.html";
+            window.location.href = "panelAdmin.html";
         } catch (error) {
             console.error(error);
             alert(error.message);
