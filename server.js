@@ -40,16 +40,32 @@ app.get('/lapidas', async (req, res) => {
     }
 });
 
+//detalles
+app.get('/lapidas/:NOM_REG', async (req, res) => {
+    try {
+        const lapida = await Lapida.findOne({ NOM_REG: req.params.NOM_REG });
+        if (!lapida) {
+            return res.status(404).json({ error: "Lápida no encontrada" });
+        }
+        res.json(lapida);
+    } catch (err) {
+        console.error("Error al obtener la lápida:", err);
+        res.status(500).json({ error: "Error al buscar la lápida" });
+    }
+});
+
+//Agregar
 app.post('/lapidas', async (req, res) => {
     try {
         const nuevaLapida = new Lapida(req.body);
         await nuevaLapida.save();
-        res.json({ mensaje: "✅ Lápida agregada correctamente" });
+        res.json({ mensaje: "Lápida agregada correctamente" });
     } catch (err) {
-        res.status(500).json({ error: "❌ Error al agregar la lápida" });
+        res.status(500).json({ error: "Error al agregar la lápida" });
     }
 });
 
+//Actualizar 
 app.put('/lapidas/:id', async (req, res) => {
     try {
         const lapidaActualizada = await Lapida.findOneAndUpdate(
@@ -69,13 +85,12 @@ app.put('/lapidas/:id', async (req, res) => {
     }
 });
 
-
 app.delete('/lapidas/:id', async (req, res) => {
     try {
         await Lapida.findByIdAndDelete(req.params.id);
-        res.json({ mensaje: "✅ Lápida eliminada correctamente" });
+        res.json({ mensaje: "Lápida eliminada correctamente" });
     } catch (err) {
-        res.status(500).json({ error: "❌ Error al eliminar la lápida" });
+        res.status(500).json({ error: "Error al eliminar la lápida" });
     }
 });
 
