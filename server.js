@@ -74,7 +74,7 @@ app.delete('/lapidas/:id', async (req, res) => {
     }
 });
 
-//actualizar
+//Actualizar
 app.put('/lapidas/:NOM_REG', async (req, res) => {
     try {
         const lapidaActualizada = await Lapida.findOneAndUpdate(
