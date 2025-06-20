@@ -13,7 +13,6 @@ body {
   align-items: center;
 }
 
-/* Contenedor principal */
 .login-box {
   display: flex;
   align-items: center;
@@ -23,7 +22,6 @@ body {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Imagen del avatar */
 .avatar-box img {
   width: 100px;
   height: 200px;
