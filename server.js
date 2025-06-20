@@ -22,6 +22,7 @@ app.use('/auth', authRoutes);
 
 const Lapida = require('./models/lapida');
 
+//busqueda
 app.get('/lapidas', async (req, res) => {
     const filtro = req.query.nombre?.toLowerCase() || "";
 
@@ -93,6 +94,15 @@ app.put('/lapidas/:NOM_REG', async (req, res) => {
         res.status(500).json({ error: "Error al actualizar la lápida" });
     }
 });
+
+app.get("/panelAdmin.html", (req, res) => {
+    if (req.session && req.session.usuarioAutenticado) {
+        res.sendFile(__dirname + "/public/panelAdmin.html");
+    } else {
+        res.redirect("/login.html");
+    }
+});
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
