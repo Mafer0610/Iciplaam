@@ -95,17 +95,10 @@ app.put('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
-app.get("/panelAdmin.html", (req, res) => {
-    if (req.session && req.session.usuarioAutenticado) {
-        res.sendFile(__dirname + "/public/panelAdmin.html");
-    } else {
-        res.redirect("/login.html");
-    }
-});
 
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
-app.listen(5000, () => console.log('🚀 Servidor en ejecución: http://localhost:5000'));
+app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));

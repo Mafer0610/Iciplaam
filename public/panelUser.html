@@ -14,7 +14,7 @@
                 const response = await fetch('http://localhost:5000/lapidas');
                 const lapidas = await response.json();
 
-                lapidas.slice(0, 7).forEach(lapida => {
+                lapidas.slice(0, 9).forEach(lapida => {
                     let fila = `
                     <tr>
                         <td>${lapida.NOM_REG}</td>
@@ -31,7 +31,7 @@
                     tbody.innerHTML += fila;
                 });
             } catch (error) {
-                console.error("❌ Error al cargar los datos:", error);
+                console.error("Error al cargar los datos:", error);
             }
         }
 
@@ -43,7 +43,7 @@
 
                 mostrarResultados(lapidas, filtro);
             } catch (error) {
-                console.error("❌ Error al buscar registros:", error);
+                console.error("Error al buscar registros:", error);
             }
         }
 
@@ -79,7 +79,6 @@
     </script>
 </head>
 <body>
-    <header>Gestión de Datos</header>
     <div class="contenedor-tabla">
         <div class="table-container">
             <div class="barra-busqueda">
