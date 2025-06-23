@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     if (!registroId) {
         console.warn("No se proporcionó un NOM_REG en la URL.");
-        document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>⚠️ No se proporcionó ID de registro.</td></tr>";
+        document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>No se proporcionó ID de registro.</td></tr>";
         return;
     }
 
