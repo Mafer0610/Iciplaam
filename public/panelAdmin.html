@@ -15,7 +15,7 @@
             try {
                 const response = await fetch('http://localhost:5000/lapidas');
                 let lapidas = await response.json();
-                lapidas.slice(0, 6).forEach(lapida => {
+                lapidas.slice(0, 7).forEach(lapida => {
                     let fila = `
                     <tr>
                         <td>${lapida.NOM_REG}</td>
@@ -27,15 +27,17 @@
                         <td>${lapida.X}</td>
                         <td>${lapida.Y}</td>
                         <td>
+                        <div class="acciones-container">
                             <button onclick="eliminarRegistro('${lapida._id}')">
-                                <img src="img/basura.svg" alt="Eliminar" width="20">
+                            <img src="img/basura.svg" alt="Eliminar" width="20">
                             </button>
                             <a href="btn/editarInfo.html?NOM_REG=${lapida.NOM_REG}">
-                                <img src="img/editar.svg" alt="Editar" width="20" style="margin-left: 5px;">
+                            <img src="img/editar.svg" alt="Editar" width="20">
                             </a>
                             <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
-                                <img src="img/ver.svg" alt="Ver" width="20" style="margin-left: 5px;">
+                            <img src="img/ver.svg" alt="Ver" width="20">
                             </a>
+                        </div>
                         </td>
                     </tr>
                     `;
@@ -100,7 +102,6 @@
     </script>
 </head>
 <body>
-    <header>Gestión de Datos</header>
     <div class="contenedor-tabla">
         <div class="table-container">
             <div class="barra-busqueda">

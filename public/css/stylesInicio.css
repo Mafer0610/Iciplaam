@@ -1,28 +1,31 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #f4f6fc;
 }
 
 header {
     background-color: #2E7FCF;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     color: white;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .barra-busqueda .btn-agregar {
     background-color: #2E7FCF;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 18px;
+    border-radius: 6px;
     cursor: pointer;
-    text-decoration: none;
     display: inline-block;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
 }
 
 .barra-busqueda .btn-agregar:hover {
@@ -32,77 +35,81 @@ header {
 nav {
     background-color: #2E7FCF;
     display: flex;
-    justify-content: space-around; 
-    margin: 0;
+    justify-content: space-around;
+    padding: 10px 0;
 }
 
 .nav-container {
     display: flex;
     width: 100%;
-    justify-content: space-evenly; 
+    justify-content: space-evenly;
 }
 
 .nav-container a {
     flex-grow: 1;
     text-align: center;
-    padding: 10px 20px;
+    padding: 12px 20px;
     text-decoration: none;
     color: white;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .nav-container a:hover:not(.active),
 .nav-container a:hover {
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     color: #2E7FCF;
-    text-decoration: none;
+    border-radius: 6px 6px 0 0;
 }
 
 .nav-container .active {
     background-color: #ffffff;
     color: #2E7FCF;
     cursor: default;
-    text-decoration: none; 
+    border-radius: 6px 6px 0 0;
 }
 
 .contenedor-tabla {
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: 30px;
 }
 
 .table-container {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 2000px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+    width: 90%;
+    max-width: 1400px;
 }
 
 .barra-busqueda {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
 }
 
 .barra-busqueda input[type="text"] {
-    padding: 8px;
-    border-radius: 5px;
+    padding: 10px 12px;
+    border-radius: 6px;
     border: 1px solid #ccc;
     flex-grow: 1;
-    margin-right: 10px;
+    font-size: 16px;
 }
 
 .barra-busqueda button {
     background-color: #2E7FCF;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 18px;
+    border-radius: 6px;
     cursor: pointer;
-    text-decoration: none; 
+    transition: background-color 0.3s ease;
+    font-weight: 600;
 }
 
 .barra-busqueda button:hover {
@@ -112,17 +119,21 @@ nav {
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 15px;
 }
 
 thead th {
-    background-color: #e8f5e9;
-    padding: 10px;
+    background-color: #e2ecf9;
+    padding: 12px;
     text-align: left;
+    font-weight: 600;
+    color: #2E7FCF;
 }
 
 tbody td {
-    padding: 10px;
+    padding: 12px;
     border-bottom: 1px solid #ddd;
+    background-color: #fcfcfc;
 }
 
 table button {
@@ -130,17 +141,18 @@ table button {
     border: none;
     cursor: pointer;
     font-size: 1.2em;
-    text-decoration: none;
+    transition: transform 0.2s ease;
 }
 
 table button:hover {
-    color: #398de0;
+    transform: scale(1.1);
+    color: #2E7FCF;
 }
 
 .paginacion {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 20px;
     align-items: center;
 }
 
@@ -148,9 +160,10 @@ table button:hover {
     background-color: #2E7FCF;
     color: white;
     border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
+    padding: 10px 14px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .paginacion button:hover {
@@ -164,6 +177,13 @@ table button:hover {
     cursor: pointer;
 }
 
+.acciones-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -174,6 +194,6 @@ table button:hover {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 100px; 
+    padding-top: 100px;
     text-align: center;
 }
