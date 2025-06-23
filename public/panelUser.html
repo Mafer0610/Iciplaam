@@ -26,6 +26,11 @@
                         <td>${lapida.X}</td>
                         <td>${lapida.Y}</td>
                         <td>${lapida.CUENTA}</td>
+                        <div class="acciones-container">
+                            <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
+                            <img src="img/ver.svg" alt="Ver" width="20">
+                            </a>
+                        </div>
                     </tr>
                     `;
                     tbody.innerHTML += fila;
@@ -63,6 +68,11 @@
                     <td>${lapida.X}</td>
                     <td>${lapida.Y}</td>
                     <td>${lapida.CUENTA}</td>
+                    <td>
+                        <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
+                            <img src="img/ver.svg" alt="Ver" width="20" style="margin-left: 5px;">
+                        </a>
+                    </td>
                 </tr>
                 `;
                 tbody.innerHTML += fila;
@@ -96,6 +106,7 @@
                         <th>X</th>
                         <th>Y</th>
                         <th>CUENTA</th>
+                        <th>ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-lapidas"></tbody>

@@ -7,7 +7,10 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/imagenes', express.static('FOTOS_PANTEON_MUNICIPAL'));
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -17,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Conectado a MongoDB - BD: iciplam'))
 .catch(err => console.error('Error de conexión:', err));
 
+// Rutas
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 

@@ -34,10 +34,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CVE_ZONA").textContent = lapida.CVE_ZONA || "Sin clave";
         document.getElementById("CVE_LOTE").textContent = lapida.CVE_LOTE || "Sin clave";
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
-        
+
         if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
-            const rutaElement = document.getElementById("RUTA");
-            rutaElement.innerHTML = `<a href="${lapida.RUTA}" target="_blank">Ver imagen</a>`;
+        const nombreArchivo = lapida.RUTA.replace(/^.*[\\/]/, ""); // extrae solo el nombre del archivo
+        const rutaWeb = `http://localhost:5000/imagenes/${nombreArchivo}`;
+        const rutaElement = document.getElementById("RUTA");
+
+        rutaElement.innerHTML = `<a href="${rutaWeb}" target="_blank">Ver imagen</a>`;
         }
         
     } catch (error) {
