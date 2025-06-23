@@ -1,11 +1,11 @@
 .table-container {
     max-width: 880px;
-    margin: 0 auto;
-    border-radius: 12px;
+    margin: 40px auto;
+    border-radius: 14px;
     overflow: hidden;
-    background-color: #fdfdfd;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-    border: 1px solid #1f1f1f;
+    background-color: #fefefe;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid #d1d1d1;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -17,39 +17,60 @@ table {
 
 caption {
     caption-side: top;
-    background: #f1f1f1;
+    background: #e3efff;
     color: #1f1f1f;
-    font-size: 20px;
+    font-size: 21px;
     font-weight: bold;
-    padding: 14px;
+    padding: 16px;
     border-bottom: 1px solid #ccc;
-}
-
-th, td {
-    border: 1px solid #d0d0d0;
-    padding: 16px 18px;
-    text-align: left;
+    letter-spacing: 0.3px;
 }
 
 th {
-    background: linear-gradient(to right, #1f1f1f, #424242);
+    background: linear-gradient(90deg, #2E7FCF, #398de0);
     color: #ffffff;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
+    padding: 14px 20px;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: none;
 }
 
 td {
-    font-size: 15px;
-    color: #333;
-    background-color: #fff;
-    transition: background-color 0.3s ease;
+    padding: 14px 20px;
+    font-size: 14.8px;
+    color: #2d2d2d;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e3e3e3;
+    transition: background-color 0.2s ease;
 }
 
 tr:nth-child(even) td {
-    background-color: #f8f8f8;
+    background-color: #f4f9ff;
 }
 
 tr:hover td {
-    background-color: #e8e8e8;
+    background-color: #e2f0ff;
+}
+
+
+.acciones-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.acciones-container img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    filter: grayscale(20%);
+}
+
+.acciones-container img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
 }

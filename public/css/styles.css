@@ -31,7 +31,6 @@ body {
   margin-right: 25px;
 }
 
-/* Formulario */
 .form-box {
   width: 280px;
 }
@@ -61,7 +60,7 @@ input:focus {
 }
 
 button {
-  background-color: #2a365c; /* Azul pálido profundo */
+  background-color: #2a365c;
   color: white;
   border: none;
   font-weight: bold;
@@ -70,5 +69,5 @@ button {
 }
 
 button:hover {
-  background-color: #1f2a49; /* Un poco más oscuro al pasar el mouse */
+  background-color: #1f2a49;
 }
