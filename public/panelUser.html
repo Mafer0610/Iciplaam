@@ -1,57 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="img/navegador.ico" type="image/x-icon">
   <title>Gestión de Datos</title>
-  <link rel="stylesheet" href="css/stylesUser.css" />
+  <link rel="stylesheet" href="css/stylesUser.css">
   <script>
-    let todasLasLapidas = [];
-
     async function cargarTabla() {
       const tbody = document.getElementById("tabla-lapidas");
       tbody.innerHTML = "";
       try {
-        const response = await fetch("http://localhost:5000/lapidas");
-        todasLasLapidas = await response.json();
-        mostrarResultados(todasLasLapidas, "");
-      } catch (error) {
-        console.error("Error al cargar los datos:", error);
-      }
-    }
+        const response = await fetch('http://localhost:5000/lapidas');
+        const lapidas = await response.json();
 
-    function buscarRegistro() {
-      const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
-
-      if (!filtro) {
-        mostrarResultados(todasLasLapidas, "");
-        return;
-      }
-
-      const tokensFiltro = new Set(filtro.split(" "));
-      const resultados = todasLasLapidas.filter(lapida => {
-        const tokensNombre = new Set(lapida.NOMBRE_PROPIE.toLowerCase().split(" "));
-        return [...tokensFiltro].every(token => tokensNombre.has(token));
-      });
-
-      mostrarResultados(resultados.length ? resultados : todasLasLapidas, resultados.length ? filtro : "");
-    }
-
-    function mostrarResultados(resultados, filtro) {
-      const tbody = document.getElementById("tabla-lapidas");
-      tbody.innerHTML = "";
-
-      if (resultados.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Sin resultados</td></tr>';
-        return;
-      }
-
-      resultados.forEach(lapida => {
-        let fila = `
+        lapidas.slice(0, 9).forEach(lapida => {
+          let fila = `
           <tr>
               <td>${lapida.NOM_REG}</td>
-              <td>${resaltarCoincidencia(lapida.NOMBRE_PROPIE, filtro)}</td>
+              <td>${lapida.NOMBRE_PROPIE}</td>
               <td>${lapida.EDO_CONTRI}</td>
               <td>${lapida.MEDIDAS}</td>
               <td>${lapida.ZONA}</td>
@@ -61,10 +28,51 @@
               <td>${lapida.CUENTA}</td>
               <td style="text-align: center;">
                   <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
-                      <img src="img/ver.svg" alt="Ver" width="20" style="vertical-align: middle;" />
+                      <img src="img/ver.svg" alt="Ver" width="20" style="vertical-align: middle;">
                   </a>
               </td>
           </tr>
+          `;
+          tbody.innerHTML += fila;
+        });
+      } catch (error) {
+        console.error("Error al cargar los datos:", error);
+      }
+    }
+
+    async function buscarRegistro() {
+      const filtro = document.getElementById("txtbuscar").value.toLowerCase();
+      try {
+        const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
+        const lapidas = await response.json();
+        mostrarResultados(lapidas, filtro);
+      } catch (error) {
+        console.error("Error al buscar registros:", error);
+      }
+    }
+
+    function mostrarResultados(resultados, filtro) {
+      const tbody = document.getElementById("tabla-lapidas");
+      tbody.innerHTML = "";
+
+      resultados.forEach(lapida => {
+        let fila = `
+        <tr>
+            <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
+            <td>${resaltarCoincidencia(lapida.NOMBRE_PROPIE, filtro)}</td>
+            <td>${lapida.EDO_CONTRI}</td>
+            <td>${lapida.MEDIDAS}</td>
+            <td>${lapida.ZONA}</td>
+            <td>${lapida.FILA}</td>
+            <td>${lapida.X}</td>
+            <td>${lapida.Y}</td>
+            <td>${lapida.CUENTA}</td>
+            <td style="text-align: center;">
+                <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
+                    <img src="img/ver.svg" alt="Ver" width="20" style="vertical-align: middle;">
+                </a>
+            </td>
+        </tr>
         `;
         tbody.innerHTML += fila;
       });
@@ -72,13 +80,8 @@
 
     function resaltarCoincidencia(texto, filtro) {
       if (!filtro) return texto;
-      const palabras = filtro.split(" ").filter(Boolean);
-      let resultado = texto;
-      palabras.forEach(palabra => {
-        const regex = new RegExp(`(${palabra})`, "gi");
-        resultado = resultado.replace(regex, '<span style="background-color: yellow;">$1</span>');
-      });
-      return resultado;
+      const regex = new RegExp(`(${filtro})`, "gi");
+      return texto.replace(regex, '<span style="background-color: yellow;">$1</span>');
     }
 
     document.addEventListener("DOMContentLoaded", cargarTabla);
@@ -88,11 +91,7 @@
   <div class="contenedor-tabla">
     <div class="table-container">
       <div class="barra-busqueda">
-        <input
-          type="text"
-          id="txtbuscar"
-          placeholder="Buscar por nombre de registro o propietario"
-          onkeyup="buscarRegistro()" />
+        <input type="text" id="txtbuscar" placeholder="Buscar por nombre de registro o propietario" onkeyup="buscarRegistro()">
       </div>
       <table>
         <thead>
