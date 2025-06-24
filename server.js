@@ -45,19 +45,31 @@ function verificarToken(req, res, next) {
 
 const Lapida = require('./models/lapida');
 
-//busqueda
+//busqueda mejorada
 app.get('/lapidas', async (req, res) => {
-    const filtro = req.query.nombre?.toLowerCase() || "";
+    const filtro = req.query.nombre?.toLowerCase().trim() || "";
 
     try {
-    const limite = parseInt(req.query.limit) || 7;
+        const limite = parseInt(req.query.limit) || 7;
 
-    const resultados = await Lapida.find({
-        $or: [
-            { NOM_REG: { $regex: filtro, $options: "i" } },
-            { NOMBRE_PROPIE: { $regex: filtro, $options: "i" } }
-        ]
-    }).limit(limite);
+        let resultados;
+
+        if (filtro) {
+            const palabras = filtro.split(/\s+/).filter(palabra => palabra.length > 0);
+            
+            const condicionesPalabras = palabras.map(palabra => ({
+                $or: [
+                    { NOM_REG: { $regex: palabra, $options: "i" } },
+                    { NOMBRE_PROPIE: { $regex: palabra, $options: "i" } }
+                ]
+            }));
+
+            resultados = await Lapida.find({
+                $and: condicionesPalabras
+            }).limit(limite);
+        } else {
+            resultados = await Lapida.find({}).limit(limite);
+        }
 
         res.json(resultados);
     } catch (error) {
