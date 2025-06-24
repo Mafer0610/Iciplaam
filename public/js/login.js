@@ -14,7 +14,6 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const data = await response.json();
 
     if (data.success) {
-      // Guardar token y rol en localStorage
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('userRole', data.role);
       
