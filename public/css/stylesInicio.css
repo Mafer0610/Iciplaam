@@ -197,3 +197,7 @@ table button:hover {
     padding-top: 100px;
     text-align: center;
 }
+.barra-busqueda .btn-agregar,
+.barra-busqueda .btn-logout {
+    text-decoration: none;
+}

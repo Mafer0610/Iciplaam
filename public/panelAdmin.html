@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/navegador.ico" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
     <title>Gestión de Datos</title>
-    <link rel="stylesheet" href="css/stylesInicio.css">
+    <link rel="stylesheet" href="css/stylesInicio.css" />
     <script src="js/auth.js"></script>
     <script src="btn/delete.js"></script>
     <script src="btn/agregar.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
         if (!verificarRolAdmin()) return;
         cargarTabla();
-        });
+    });
 
-        async function cargarTabla() {
+    async function cargarTabla() {
         const tbody = document.getElementById("tabla-lapidas");
         tbody.innerHTML = "";
         try {
-            const response = await fetch('http://localhost:5000/lapidas?limit=7');
+            const response = await fetch("http://localhost:5000/lapidas?limit=7");
             const lapidas = await response.json();
             mostrarResultados(lapidas, "");
         } catch (error) {
             console.error("Error al cargar los datos:", error);
         }
-        }
+    }
 
-        async function buscarRegistro() {
+    async function buscarRegistro() {
         const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
         if (!filtro) {
-            cargarTabla(); // Muestra solo 7 si no hay filtro
+            cargarTabla();
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5000/lapidas?nombre=${encodeURIComponent(filtro)}&limit=100`);
+            const response = await fetch(
+            `http://localhost:5000/lapidas?nombre=${encodeURIComponent(filtro)}&limit=100`
+            );
             const lapidas = await response.json();
             mostrarResultados(lapidas, filtro);
         } catch (error) {
             console.error("Error al buscar registros:", error);
         }
-        }
+    }
 
-        function mostrarResultados(resultados, filtro) {
+    function mostrarResultados(resultados, filtro) {
         const tbody = document.getElementById("tabla-lapidas");
         tbody.innerHTML = "";
 
@@ -51,7 +53,7 @@
             return;
         }
 
-        resultados.forEach(lapida => {
+        resultados.forEach((lapida) => {
             const fila = `
             <tr>
                 <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
@@ -65,40 +67,44 @@
                 <td>
                 <div class="acciones-container">
                     <button onclick="eliminarRegistro('${lapida._id}')">
-                    <img src="img/basura.svg" alt="Eliminar" width="20">
+                    <img src="img/basura.svg" alt="Eliminar" width="20" />
                     </button>
                     <a href="btn/editarInfo.html?NOM_REG=${lapida.NOM_REG}">
-                    <img src="img/editar.svg" alt="Editar" width="20" style="margin-left: 5px;">
+                    <img src="img/editar.svg" alt="Editar" width="20" style="margin-left: 5px;" />
                     </a>
                     <a href="btn/verInfo.html?NOM_REG=${lapida.NOM_REG}">
-                    <img src="img/ver.svg" alt="Ver" width="20" style="margin-left: 5px;">
+                    <img src="img/ver.svg" alt="Ver" width="20" style="margin-left: 5px;" />
                     </a>
                 </div>
                 </td>
-            </tr>`;
+            </tr>
+            `;
             tbody.innerHTML += fila;
         });
-        }
+    }
 
-        function resaltarCoincidencia(texto, filtro) {
+    function resaltarCoincidencia(texto, filtro) {
         if (!filtro) return texto;
         const regex = new RegExp(`(${filtro})`, "gi");
         return texto.replace(regex, '<span style="background-color: yellow;">$1</span>');
-        }
+    }
 
-        function cerrarSesion() {
-        localStorage.removeItem('token');
-        window.location.href = 'index.html';
-        }
-
-        document.addEventListener("DOMContentLoaded", cargarTabla);
+    function cerrarSesion() {
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+    }
     </script>
 </head>
 <body>
     <div class="contenedor-tabla">
         <div class="table-container">
         <div class="barra-busqueda">
-            <input type="text" id="txtbuscar" placeholder="Buscar por nombre de registro o propietario" onkeyup="buscarRegistro()">
+            <input
+            type="text"
+            id="txtbuscar"
+            placeholder="Buscar por nombre de registro o propietario"
+            onkeyup="buscarRegistro()"
+            />
             <a href="btn/agregarInfo.html" class="btn-agregar">Agregar información</a>
             <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
         </div>
