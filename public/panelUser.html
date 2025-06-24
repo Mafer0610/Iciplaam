@@ -13,8 +13,20 @@
         return;
       }
       cargarTabla();
+      cargarConteoTotal();
     });
     let todasLasLapidas = [];
+
+    async function cargarConteoTotal() {
+        try {
+            const response = await fetch("http://localhost:5000/lapidas/count/total");
+            const data = await response.json();
+            document.getElementById("total-registros").textContent = data.total;
+        } catch (error) {
+            console.error("Error al cargar el conteo total:", error);
+            document.getElementById("total-registros").textContent = "Error";
+        }
+    }
     
     async function cargarTabla() {
       const tbody = document.getElementById("tabla-lapidas");
@@ -92,6 +104,9 @@
 <body>
   <div class="contenedor-tabla">
     <div class="table-container">
+      <div class="contador-registros">
+        Total de registros en la base de datos: <span class="numero" id="total-registros">Cargando...</span>
+      </div>
       <div class="barra-busqueda">
         <input type="text" id="txtbuscar" placeholder="Buscar por nombre de registro o propietario" onkeyup="buscarRegistro()">
         <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>

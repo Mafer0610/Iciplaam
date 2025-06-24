@@ -120,7 +120,15 @@ app.put('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
-
+app.get('/lapidas/count/total', async (req, res) => {
+    try {
+        const total = await Lapida.countDocuments();
+        res.json({ total });
+    } catch (error) {
+        console.error("Error al obtener el conteo:", error);
+        res.status(500).json({ error: "Error al obtener el conteo de registros" });
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
