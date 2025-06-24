@@ -15,11 +15,12 @@
       cargarTabla();
     });
     let todasLasLapidas = [];
+    
     async function cargarTabla() {
       const tbody = document.getElementById("tabla-lapidas");
       tbody.innerHTML = "";
       try {
-        const response = await fetch("http://localhost:5000/lapidas");
+        const response = await fetch("http://localhost:5000/lapidas?limit=7");
         todasLasLapidas = await response.json();
         mostrarResultados(todasLasLapidas, "");
       } catch (error) {
@@ -27,18 +28,20 @@
       }
     }
 
-    function buscarRegistro() {
+    async function buscarRegistro() {
       const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
       if (!filtro) {
-        mostrarResultados(todasLasLapidas, "");
+        cargarTabla();
         return;
       }
-      const tokensFiltro = new Set(filtro.split(" "));
-      const resultados = todasLasLapidas.filter(lapida => {
-        const tokensNombre = new Set(lapida.NOMBRE_PROPIE.toLowerCase().split(" "));
-        return [...tokensFiltro].every(token => tokensNombre.has(token));
-      });
-      mostrarResultados(resultados.length ? resultados : todasLasLapidas, resultados.length ? filtro : "");
+
+      try {
+        const response = await fetch(`http://localhost:5000/lapidas?nombre=${encodeURIComponent(filtro)}&limit=100`);
+        const resultados = await response.json();
+        mostrarResultados(resultados.length ? resultados : todasLasLapidas, resultados.length ? filtro : "");
+      } catch (error) {
+        console.error("Error al buscar registros:", error);
+      }
     }
 
     function mostrarResultados(resultados, filtro) {

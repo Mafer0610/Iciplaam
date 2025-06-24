@@ -50,12 +50,14 @@ app.get('/lapidas', async (req, res) => {
     const filtro = req.query.nombre?.toLowerCase() || "";
 
     try {
-        const resultados = await Lapida.find({
-            $or: [
-                { NOM_REG: { $regex: filtro, $options: "i" } },
-                { NOMBRE_PROPIE: { $regex: filtro, $options: "i" } }
-            ]
-        }).limit(50);
+    const limite = parseInt(req.query.limit) || 7;
+
+    const resultados = await Lapida.find({
+        $or: [
+            { NOM_REG: { $regex: filtro, $options: "i" } },
+            { NOMBRE_PROPIE: { $regex: filtro, $options: "i" } }
+        ]
+    }).limit(limite);
 
         res.json(resultados);
     } catch (error) {
