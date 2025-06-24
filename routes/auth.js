@@ -30,14 +30,20 @@ router.post('/login', async (req, res) => {
         const { username, password } = req.body;
 
         const user = await User.findOne({ username });
-        if (!user) return res.status(400).json({ error: "Usuario no encontrado" });
-
+        if (!user) return res.status(400).json({ success: false, error: "Usuario no encontrado" });
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return res.status(400).json({ error: "Contraseña incorrecta" });
-
-        const token = jwt.sign({ id: user._id, role: user.role }, 'secret', { expiresIn: '1h' });
-
-        res.json({ success: true, token, role: user.role });
+        if (!isValid) return res.status(400).json({ success: false, error: "Contraseña incorrecta" });
+        const token = jwt.sign(
+            { id: user._id, role: user.role }, 
+            process.env.JWT_SECRET || 'secret', 
+            { expiresIn: '10h' }
+        );
+        res.json({ 
+            success: true, 
+            token, 
+            role: user.role,
+            username: user.username 
+        });
     } catch (error) {
         console.error("Error en el login:", error);
         res.status(500).json({ error: "Error interno del servidor" });

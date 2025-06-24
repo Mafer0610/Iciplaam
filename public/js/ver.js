@@ -1,17 +1,14 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const params = new URLSearchParams(window.location.search);
     const registroId = params.get("NOM_REG");
-    
     if (!registroId) {
         console.warn("No se proporcionó un NOM_REG en la URL.");
         document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>No se proporcionó ID de registro.</td></tr>";
         return;
     }
-
     try {
-        const response = await fetch(`http://localhost:5000/lapidas/${registroId}`);
+        const response = await fetchAutenticado(`http://localhost:5000/lapidas/${registroId}`);
         if (!response.ok) throw new Error("Error al obtener datos");
-
         const lapida = await response.json();
 
         document.getElementById("NOM_REG").textContent = lapida.NOM_REG || "Sin registro";

@@ -27,9 +27,8 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     console.log("Datos enviados:", formData); 
 
     try {
-        const response = await fetch('http://localhost:5000/lapidas', {
+        const response = await fetchAutenticado('http://localhost:5000/lapidas', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         });
 

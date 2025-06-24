@@ -14,7 +14,10 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const data = await response.json();
 
     if (data.success) {
-      // No mostramos alert, simplemente redirigimos
+      // Guardar token y rol en localStorage
+      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('userRole', data.role);
+      
       if (data.role === "admin") {
         window.location.href = "panelAdmin.html";
       } else if (data.role === "user") {

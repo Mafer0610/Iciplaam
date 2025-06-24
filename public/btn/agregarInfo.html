@@ -6,8 +6,17 @@
     <link rel="icon" href="../img/agregar.ico" type="image/x-icon">
     <title>Registro</title>
     <link rel="stylesheet" href="../css/stylesAgregar.css">
+    <script src="../js/auth.js"></script>
 </head>
 <body>
+    <script>
+        // Verificar autenticación al cargar
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) {
+                return;
+            }
+        });
+    </script>
     <div class="form-container">
         <h2>INFORMACIÓN DE LA LÁPIDA</h2>
         <form id="register-form">

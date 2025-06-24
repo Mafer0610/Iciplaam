@@ -6,9 +6,16 @@
     <link rel="icon" href="img/navegador.ico" type="image/x-icon">
     <title>Gestión de Datos</title>
     <link rel="stylesheet" href="css/stylesInicio.css">
+    <script src="js/auth.js"></script>
     <script src="btn/delete.js"></script>
     <script src="btn/agregar.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) {
+                return; // Si no está autenticado, ya fue redirigido
+            }
+            cargarTabla();
+        });
         async function cargarTabla() {
             const tbody = document.getElementById("tabla-lapidas");
             tbody.innerHTML = "";
@@ -51,9 +58,8 @@
         async function buscarRegistro() {
             const filtro = document.getElementById("txtbuscar").value.toLowerCase();
             try {
-                const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
+                const response = await fetchAutenticado(`http://localhost:5000/lapidas?nombre=${filtro}`);
                 const lapidas = await response.json();
-
                 mostrarResultados(lapidas, filtro);
             } catch (error) {
                 console.error("Error al buscar registros:", error);

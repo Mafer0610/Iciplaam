@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (nomReg) {
         try {
-            const response = await fetch(`http://localhost:5000/lapidas/${nomReg}`);
+            const response = await fetchAutenticado(`http://localhost:5000/lapidas/${nomReg}`);
             if (!response.ok) throw new Error("Error al obtener los datos");
 
             const lapida = await response.json();
@@ -27,9 +27,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const lapidaData = Object.fromEntries(formData);
 
         try {
-            const response = await fetch(`http://localhost:5000/lapidas/${lapidaData.NOM_REG}`, {
+            const response = await fetchAutenticado(`http://localhost:5000/lapidas/${lapidaData.NOM_REG}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(lapidaData),
             });
 

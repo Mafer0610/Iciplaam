@@ -6,9 +6,17 @@
     <link rel="icon" href="../img/ojo.ico" type="image/x-icon">
     <title>Información</title>
     <link rel="stylesheet" href="../css/stylesVer.css">
+    <script src="../js/auth.js"></script>
     <script defer src="../js/ver.js"></script>
 </head>
 <body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarAutenticacion()) {
+                return;
+            }
+        });
+    </script>
     <div class="container">
         <table class="detalle-lapida">
             <tr><td><b>Número Registro:</b></td><td id="NOM_REG"></td></tr>

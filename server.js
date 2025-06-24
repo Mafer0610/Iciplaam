@@ -24,6 +24,25 @@ mongoose.connect(process.env.MONGO_URI, {
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
+const jwt = require('jsonwebtoken');
+
+// Middleware para verificar JWT
+function verificarToken(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Token no proporcionado' });
+    }
+    
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta');
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Token inválido' });
+    }
+}
+
 const Lapida = require('./models/lapida');
 
 //busqueda

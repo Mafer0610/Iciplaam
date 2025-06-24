@@ -6,9 +6,17 @@
     <link rel="icon" href="../img/edit.ico" type="image/x-icon">
     <title>Editar</title>
     <link rel="stylesheet" href="../css/stylesEdit.css">
+    <script src="../js/auth.js"></script>
     <script src="../js/editar.js" defer></script>
 </head>
 <body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) {
+                return;
+            }
+        });
+    </script>
     <div class="form-container">
         <h2>EDITAR INFORMACIÓN</h2>
         <form id="lapida-form">
