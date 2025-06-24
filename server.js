@@ -91,6 +91,7 @@ app.post('/lapidas', async (req, res) => {
     }
 });
 
+//borrar
 app.delete('/lapidas/:id', async (req, res) => {
     try {
         await Lapida.findByIdAndDelete(req.params.id);
@@ -120,6 +121,7 @@ app.put('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
+//conteo de datos
 app.get('/lapidas/count/total', async (req, res) => {
     try {
         const total = await Lapida.countDocuments();
