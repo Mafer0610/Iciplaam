@@ -34,9 +34,7 @@
             return;
         }
         try {
-            const response = await fetch(
-            `http://localhost:5000/lapidas?nombre=${encodeURIComponent(filtro)}&limit=100`
-            );
+            const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
             const lapidas = await response.json();
             mostrarResultados(lapidas, filtro);
         } catch (error) {

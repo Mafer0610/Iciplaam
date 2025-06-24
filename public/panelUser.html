@@ -34,13 +34,12 @@
         cargarTabla();
         return;
       }
-
       try {
-        const response = await fetch(`http://localhost:5000/lapidas?nombre=${encodeURIComponent(filtro)}&limit=100`);
-        const resultados = await response.json();
-        mostrarResultados(resultados.length ? resultados : todasLasLapidas, resultados.length ? filtro : "");
+          const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
+          const lapidas = await response.json();
+          mostrarResultados(lapidas, filtro);
       } catch (error) {
-        console.error("Error al buscar registros:", error);
+          console.error("Error al buscar registros:", error);
       }
     }
 
