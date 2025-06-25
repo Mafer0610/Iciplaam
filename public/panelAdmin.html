@@ -125,6 +125,7 @@
         if (response.ok) {
           mostrarMensaje("Registro eliminado correctamente.");
           cargarTabla();
+          cargarConteoTotal();
         } else {
           mostrarMensaje("Error al eliminar el registro.");
         }
@@ -179,7 +180,6 @@
     </div>
   </div>
 
-  <!-- Modal y alerta personalizada -->
   <div id="modal-confirmacion" class="modal oculto">
     <div class="modal-contenido">
       <p>¿Estás seguro de que deseas eliminar este registro?</p>
