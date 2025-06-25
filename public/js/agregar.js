@@ -50,7 +50,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     document.getElementById('register-form').reset();
 
     setTimeout(() => {
-      window.location.href = "../panelAdmin.html";
+      window.location.href = "../panelAdministrador.html";
     }, 1000);
 
   } catch (error) {

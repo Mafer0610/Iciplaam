@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       await response.json();
       mostrarMensaje("Información actualizada.");
       setTimeout(() => {
-        window.location.href = "../panelAdmin.html";
+        window.location.href = "../panelAdministrador.html";
       }, 1200);
     } catch (error) {
       console.error("Error al actualizar:", error);
