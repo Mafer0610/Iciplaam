@@ -16,7 +16,7 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.barra-busqueda .btn-agregar {
+.barra-busqueda .btn-agregar, .btn-logout {
     background-color: #2E7FCF;
     color: white;
     border: none;
@@ -28,7 +28,7 @@ header {
     transition: background-color 0.3s ease;
 }
 
-.barra-busqueda .btn-agregar:hover {
+.barra-busqueda .btn-agregar:hover, .btn-logout {
     background-color: #398de0;
 }
 
