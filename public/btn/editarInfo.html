@@ -1,70 +1,90 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../img/edit.ico" type="image/x-icon">
-    <title>Editar</title>
-    <link rel="stylesheet" href="../css/stylesEdit.css">
-    <script src="../js/auth.js"></script>
-    <script src="../js/editar.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../img/edit.ico" type="image/x-icon">
+  <title>Editar</title>
+  <link rel="stylesheet" href="../css/stylesEdit.css">
+  <script src="../js/auth.js"></script>
+  <script src="../js/editar.js" defer></script>
+  <style>
+    #mensaje-flotante {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 9999;
+    }
+
+    #mensaje-flotante.visible {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (!verificarRolAdmin()) {
-                return;
-            }
-        });
-    </script>
-    <div class="form-container">
-        <h2>EDITAR INFORMACIÓN</h2>
-        <form id="lapida-form">
-            <label for="NOM_REG">Número Registro:</label>
-            <input type="text" id="NOM_REG" name="NOM_REG" placeholder="PN000000">
-            <label for="NOMBRE_PROPIE">Nombre Propietario:</label>
-            <input type="text" id="NOMBRE_PROPIE" name="NOMBRE_PROPIE" required>
-            <label for="DIRECCION">Dirección:</label>
-            <input type="text" id="DIRECCION" name="DIRECCION">
-            <label for="UBICACION">Ubicación:</label>
-            <input type="text" id="UBICACION" name="UBICACION" placeholder="LOTE - #0000-00 DE - CLASE -">
-            <label for="LOTE">Lote:</label>
-            <input type="text" id="LOTE" name="LOTE" placeholder="_0000">
-            <label for="MEDIDAS_NO">Medidas no convencionales:</label>
-            <input type="text" id="MEDIDAS_NO" name="MEDIDAS_NO" placeholder="LOTES - (-X- MTS)">
-            <label for="EDO_CONTRI">Estatus de titularidad:</label>
-            <select id="EDO_CONTRI" name="EDO_CONTRI">
-                <option value="PROP">Propietario</option>
-                <option value="COPROP">Co-propietario</option>
-            </select>
-            <label for="COLONIA">Colonia:</label>
-            <input type="text" id="COLONIA" name="COLONIA" placeholder="Colonia">
-            <label for="MEDIDAS">Medidas:</label>
-            <input type="text" id="MEDIDAS" name="MEDIDAS" placeholder="0.00X0.00 METROS">
-            <label for="LOTES_A">Lote a:</label>
-            <input type="text" id="LOTES_A" name="LOTES_A" placeholder="zona_lote_fila_bis">
-            <label for="ZONA">Zona:</label>
-            <input type="text" id="ZONA" name="ZONA" placeholder="OTE, P_OTE, PTE, P_PTE">
-            <label for="FILA">Fila:</label>
-            <input type="text" id="FILA" name="FILA">
-            <label for="RUTA">Ruta:</label>
-            <input type="text" id="RUTA" name="RUTA" placeholder="Enlace de la imagen de la lapida">
-            <label for="X">Coordenada X:</label>
-            <input type="text" id="X" name="X">
-            <label for="Y">Coordenada Y:</label>
-            <input type="text" id="Y" name="Y">
-            <label for="CVE_POB">Clave de Población:</label>
-            <input type="text" id="CVE_POB" name="CVE_POB" placeholder="01">
-            <label for="CVE_PANTEO">Clave de panteón:</label>
-            <input type="text" id="CVE_PANTEO" name="CVE_PANTEO" placeholder="01">
-            <label for="CVE_ZONA">Clave de zona:</label>
-            <input type="text" id="CVE_ZONA" name="CVE_ZONA" placeholder="01-04">
-            <label for="CVE_LOTE">Clave de lote:</label>
-            <input type="text" id="CVE_LOTE" name="CVE_LOTE" placeholder="Cuatro dígitos">
-            <label for="CUENTA">Cuenta:</label>
-            <input type="text" id="CUENTA" name="CUENTA" placeholder="Conjunto de claves">
-            <div class="center-button"><button type="submit">Guardar</button></div>
-        </form>
-    </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!verificarRolAdmin()) return;
+    });
+  </script>
+
+  <div class="form-container">
+    <h2>EDITAR INFORMACIÓN</h2>
+    <form id="lapida-form">
+      <label for="NOM_REG">Número Registro:</label>
+      <input type="text" id="NOM_REG" name="NOM_REG" placeholder="PN000000">
+      <label for="NOMBRE_PROPIE">Nombre Propietario:</label>
+      <input type="text" id="NOMBRE_PROPIE" name="NOMBRE_PROPIE" required>
+      <label for="DIRECCION">Dirección:</label>
+      <input type="text" id="DIRECCION" name="DIRECCION">
+      <label for="UBICACION">Ubicación:</label>
+      <input type="text" id="UBICACION" name="UBICACION" placeholder="LOTE - #0000-00 DE - CLASE -">
+      <label for="LOTE">Lote:</label>
+      <input type="text" id="LOTE" name="LOTE" placeholder="_0000">
+      <label for="MEDIDAS_NO">Medidas no convencionales:</label>
+      <input type="text" id="MEDIDAS_NO" name="MEDIDAS_NO" placeholder="LOTES - (-X- MTS)">
+      <label for="EDO_CONTRI">Estatus de titularidad:</label>
+      <select id="EDO_CONTRI" name="EDO_CONTRI">
+        <option value="PROP">Propietario</option>
+        <option value="COPROP">Co-propietario</option>
+      </select>
+      <label for="COLONIA">Colonia:</label>
+      <input type="text" id="COLONIA" name="COLONIA" placeholder="Colonia">
+      <label for="MEDIDAS">Medidas:</label>
+      <input type="text" id="MEDIDAS" name="MEDIDAS" placeholder="0.00X0.00 METROS">
+      <label for="LOTES_A">Lote a:</label>
+      <input type="text" id="LOTES_A" name="LOTES_A" placeholder="zona_lote_fila_bis">
+      <label for="ZONA">Zona:</label>
+      <input type="text" id="ZONA" name="ZONA" placeholder="OTE, P_OTE, PTE, P_PTE">
+      <label for="FILA">Fila:</label>
+      <input type="text" id="FILA" name="FILA">
+      <label for="RUTA">Ruta:</label>
+      <input type="text" id="RUTA" name="RUTA" placeholder="Enlace de la imagen de la lapida">
+      <label for="X">Coordenada X:</label>
+      <input type="text" id="X" name="X">
+      <label for="Y">Coordenada Y:</label>
+      <input type="text" id="Y" name="Y">
+      <label for="CVE_POB">Clave de Población:</label>
+      <input type="text" id="CVE_POB" name="CVE_POB" placeholder="01">
+      <label for="CVE_PANTEO">Clave de panteón:</label>
+      <input type="text" id="CVE_PANTEO" name="CVE_PANTEO" placeholder="01">
+      <label for="CVE_ZONA">Clave de zona:</label>
+      <input type="text" id="CVE_ZONA" name="CVE_ZONA" placeholder="01-04">
+      <label for="CVE_LOTE">Clave de lote:</label>
+      <input type="text" id="CVE_LOTE" name="CVE_LOTE" placeholder="Cuatro dígitos">
+      <label for="CUENTA">Cuenta:</label>
+      <input type="text" id="CUENTA" name="CUENTA" placeholder="Conjunto de claves">
+      <div class="center-button"><button type="submit">Guardar</button></div>
+    </form>
+  </div>
+
+  <div id="mensaje-flotante"></div>
 </body>
 </html>

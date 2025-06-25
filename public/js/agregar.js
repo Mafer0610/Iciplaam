@@ -48,6 +48,12 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
 
     mostrarMensaje("Registro agregado correctamente.");
     document.getElementById('register-form').reset();
+
+    // Redirecciona después de un pequeño delay
+    setTimeout(() => {
+      window.location.href = "../panelAdmin.html";
+    }, 1000); // 1.5 segundos
+
   } catch (error) {
     console.error("Error en la solicitud:", error);
     mostrarMensaje(error.message);
