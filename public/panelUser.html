@@ -91,10 +91,6 @@
       if (!filtro) return texto;
       const palabras = filtro.split(" ").filter(Boolean);
       let resultado = texto;
-      palabras.forEach(palabra => {
-        const regex = new RegExp(`(${palabra})`, "gi");
-        resultado = resultado.replace(regex, '<span style="background-color: yellow;">$1</span>');
-      });
       return resultado;
     }
 
