@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
 
         if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
-        const nombreArchivo = lapida.RUTA.replace(/^.*[\\/]/, ""); // extrae solo el nombre del archivo
+        const nombreArchivo = lapida.RUTA.replace(/^.*[\\/]/, "");
         const rutaWeb = `http://localhost:5000/imagenes/${nombreArchivo}`;
         const rutaElement = document.getElementById("RUTA");
 
