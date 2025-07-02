@@ -9,229 +9,240 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
 </head>
 <body>
+
 <div class="contenedor-tabla">
-    <div class="table-container">
+  <div class="table-container">
 
-      <!-- Contador y menú alineados -->
-      <div class="top-bar">
-        <div class="contador-registros">
-          Registros en la base de datos: 
-          <span class="numero" id="total-registros">Cargando...</span>
-        </div>
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="contador-registros">
+        Registros en la base de datos:
+        <span class="numero" id="total-registros">Cargando...</span>
+      </div>
 
-<div class="menu adaptado">
+      <!-- Menú hamburguesa tipo cápsula -->
+     <div class="menu adaptado">
+  <div class="acciones horizontal">
+    <a href="btn/agregarInfo.html" onclick="event.stopPropagation()">Agregar</a>
+    <span>|</span>
+    <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+  </div>
   <div class="container">
     <div class="toggle"></div>
   </div>
-  <div class="acciones horizontal">
-    <a href="btn/agregarInfo.html">Agregar</a>
-    <span>|</span>
-    <a href="#" onclick="cerrarSesion()">Cerrar</a>
+</div>
+
+    </div>
+
+    <!-- Buscador -->
+    <div class="barra-busqueda">
+      <input
+        type="text"
+        id="txtbuscar"
+        placeholder="Buscar por nombre de registro o propietario"
+        onkeyup="buscarRegistro()" />
+    </div>
+
+    <!-- Tabla -->
+    <table>
+      <thead>
+        <tr>
+          <th>REGISTRO</th>
+          <th>PROPIETARIO</th>
+          <th>TITULAR</th>
+          <th>MEDIDAS</th>
+          <th>ZONA</th>
+          <th>FILA</th>
+          <th>X</th>
+          <th>Y</th>
+          <th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-lapidas"></tbody>
+    </table>
   </div>
 </div>
 
-
-      </div>
-      <div class="barra-busqueda">
-        <input  
-          type="text"
-          id="txtbuscar"
-          placeholder="Buscar por nombre de registro o propietario"
-          onkeyup="buscarRegistro()" />
-      </div>
-      <!-- Tabla -->
-      <table>
-        <thead>
-          <tr>
-            <th>REGISTRO</th>
-            <th>PROPIETARIO</th>
-            <th>TITULAR</th>
-            <th>MEDIDAS</th>
-            <th>ZONA</th>
-            <th>FILA</th>
-            <th>X</th>
-            <th>Y</th>
-            <th>ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-lapidas"></tbody>
-      </table>
+<!-- Modal confirmación -->
+<div id="modal-confirmacion" class="modal oculto">
+  <div class="modal-contenido">
+    <p>¿Estás seguro de que deseas eliminar este registro?</p>
+    <div class="modal-botones">
+      <button id="btn-confirmar">Sí</button>
+      <button id="btn-cancelar">Cancelar</button>
     </div>
   </div>
+</div>
 
-  <div id="modal-confirmacion" class="modal oculto">
-    <div class="modal-contenido">
-      <p>¿Estás seguro de que deseas eliminar este registro?</p>
-      <div class="modal-botones">
-        <button id="btn-confirmar">Sí</button>
-        <button id="btn-cancelar">Cancelar</button>
-      </div>
-    </div>
-  </div>
+<!-- Mensaje flotante -->
+<div id="mensaje-flotante"></div>
 
-  <div id="mensaje-flotante"></div>
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // Menú hamburguesa toggle
+  $('.toggle').on('click', function () {
+    const $menu = $(this).closest('.menu.adaptado');
+    $menu.toggleClass('expanded');
+    $(this).toggleClass('close');
+  });
 
-  <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      $('.toggle').on('click', function () {
-        const $menu = $(this).closest('.menu');
-        const $acciones = $menu.find('.acciones');
+  // Función para cerrar sesión
+  function cerrarSesion() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "index.html"; // redirige al inicio o login
+  }
 
-        $menu.toggleClass('expanded');
-        $acciones.toggleClass('hidden');
-        $(this).toggleClass('close');
-      });
-    </script>
+  // Funciones generales
+  let idAEliminar = null;
+  let currentMenuId = null;
 
-  <script>
-    let idAEliminar = null;
-    let currentMenuId = null;
+  document.addEventListener("DOMContentLoaded", () => {
+    cargarTabla();
+    cargarConteoTotal();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      cargarTabla();
-      cargarConteoTotal();
-
-      document.getElementById("btn-confirmar").addEventListener("click", eliminarConfirmado);
-      document.getElementById("btn-cancelar").addEventListener("click", () => {
-        document.getElementById("modal-confirmacion").classList.add("oculto");
-        idAEliminar = null;
-      });
+    document.getElementById("btn-confirmar").addEventListener("click", eliminarConfirmado);
+    document.getElementById("btn-cancelar").addEventListener("click", () => {
+      document.getElementById("modal-confirmacion").classList.add("oculto");
+      idAEliminar = null;
     });
+  });
 
-    async function cargarConteoTotal() {
-      try {
-        const res = await fetch("http://localhost:5000/lapidas/count/total");
-        const data = await res.json();
-        document.getElementById("total-registros").textContent = data.total;
-      } catch (err) {
-        document.getElementById("total-registros").textContent = "Error";
-      }
+  async function cargarConteoTotal() {
+    try {
+      const res = await fetch("http://localhost:5000/lapidas/count/total");
+      const data = await res.json();
+      document.getElementById("total-registros").textContent = data.total;
+    } catch (err) {
+      document.getElementById("total-registros").textContent = "Error";
+    }
+  }
+
+  async function cargarTabla() {
+    const tbody = document.getElementById("tabla-lapidas");
+    tbody.innerHTML = "";
+    try {
+      const res = await fetch("http://localhost:5000/lapidas?limit=7");
+      const data = await res.json();
+      mostrarResultados(data, "");
+    } catch (err) {
+      console.error("Error al cargar los datos:", err);
+    }
+  }
+
+  async function buscarRegistro() {
+    const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
+    if (!filtro) return cargarTabla();
+    try {
+      const res = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
+      const data = await res.json();
+      mostrarResultados(data, filtro);
+    } catch (err) {
+      console.error("Error al buscar registros:", err);
+    }
+  }
+
+  function mostrarResultados(datos, filtro) {
+    const tbody = document.getElementById("tabla-lapidas");
+    tbody.innerHTML = "";
+    if (!datos.length) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sin resultados</td></tr>';
+      return;
     }
 
-    async function cargarTabla() {
-      const tbody = document.getElementById("tabla-lapidas");
-      tbody.innerHTML = "";
-      try {
-        const res = await fetch("http://localhost:5000/lapidas?limit=7");
-        const data = await res.json();
-        mostrarResultados(data, "");
-      } catch (err) {
-        console.error("Error al cargar los datos:", err);
-      }
-    }
-
-    async function buscarRegistro() {
-      const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
-      if (!filtro) return cargarTabla();
-      try {
-        const res = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
-        const data = await res.json();
-        mostrarResultados(data, filtro);
-      } catch (err) {
-        console.error("Error al buscar registros:", err);
-      }
-    }
-
-    function mostrarResultados(datos, filtro) {
-      const tbody = document.getElementById("tabla-lapidas");
-      tbody.innerHTML = "";
-      if (!datos.length) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sin resultados</td></tr>';
-        return;
-      }
-
-      datos.forEach((item, i) => {
-        const menuId = `menu-${i}`;
-        tbody.innerHTML += `
-          <tr>
-            <td>${item.NOM_REG}</td>
-            <td>${item.NOMBRE_PROPIE}</td>
-            <td>${item.EDO_CONTRI}</td>
-            <td>${item.MEDIDAS}</td>
-            <td>${item.ZONA}</td>
-            <td>${item.FILA}</td>
-            <td>${item.X}</td>
-            <td>${item.Y}</td>
-            <td>
-              <div class="flexDiv" id="${menuId}">
-                <button class="sec_btn" onclick="openMulti('${menuId}')">Acciones</button>
-                <div class="selectWrapper">
-                  <div class="multiSelect" id="${menuId}-0">
-                    <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>
-                    <div onclick="editarRegistro('${item.NOM_REG}')">Editar registro</div>
-                    <div onclick="eliminarRegistro('${item._id}')" style="color:#dc3545;">Eliminar registro</div>
-                  </div>
+    datos.forEach((item, i) => {
+      const menuId = `menu-${i}`;
+      tbody.innerHTML += `
+        <tr>
+          <td>${item.NOM_REG}</td>
+          <td>${item.NOMBRE_PROPIE}</td>
+          <td>${item.EDO_CONTRI}</td>
+          <td>${item.MEDIDAS}</td>
+          <td>${item.ZONA}</td>
+          <td>${item.FILA}</td>
+          <td>${item.X}</td>
+          <td>${item.Y}</td>
+          <td>
+            <div class="flexDiv" id="${menuId}">
+              <button class="sec_btn" onclick="openMulti('${menuId}')">Acciones</button>
+              <div class="selectWrapper">
+                <div class="multiSelect" id="${menuId}-0">
+                  <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>
+                  <div onclick="editarRegistro('${item.NOM_REG}')">Editar registro</div>
+                  <div onclick="eliminarRegistro('${item._id}')" style="color:#dc3545;">Eliminar registro</div>
                 </div>
               </div>
-            </td>
-          </tr>`;
+            </div>
+          </td>
+        </tr>`;
+    });
+  }
+
+  function verRegistro(nom) {
+    window.location.href = `btn/verInfo.html?NOM_REG=${nom}`;
+  }
+
+  function editarRegistro(nom) {
+    window.location.href = `btn/editarInfo.html?NOM_REG=${nom}`;
+  }
+
+  function eliminarRegistro(id) {
+    idAEliminar = id;
+    document.getElementById("modal-confirmacion").classList.remove("oculto");
+  }
+
+  async function eliminarConfirmado() {
+    try {
+      const res = await fetch(`http://localhost:5000/lapidas/${idAEliminar}`, {
+        method: 'DELETE',
       });
-    }
-
-    function verRegistro(nom) {
-      window.location.href = `btn/verInfo.html?NOM_REG=${nom}`;
-    }
-
-    function editarRegistro(nom) {
-      window.location.href = `btn/editarInfo.html?NOM_REG=${nom}`;
-    }
-
-    function eliminarRegistro(id) {
-      idAEliminar = id;
-      document.getElementById("modal-confirmacion").classList.remove("oculto");
-    }
-
-    async function eliminarConfirmado() {
-      try {
-        const res = await fetch(`http://localhost:5000/lapidas/${idAEliminar}`, {
-          method: 'DELETE',
-        });
-        if (res.ok) {
-          cargarTabla();
-          cargarConteoTotal();
-          mostrarMensaje("Registro eliminado.");
-        } else {
-          mostrarMensaje("Error al eliminar.");
-        }
-      } catch {
-        mostrarMensaje("Error en la solicitud.");
-      } finally {
-        document.getElementById("modal-confirmacion").classList.add("oculto");
-        idAEliminar = null;
+      if (res.ok) {
+        cargarTabla();
+        cargarConteoTotal();
+        mostrarMensaje("Registro eliminado.");
+      } else {
+        mostrarMensaje("Error al eliminar.");
       }
+    } catch {
+      mostrarMensaje("Error en la solicitud.");
+    } finally {
+      document.getElementById("modal-confirmacion").classList.add("oculto");
+      idAEliminar = null;
     }
+  }
 
-    function mostrarMensaje(msg) {
-      const mensaje = document.getElementById("mensaje-flotante");
-      mensaje.textContent = msg;
-      mensaje.classList.add("visible");
-      setTimeout(() => mensaje.classList.remove("visible"), 3000);
-    }
+  function mostrarMensaje(msg) {
+    const mensaje = document.getElementById("mensaje-flotante");
+    mensaje.textContent = msg;
+    mensaje.classList.add("visible");
+    setTimeout(() => mensaje.classList.remove("visible"), 3000);
+  }
 
-    function openMulti(id) {
-      currentMenuId = id;
-      const wrapper = document.querySelector(`#${id} .selectWrapper`);
-      document.querySelectorAll('.selectWrapper').forEach(w => {
-        if (w !== wrapper) {
-          w.style.opacity = 0;
-          w.style.pointerEvents = "none";
-        }
-      });
-
-      const isVisible = wrapper.style.pointerEvents === "all";
-      wrapper.style.opacity = isVisible ? 0 : 1;
-      wrapper.style.pointerEvents = isVisible ? "none" : "all";
-    }
-
-    document.addEventListener("click", e => {
-      if (!e.target.closest('.flexDiv')) {
-        document.querySelectorAll('.selectWrapper').forEach(w => {
-          w.style.opacity = 0;
-          w.style.pointerEvents = "none";
-        });
+  function openMulti(id) {
+    currentMenuId = id;
+    const wrapper = document.querySelector(`#${id} .selectWrapper`);
+    document.querySelectorAll('.selectWrapper').forEach(w => {
+      if (w !== wrapper) {
+        w.style.opacity = 0;
+        w.style.pointerEvents = "none";
       }
     });
-  </script>
+
+    const isVisible = wrapper.style.pointerEvents === "all";
+    wrapper.style.opacity = isVisible ? 0 : 1;
+    wrapper.style.pointerEvents = isVisible ? "none" : "all";
+  }
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest('.flexDiv')) {
+      document.querySelectorAll('.selectWrapper').forEach(w => {
+        w.style.opacity = 0;
+        w.style.pointerEvents = "none";
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
