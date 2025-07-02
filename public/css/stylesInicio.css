@@ -258,7 +258,6 @@ thead th {
     --bgColor: #1a5fa8;
 }
 
-/* Modal de confirmación */
 .modal {
     display: none;
     position: fixed;
@@ -315,7 +314,6 @@ thead th {
     color: white;
 }
 
-/* Mensaje flotante */
 #mensaje-flotante {
     position: fixed;
     top: 20px;

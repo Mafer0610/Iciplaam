@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
   <title>Gestión de Datos</title>
   <link rel="stylesheet" href="css/stylesInicio.css" />
   <link rel="stylesheet" href="css/styleadmin.css" />
@@ -12,19 +13,15 @@
 
 <div class="contenedor-tabla">
   <div class="table-container">
-
-    <!-- Top bar -->
     <div class="top-bar">
       <div class="contador-registros">
         Registros en la base de datos:
         <span class="numero" id="total-registros">Cargando...</span>
       </div>
 
-      <!-- Menú hamburguesa tipo cápsula -->
-     <div class="menu adaptado">
+    <div class="menu adaptado">
   <div class="acciones horizontal">
     <a href="btn/agregarInfo.html" onclick="event.stopPropagation()">Agregar</a>
-    <span>|</span>
     <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
   </div>
   <div class="container">
@@ -33,8 +30,6 @@
 </div>
 
     </div>
-
-    <!-- Buscador -->
     <div class="barra-busqueda">
       <input
         type="text"
@@ -42,8 +37,6 @@
         placeholder="Buscar por nombre de registro o propietario"
         onkeyup="buscarRegistro()" />
     </div>
-
-    <!-- Tabla -->
     <table>
       <thead>
         <tr>
@@ -63,7 +56,6 @@
   </div>
 </div>
 
-<!-- Modal confirmación -->
 <div id="modal-confirmacion" class="modal oculto">
   <div class="modal-contenido">
     <p>¿Estás seguro de que deseas eliminar este registro?</p>
@@ -74,27 +66,21 @@
   </div>
 </div>
 
-<!-- Mensaje flotante -->
 <div id="mensaje-flotante"></div>
 
-<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  // Menú hamburguesa toggle
   $('.toggle').on('click', function () {
     const $menu = $(this).closest('.menu.adaptado');
     $menu.toggleClass('expanded');
     $(this).toggleClass('close');
   });
 
-  // Función para cerrar sesión
   function cerrarSesion() {
     localStorage.clear();
     sessionStorage.clear();
-    window.location.href = "index.html"; // redirige al inicio o login
+    window.location.href = "index.html";
   }
-
-  // Funciones generales
   let idAEliminar = null;
   let currentMenuId = null;
 
@@ -242,7 +228,6 @@
       });
     }
   });
-</script>
-
+  </script>
 </body>
 </html>
