@@ -3,29 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
   <title>Gestión de Datos</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="css/stylesInicio.css" />
-  <script src="js/auth.js"></script>
-  <script src="btn/delete.js"></script>
-  <script src="btn/agregar.js"></script>
+  <link rel="stylesheet" href="css/styleadmin.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
 </head>
 <body>
-  <div class="contenedor-tabla">
+<div class="contenedor-tabla">
     <div class="table-container">
-      <div class="contador-registros">
-        Total de registros en la base de datos: <span class="numero" id="total-registros">Cargando...</span>
+
+      <!-- Contador y menú alineados -->
+      <div class="top-bar">
+        <div class="contador-registros">
+          Registros en la base de datos: 
+          <span class="numero" id="total-registros">Cargando...</span>
+        </div>
+
+<div class="menu adaptado">
+  <div class="container">
+    <div class="toggle"></div>
+  </div>
+  <div class="acciones horizontal">
+    <a href="btn/agregarInfo.html">Agregar</a>
+    <span>|</span>
+    <a href="#" onclick="cerrarSesion()">Cerrar</a>
+  </div>
+</div>
+
+
       </div>
       <div class="barra-busqueda">
-        <input
+        <input  
           type="text"
           id="txtbuscar"
           placeholder="Buscar por nombre de registro o propietario"
           onkeyup="buscarRegistro()" />
-        <a href="btn/agregarInfo.html" class="btn-agregar">Agregar información</a>
-        <a onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</a>
       </div>
+      <!-- Tabla -->
       <table>
         <thead>
           <tr>
@@ -57,14 +71,24 @@
 
   <div id="mensaje-flotante"></div>
 
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $('.toggle').on('click', function () {
+        const $menu = $(this).closest('.menu');
+        const $acciones = $menu.find('.acciones');
+
+        $menu.toggleClass('expanded');
+        $acciones.toggleClass('hidden');
+        $(this).toggleClass('close');
+      });
+    </script>
+
   <script>
-    // Variables globales
     let idAEliminar = null;
     let currentMenuId = null;
 
-    // Inicialización
     document.addEventListener("DOMContentLoaded", () => {
-      if (!verificarRolAdmin()) return;
       cargarTabla();
       cargarConteoTotal();
 
@@ -75,64 +99,12 @@
       });
     });
 
-    // Función para verificar rol de admin (placeholder)
-    function verificarRolAdmin() {
-      // Implementar lógica de verificación de rol
-      return true;
-    }
-
-    // Función para cerrar sesión (placeholder)
-    function cerrarSesion() {
-      // Implementar lógica de cierre de sesión
-      console.log("Cerrando sesión...");
-    }
-
-    // Funciones del menú desplegable
-    function openMulti(menuId) {
-      currentMenuId = menuId;
-      const selectWrapper = document.querySelector(`#${menuId} .selectWrapper`);
-      
-      // Cerrar otros menús abiertos
-      document.querySelectorAll('.selectWrapper').forEach(wrapper => {
-        if (wrapper !== selectWrapper) {
-          wrapper.style.opacity = 0;
-          wrapper.style.pointerEvents = "none";
-          resetMenus(wrapper);
-        }
-      });
-
-      if (selectWrapper.style.pointerEvents == "all") {
-        selectWrapper.style.opacity = 0;
-        selectWrapper.style.pointerEvents = "none";
-        resetMenus(selectWrapper);
-      } else {
-        selectWrapper.style.opacity = 1;
-        selectWrapper.style.pointerEvents = "all";
-      }
-    }
-
-    function resetMenus(wrapper) {
-      setTimeout(function () {
-        const menus = wrapper.querySelectorAll(".multiSelect");
-        for (let i = 1; i < menus.length; i++) {
-          menus[i].style.transform = "translateX(100%)";
-          menus[i].style.clipPath = "polygon(0 0, 0 0, 0 100%, 0% 100%)";
-        }
-        if (menus[0]) {
-          menus[0].style.transform = "translateX(0)";
-          menus[0].style.clipPath = "polygon(0 0, 100% 0, 100% 100%, 0% 100%)";
-        }
-      }, 300);
-    }
-
-    // Funciones de carga de datos
     async function cargarConteoTotal() {
       try {
-        const response = await fetch("http://localhost:5000/lapidas/count/total");
-        const data = await response.json();
+        const res = await fetch("http://localhost:5000/lapidas/count/total");
+        const data = await res.json();
         document.getElementById("total-registros").textContent = data.total;
-      } catch (error) {
-        console.error("Error al cargar el conteo total:", error);
+      } catch (err) {
         document.getElementById("total-registros").textContent = "Error";
       }
     }
@@ -141,130 +113,122 @@
       const tbody = document.getElementById("tabla-lapidas");
       tbody.innerHTML = "";
       try {
-        const response = await fetch("http://localhost:5000/lapidas?limit=7");
-        const lapidas = await response.json();
-        mostrarResultados(lapidas, "");
-      } catch (error) {
-        console.error("Error al cargar los datos:", error);
+        const res = await fetch("http://localhost:5000/lapidas?limit=7");
+        const data = await res.json();
+        mostrarResultados(data, "");
+      } catch (err) {
+        console.error("Error al cargar los datos:", err);
       }
     }
 
     async function buscarRegistro() {
       const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
-      if (!filtro) {
-        cargarTabla();
-        return;
-      }
+      if (!filtro) return cargarTabla();
       try {
-        const response = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
-        const lapidas = await response.json();
-        mostrarResultados(lapidas, filtro);
-      } catch (error) {
-        console.error("Error al buscar registros:", error);
+        const res = await fetch(`http://localhost:5000/lapidas?nombre=${filtro}`);
+        const data = await res.json();
+        mostrarResultados(data, filtro);
+      } catch (err) {
+        console.error("Error al buscar registros:", err);
       }
     }
 
-    function mostrarResultados(resultados, filtro) {
+    function mostrarResultados(datos, filtro) {
       const tbody = document.getElementById("tabla-lapidas");
       tbody.innerHTML = "";
-
-      if (resultados.length === 0) {
+      if (!datos.length) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sin resultados</td></tr>';
         return;
       }
 
-      resultados.forEach((lapida, index) => {
-        const menuId = `menu-${index}`;
-        const fila = `
-        <tr>
-          <td>${resaltarCoincidencia(lapida.NOM_REG, filtro)}</td>
-          <td>${resaltarCoincidencia(lapida.NOMBRE_PROPIE, filtro)}</td>
-          <td>${lapida.EDO_CONTRI}</td>
-          <td>${lapida.MEDIDAS}</td>
-          <td>${lapida.ZONA}</td>
-          <td>${lapida.FILA}</td>
-          <td>${lapida.X}</td>
-          <td>${lapida.Y}</td>
-          <td>
-            <div class="flexDiv" id="${menuId}">
-              <button class="sec_btn" onclick="openMulti('${menuId}')">Acciones</button>
-              <div class="selectWrapper">
-                <div class="multiSelect" id="${menuId}-0">
-                  <div onclick="verRegistro('${lapida.NOM_REG}')">Ver detalles</div>
-                  <div onclick="editarRegistro('${lapida.NOM_REG}')">Editar registro</div>
-                  <div onclick="eliminarRegistro('${lapida._id}')" style="color: #dc3545;">Eliminar registro</div>
+      datos.forEach((item, i) => {
+        const menuId = `menu-${i}`;
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.NOM_REG}</td>
+            <td>${item.NOMBRE_PROPIE}</td>
+            <td>${item.EDO_CONTRI}</td>
+            <td>${item.MEDIDAS}</td>
+            <td>${item.ZONA}</td>
+            <td>${item.FILA}</td>
+            <td>${item.X}</td>
+            <td>${item.Y}</td>
+            <td>
+              <div class="flexDiv" id="${menuId}">
+                <button class="sec_btn" onclick="openMulti('${menuId}')">Acciones</button>
+                <div class="selectWrapper">
+                  <div class="multiSelect" id="${menuId}-0">
+                    <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>
+                    <div onclick="editarRegistro('${item.NOM_REG}')">Editar registro</div>
+                    <div onclick="eliminarRegistro('${item._id}')" style="color:#dc3545;">Eliminar registro</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </td>
-        </tr>`;
-        tbody.innerHTML += fila;
+            </td>
+          </tr>`;
       });
     }
 
-    function resaltarCoincidencia(texto, filtro) {
-      if (!filtro) return texto;
-      return texto;
+    function verRegistro(nom) {
+      window.location.href = `btn/verInfo.html?NOM_REG=${nom}`;
     }
 
-    // Funciones de acciones
-    function verRegistro(nomReg) {
-      window.location.href = `btn/verInfo.html?NOM_REG=${nomReg}`;
-    }
-
-    function editarRegistro(nomReg) {
-      window.location.href = `btn/editarInfo.html?NOM_REG=${nomReg}`;
+    function editarRegistro(nom) {
+      window.location.href = `btn/editarInfo.html?NOM_REG=${nom}`;
     }
 
     function eliminarRegistro(id) {
       idAEliminar = id;
       document.getElementById("modal-confirmacion").classList.remove("oculto");
-      
-      // Cerrar menú desplegable
-      if (currentMenuId) {
-        const selectWrapper = document.querySelector(`#${currentMenuId} .selectWrapper`);
-        selectWrapper.style.opacity = 0;
-        selectWrapper.style.pointerEvents = "none";
-        resetMenus(selectWrapper);
-      }
     }
 
     async function eliminarConfirmado() {
       try {
-        const response = await fetch(`http://localhost:5000/lapidas/${idAEliminar}`, {
+        const res = await fetch(`http://localhost:5000/lapidas/${idAEliminar}`, {
           method: 'DELETE',
         });
-
-        if (response.ok) {
-          mostrarMensaje("Registro eliminado correctamente.");
+        if (res.ok) {
           cargarTabla();
           cargarConteoTotal();
+          mostrarMensaje("Registro eliminado.");
         } else {
-          mostrarMensaje("Error al eliminar el registro.");
+          mostrarMensaje("Error al eliminar.");
         }
-      } catch (error) {
-        console.error("Error al eliminar:", error);
-        mostrarMensaje("Hubo un error en la solicitud.");
+      } catch {
+        mostrarMensaje("Error en la solicitud.");
       } finally {
         document.getElementById("modal-confirmacion").classList.add("oculto");
         idAEliminar = null;
       }
     }
 
-    function mostrarMensaje(texto) {
+    function mostrarMensaje(msg) {
       const mensaje = document.getElementById("mensaje-flotante");
-      mensaje.textContent = texto;
+      mensaje.textContent = msg;
       mensaje.classList.add("visible");
       setTimeout(() => mensaje.classList.remove("visible"), 3000);
     }
 
-    // Cerrar menús al hacer clic fuera
-    document.addEventListener('click', function(event) {
-      if (!event.target.closest('.flexDiv')) {
-        document.querySelectorAll('.selectWrapper').forEach(wrapper => {
-          wrapper.style.opacity = 0;
-          wrapper.style.pointerEvents = "none";
-          resetMenus(wrapper);
+    function openMulti(id) {
+      currentMenuId = id;
+      const wrapper = document.querySelector(`#${id} .selectWrapper`);
+      document.querySelectorAll('.selectWrapper').forEach(w => {
+        if (w !== wrapper) {
+          w.style.opacity = 0;
+          w.style.pointerEvents = "none";
+        }
+      });
+
+      const isVisible = wrapper.style.pointerEvents === "all";
+      wrapper.style.opacity = isVisible ? 0 : 1;
+      wrapper.style.pointerEvents = isVisible ? "none" : "all";
+    }
+
+    document.addEventListener("click", e => {
+      if (!e.target.closest('.flexDiv')) {
+        document.querySelectorAll('.selectWrapper').forEach(w => {
+          w.style.opacity = 0;
+          w.style.pointerEvents = "none";
         });
       }
     });
