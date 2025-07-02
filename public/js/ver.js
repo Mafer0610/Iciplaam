@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         document.getElementById("NOM_REG").textContent = lapida.NOM_REG || "Sin registro";
         document.getElementById("NOMBRE_PROPIE").textContent = lapida.NOMBRE_PROPIE || "Desconocido";
-        document.getElementById("DIRECCION").textContent = lapida.DIRECCION || "No registrada";
+        document.getElementById("DIRECCION").textContent = lapida.DIRECCION || "No registrada"; 
         document.getElementById("UBICACION").textContent = lapida.UBICACION || "No especificada";
         document.getElementById("LOTE").textContent = lapida.LOTE || "No asignado";
         document.getElementById("MEDIDAS_NO").textContent = lapida.MEDIDAS_NO || "No registradas";
