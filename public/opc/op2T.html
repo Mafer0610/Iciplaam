@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traspaso</title>
+    <link rel="stylesheet" href="../css/stylesOp.css" />
+</head>
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) return;
+        });
+    </script>
+    <div class="form-container">
+        <h2>Trámite de Traspaso</h2>
+        <label for="NOM_REG">Número Registro:</label>
+        <input type="text" id="NOM_REG" name="NOM_REG" placeholder="PN000000">
+        <label for="NOMBRE_PROPIE">Nombre del Nuevo Propietario:</label>
+        <input type="text" id="NOMBRE_PROPIE" name="NOMBRE_PROPIE" required>
+        <form action="/subir-documentos-traspaso" method="POST" enctype="multipart/form-data">
+            <p><strong>Sube los siguientes documentos:</strong></p>
+            <label>Orig. y 2 copias de boleta de propiedad:</label>
+            <input type="file" name="boletaPropiedad" multiple required><br><br>
+            <label>Orig. y 2 copias del último pago de mantenimiento:</label>
+            <input type="file" name="pagoMantenimiento" multiple required><br><br>
+            <label>Carta poder (si vive el titular):</label>
+            <input type="file" name="cartaPoder" multiple><br><br>
+            <label>2 copias de INE de los testigos de la carta poder:</label>
+            <input type="file" name="ineTestigosCarta" multiple><br><br>
+            <label>2 copias de INE a color del titular del lote:</label>
+            <input type="file" name="ineTitularColor" multiple><br><br>
+            <label>2 copias de INE a color del nuevo propietario:</label>
+            <input type="file" name="ineNuevoPropietarioColor" multiple required><br><br>
+            <label>2 copias del acta de defunción (si el titular ha fallecido):</label>
+            <input type="file" name="actaDefuncion" multiple><br><br>
+            <label>2 copias de acta de nacimiento o matrimonio (si familiar directo):</label>
+            <input type="file" name="actaRelacion" multiple><br><br>
+            <label>2 fotos impresas a color del lote a traspasar:</label>
+            <input type="file" name="fotosLoteTraspaso" multiple required><br><br>
+            <label>Original y 1 copia de carta de responsabilidad:</label>
+            <input type="file" name="cartaResponsabilidad" multiple required><br><br>
+            <label>Original y 1 copia del oficio de solicitud:</label>
+            <input type="file" name="oficioSolicitud" multiple required><br><br>
+            <label>2 copias de recibo de exhumación (si es traspaso entre terceros):</label>
+            <input type="file" name="reciboExhumacion" multiple><br><br>
+            <p class="nota"><strong>Nota:</strong> Todo traspaso entre terceras personas (primo, tío, conocido, comprador) requerirá exhumar a las personas inhumadas en el lote, siempre y cuando hayan pasado 7 años de la inhumación.</p>
+            <div class="center-button">
+                <button type="submit">Guardar Información</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
