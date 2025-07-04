@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
 </head>
 <body>
-
 <div class="contenedor-tabla">
   <div class="table-container">
     <div class="top-bar">
@@ -22,6 +21,8 @@
     <div class="menu adaptado">
   <div class="acciones horizontal">
     <a href="btn/agregarInfo.html" onclick="event.stopPropagation()">Agregar</a>
+    <a href="opc/FichaInspeccion.html" onclick="event.stopPropagation()">Filtro 1</a>
+    <a href="opc/.html" onclick="event.stopPropagation()">Filtro 2</a>
     <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
   </div>
   <div class="container">
@@ -151,7 +152,7 @@
           <td>${item.Y}</td>
           <td>
             <div class="flexDiv" id="${menuId}">
-              <button class="sec_btn" onclick="openMulti('${menuId}')">Acciones</button>
+              <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
               <div class="selectWrapper">
                 <div class="multiSelect" id="${menuId}-0">
                   <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>

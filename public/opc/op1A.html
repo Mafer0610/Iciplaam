@@ -15,29 +15,25 @@
 
     <div class="form-container">
         <h2>Alta por rezago de pago</h2>
-        <label for="NOM_REG">Número Registro:</label>
-        <input type="text" id="NOM_REG" name="NOM_REG" placeholder="PN000000">
-        <label for="NOMBRE_PROPIE">Nombre Propietario:</label>
-        <input type="text" id="NOMBRE_PROPIE" name="NOMBRE_PROPIE" required>
         <form action="/subir-documentos" method="POST" enctype="multipart/form-data">
-        <p><strong>Sube los siguientes documentos:</strong></p>
-        <label>Orig. y 2 copias de boleta de propiedad:</label>
-        <input type="file" name="boletaPropiedad" multiple required><br><br>
-        <label>2 copias de INE del titular del lote (si vive):</label>
-        <input type="file" name="ineTitular" multiple><br><br>
-        <label>2 copias de INE de quien realiza el trámite (familiar directo):</label>
-        <input type="file" name="ineTramitante" multiple required><br><br>
-        <label>2 copias del acta de defunción de la última persona inhumada:</label>
-        <input type="file" name="actaDefuncion" multiple required><br><br>
-        <label>2 fotografías a color del lote:</label>
-        <input type="file" name="fotosLote" multiple required><br><br>
-        <label>Hoja del libro de registro del panteón:</label>
-        <input type="file" name="registroPanteon" required><br><br>
-        <label>Original y 1 copia del oficio de solicitud:</label>
-        <input type="file" name="oficioSolicitud" multiple required><br><br>
-        <div class="center-button">
-            <button type="submit">Guardar Información</button>
-        </div>
+            <p><strong>Sube los siguientes documentos:</strong></p>
+            <label>Orig. y 2 copias de boleta de propiedad:</label>
+            <input type="file" name="boletaPropiedad" multiple required><br><br>
+            <label>2 copias de INE del titular del lote (si vive):</label>
+            <input type="file" name="ineTitular" multiple><br><br>
+            <label>2 copias de INE de quien realiza el trámite (familiar directo):</label>
+            <input type="file" name="ineTramitante" multiple required><br><br>
+            <label>2 copias del acta de defunción de la última persona inhumada:</label>
+            <input type="file" name="actaDefuncion" multiple required><br><br>
+            <label>2 fotografías a color del lote:</label>
+            <input type="file" name="fotosLote" multiple required><br><br>
+            <label>Hoja del libro de registro del panteón:</label>
+            <input type="file" name="registroPanteon" required><br><br>
+            <label>Original y 1 copia del oficio de solicitud:</label>
+            <input type="file" name="oficioSolicitud" multiple required><br><br>
+            <div class="center-button">
+                <button type="submit">Guardar Información</button>
+            </div>
         </form>
     </div>
 </body>

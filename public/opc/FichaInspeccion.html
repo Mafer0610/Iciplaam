@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de inspección</title>
+    <link rel="stylesheet" href="../css/stylesOp.css" />
+</head>
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        if (!verificarRolAdmin()) return;
+        });
+    </script>
+
+    <div class="form-container">
+        <h2>FICHA DE INSPECCIÓN</h2>
+        <label for="NO_FICHI">No. FICHA DE INSPECCIÓN:</label>
+        <input type="text" id="NO_FICHI" name="NO_FICHI" required>
+        <label for="LOTE_ACT">LOTE ACTUAL:</label>
+        <input type="text" id="LOTE_ACT" name="LOTE_ACT" required>
+        <label for="MEDIDAS">MEDIDAS:</label>
+        <input type="text" id="MEDIDAS" name="MEDIDAS" required>
+        <label for="INHU_CADA">INHUMACIÓN DE CADÁVER DEL (A):</label>
+        <input type="text" id="INHU_CADA" name="INHU_CADA" required>
+        <label for="FECHA_INHU">FECHA DE INHUMACIÓN:</label></br>
+        <input type="date" id="FECHA_INHU" name="FECHA_INHU" required></br>
+        <label for="FOLIO">FOLIO:</label>
+        <input type="text" id="FOLIO" name="FOLIO" required>
+        <label for="HOJA">HOJA:</label>
+        <input type="text" id="HOJA" name="HOJA" required>
+        <label for="CARAC_LOTE">CARACTERÍSTICA DEL LOTE:</label>
+        <input type="text" id="CARAC_LOTE" name="CARAC_LOTE" required>
+        <label for="ACTU_PROPIE">ACTUAL PROPIETARIO:</label>
+        <input type="text" id="ACTU_PROPIE" name="ACTU_PROPIE" required>
+        <label for="TELEFONO">No. TELEFONICO:</label>
+        <input type="text" id="TELEFONO" name="TELEFONO" required>
+        <h2>COLINDANCIAS</h2>
+        <label for="SUR">LADO SUR:</label>
+        <input type="text" id="SUR" name="SUR" required>
+        <label for="NORTE">LADO NORTE:</label>
+        <input type="text" id="NORTE" name="NORTE" required>
+        <label for="CONCEP">CONCEPTOS:</label>
+        <input type="text" id="CONCEP" name="CONCEP" required>
+        <label for="OBSER">OBSERVACIÓN:</label>
+        <input type="text" id="OBSER" name="OBSER" required>
+    </div>
+</body>
+</html>

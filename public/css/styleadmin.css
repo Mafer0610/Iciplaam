@@ -4,7 +4,7 @@
   align-items: center;
   position: relative;
   margin-bottom: 12px;
-  padding-right: 70px; /* espacio para el botón */
+  padding-right: 70px;
 }
 
 .contador-registros {
@@ -16,7 +16,6 @@
   text-overflow: ellipsis;
 }
 
-/* Menú adaptado (hamburguesa fija en top-right) */
 .menu.adaptado {
   position: absolute;
   top: 0;
@@ -30,7 +29,6 @@
   background: transparent;
 }
 
-/* Botón hamburguesa */
 .toggle {
   width: 30px;
   height: 20px;
@@ -57,7 +55,6 @@
   bottom: 0;
 }
 
-/* Animación: de "≡" a "X" */
 .toggle.close::before {
   transform: rotate(45deg);
   top: 8.5px;
@@ -74,10 +71,10 @@
   right: 56px;
   transform: translateY(-50%) scaleX(0);
   transform-origin: right;
-  background-color: transparent; /* Quitar fondo blanco */
-  border-radius: 0; /* Eliminar bordes redondeados */
-  padding: 0; /* Sin relleno */
-  box-shadow: none; /* Quitar sombra */
+  background-color: transparent; 
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -89,14 +86,12 @@
 }
 
 
-/* Activar despliegue */
 .menu.adaptado.expanded .acciones.horizontal {
   transform: translateY(-50%) scaleX(1);
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Enlaces dentro del panel */
 .acciones.horizontal a {
   font-size: 14px;
   color: #333;
@@ -110,7 +105,6 @@
   color: #1D90F5;
 }
 
-/* Separador visual opcional */
 .acciones.horizontal span {
   color: #bbb;
   font-weight: 500;
