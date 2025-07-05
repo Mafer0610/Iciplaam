@@ -2,16 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
 require('dotenv').config();
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/imagenes', express.static('FOTOS_PANTEON_MUNICIPAL'));
-
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -20,7 +18,57 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Conectado a MongoDB - BD: iciplam'))
 .catch(err => console.error('Error de conexión:', err));
 
-// Rutas
+// Ruta para generar documento de trámite
+app.post('/generar-tramite', async (req, res) => {
+    try {
+        console.log('Datos recibidos para trámite:', req.body);
+        
+        const resultado = generarDocumentoTramite(req.body);
+        
+        if (resultado.exito) {
+            console.log('Documento de trámite generado exitosamente:', resultado.archivo);
+            
+            // Enviar el archivo para descarga
+            res.download(resultado.ruta, resultado.archivo, (err) => {
+                if (err) {
+                    console.error('Error al enviar archivo:', err);
+                    res.status(500).json({ error: 'Error al descargar el archivo' });
+                } else {
+                    console.log('Archivo enviado exitosamente');
+                }
+            });
+        } else {
+            console.error('Error al generar documento de trámite:', resultado.mensaje);
+            res.status(500).json({ error: resultado.mensaje });
+        }
+    } catch (error) {
+        console.error('Error en ruta generar-tramite:', error);
+res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+// Función para generar documento de trámite en PDF
+function generarDocumentoTramite(datos) {
+    const doc = new PDFDocument();
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const nombreArchivo = `Documento_Tramite_${timestamp}.pdf`;
+    const rutaCompleta = path.join(__dirname, 'documentos_generados', nombreArchivo);
+    
+    doc.pipe(fs.createWriteStream(rutaCompleta));
+    doc.fontSize(25).text('Documento de Trámite', { align: 'center' });
+    doc.text(`Nombre del Contribuyente: ${datos.NOMBRE_CONTRIBUYENTE}`);
+    doc.text(`Dirección: ${datos.DIRECCION}`);
+    doc.text(`Ubicación del Lote: ${datos.UBICACION_LOTE}`);
+    doc.text(`Medida: ${datos.MEDIDA_TRAMITE}`);
+    // Agrega más datos según sea necesario
+    doc.end();
+    return {
+        exito: true,
+        mensaje: "Documento de trámite generado exitosamente",
+        archivo: nombreArchivo,
+        ruta: rutaCompleta
+    };
+}
+
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
@@ -45,7 +93,7 @@ function verificarToken(req, res, next) {
 
 const Lapida = require('./models/lapida');
 
-//busqueda mejorada
+// Búsqueda mejorada
 app.get('/lapidas', async (req, res) => {
     const filtro = req.query.nombre?.toLowerCase().trim() || "";
 
@@ -78,7 +126,7 @@ app.get('/lapidas', async (req, res) => {
     }
 });
 
-//ver
+// Ver
 app.get('/lapidas/:NOM_REG', async (req, res) => {
     try {
         const lapida = await Lapida.findOne({ NOM_REG: req.params.NOM_REG });
@@ -92,7 +140,7 @@ app.get('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
-//Agregar
+// Agregar
 app.post('/lapidas', async (req, res) => {
     try {
         const nuevaLapida = new Lapida(req.body);
@@ -103,7 +151,7 @@ app.post('/lapidas', async (req, res) => {
     }
 });
 
-//borrar
+// Borrar
 app.delete('/lapidas/:id', async (req, res) => {
     try {
         await Lapida.findByIdAndDelete(req.params.id);
@@ -113,7 +161,7 @@ app.delete('/lapidas/:id', async (req, res) => {
     }
 });
 
-//Actualizar
+// Actualizar
 app.put('/lapidas/:NOM_REG', async (req, res) => {
     try {
         const lapidaActualizada = await Lapida.findOneAndUpdate(
@@ -133,7 +181,7 @@ app.put('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
-//conteo de datos
+// Conteo de datos
 app.get('/lapidas/count/total', async (req, res) => {
     try {
         const total = await Lapida.countDocuments();
@@ -144,6 +192,7 @@ app.get('/lapidas/count/total', async (req, res) => {
     }
 });
 
+// Ruta principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });

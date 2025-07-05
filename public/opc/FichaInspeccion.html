@@ -1,53 +1,387 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha de inspección</title>
-    <link rel="stylesheet" href="../css/stylesOp.css" />
-    <script src="../js/ficha.js"></script>
+    <title>Generador de Documentos - Panteón Municipal</title>
+    <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/ficha.js" defer></script>
 </head>
 <body>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        if (!verificarRolAdmin()) return;
-        });
-    </script>
-
     <div class="form-container">
-        <h2>FICHA DE INSPECCIÓN</h2>
-        <label for="NO_FICHI">No. FICHA DE INSPECCIÓN:</label>
-        <input type="text" id="NO_FICHI" name="NO_FICHI" required>
-        <label for="LOTE_ACT">LOTE ACTUAL:</label>
-        <input type="text" id="LOTE_ACT" name="LOTE_ACT" required>
-        <label for="MEDIDAS">MEDIDAS:</label>
-        <input type="text" id="MEDIDAS" name="MEDIDAS" required>
-        <label for="INHU_CADA">INHUMACIÓN DE CADÁVER DEL (A):</label>
-        <input type="text" id="INHU_CADA" name="INHU_CADA" required>
-        <label for="FECHA_INHU">FECHA DE INHUMACIÓN:</label></br>
-        <input type="date" id="FECHA_INHU" name="FECHA_INHU" required></br>
-        <label for="FOLIO">FOLIO:</label>
-        <input type="text" id="FOLIO" name="FOLIO" required>
-        <label for="HOJA">HOJA:</label>
-        <input type="text" id="HOJA" name="HOJA" required>
-        <label for="CARAC_LOTE">CARACTERÍSTICA DEL LOTE:</label>
-        <input type="text" id="CARAC_LOTE" name="CARAC_LOTE" required>
-        <label for="ACTU_PROPIE">ACTUAL PROPIETARIO:</label>
-        <input type="text" id="ACTU_PROPIE" name="ACTU_PROPIE" required>
-        <label for="TELEFONO">No. TELEFONICO:</label>
-        <input type="text" id="TELEFONO" name="TELEFONO" required>
-        <h2>COLINDANCIAS</h2>
-        <label for="SUR">LADO SUR:</label>
-        <input type="text" id="SUR" name="SUR" required>
-        <label for="NORTE">LADO NORTE:</label>
-        <input type="text" id="NORTE" name="NORTE" required>
-        <label for="CONCEP">CONCEPTOS:</label>
-        <input type="text" id="CONCEP" name="CONCEP" required>
-        <label for="OBSER">OBSERVACIÓN:</label>
-        <input type="text" id="OBSER" name="OBSER" required>
-        <div class="center-button">
-            <button type="submit">Guardar Información</button>
+        <h2>Generador de Documentos - Panteón Municipal</h2>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab('ficha')">Ficha de Inspección</button>
+            <button class="tab" onclick="showTab('tramite')">Documento de Trámite</button>
+        </div>
+
+        <div id="status-message" class="status-message"></div>
+
+        <!-- Ficha de Inspección -->
+        <div id="ficha" class="tab-content active">
+            <form id="fichaForm">
+                <div class="form-grid">
+                    <div>
+                        <label for="NO_FICHI">No. Ficha de Inspección:</label>
+                        <input type="text" id="NO_FICHI" name="NO_FICHI" required>
+                    </div>
+                    <div>
+                        <label for="LOTE_ACT">Lote Actual:</label>
+                        <input type="text" id="LOTE_ACT" name="LOTE_ACT" required>
+                    </div>
+                    <div>
+                        <label for="MEDIDAS">Medidas:</label>
+                        <input type="text" id="MEDIDAS" name="MEDIDAS" required>
+                    </div>
+                    <div>
+                        <label for="INHU_CADA">Inhumación de Cadáver del(a):</label>
+                        <input type="text" id="INHU_CADA" name="INHU_CADA" required>
+                    </div>
+                    <div>
+                        <label for="FECHA_INHU">Fecha de Inhumación:</label>
+                        <input type="date" id="FECHA_INHU" name="FECHA_INHU" required>
+                    </div>
+                    <div>
+                        <label for="FOLIO">Folio:</label>
+                        <input type="text" id="FOLIO" name="FOLIO" required>
+                    </div>
+                    <div>
+                        <label for="HOJA">Hoja:</label>
+                        <input type="text" id="HOJA" name="HOJA" required>
+                    </div>
+                    <div>
+                        <label for="ACTU_PROPIE">Actual Propietario:</label>
+                        <input type="text" id="ACTU_PROPIE" name="ACTU_PROPIE" required>
+                    </div>
+                    <div>
+                        <label for="TELEFONO">No. Telefónico:</label>
+                        <input type="text" id="TELEFONO" name="TELEFONO" required>
+                    </div>
+                </div>
+
+                <div class="form-grid full-width">
+                    <div>
+                        <label for="CARAC_LOTE">Característica del Lote:</label>
+                        <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
+                    </div>
+                </div>
+
+                <div class="checkbox-section">
+                    <h3>Colindancias</h3>
+                    <div class="form-grid">
+                        <div>
+                            <label for="SUR">Lado Sur:</label>
+                            <input type="text" id="SUR" name="SUR" required>
+                        </div>
+                        <div>
+                            <label for="NORTE">Lado Norte:</label>
+                            <input type="text" id="NORTE" name="NORTE" required>
+                        </div>
+                        <div>
+                            <label for="CONCEP">Conceptos:</label>
+                            <input type="text" id="CONCEP" name="CONCEP" required>
+                        </div>
+                        <div>
+                            <label for="OBSER">Observación:</label>
+                            <input type="text" id="OBSER" name="OBSER" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" class="btn-primary">Generar Ficha de Inspección</button>
+                    <button type="button" class="btn-secondary" onclick="limpiarFormulario('fichaForm')">Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Documento de Trámite -->
+        <div id="tramite" class="tab-content">
+            <form id="tramiteForm">
+                <div class="form-grid">
+                    <div>
+                        <label for="NOMB_CONTRI">Nombre del Contribuyente:</label>
+                        <input type="text" id="NOMB_CONTRI" name="NOMB_CONTRI" required>
+                    </div>
+                    <div>
+                        <label for="DIRECCION">Dirección:</label>
+                        <input type="text" id="DIRECCION" name="DIRECCION" required>
+                    </div>
+                    <div>
+                        <label for="UBICACION_LOTE">Ubicación del Lote:</label>
+                        <input type="text" id="UBICACION_LOTE" name="UBICACION_LOTE" required>
+                    </div>
+                    <div>
+                        <label for="MEDIDA_TRAMITE">Medida:</label>
+                        <input type="text" id="MEDIDA_TRAMITE" name="MEDIDA_TRAMITE" required>
+                    </div>
+                </div>
+
+                <div class="checkbox-section">
+                    <h3>Tipo de Trámite</h3>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="INHUMACION" name="TIPO_TRAMITE" value="INHUMACION">
+                            <label for="INHUMACION">Inhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="REP_BOLETA" name="TIPO_TRAMITE" value="REP_BOLETA">
+                            <label for="REP_BOLETA">Rep. Boleta</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="TRASPASO" name="TIPO_TRAMITE" value="TRASPASO">
+                            <label for="TRASPASO">Traspaso</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CONSTRUCCION" name="TIPO_TRAMITE" value="CONSTRUCCION">
+                            <label for="CONSTRUCCION">Construcción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="EXHUMACION" name="TIPO_TRAMITE" value="EXHUMACION">
+                            <label for="EXHUMACION">Exhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ALTA_SISTEMA" name="TIPO_TRAMITE" value="ALTA_SISTEMA">
+                            <label for="ALTA_SISTEMA">Alta en el Sistema</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="DEPOSITO_CENIZAS" name="TIPO_TRAMITE" value="DEPOSITO_CENIZAS">
+                            <label for="DEPOSITO_CENIZAS">Depósito de Cenizas</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkbox-section">
+                    <h3>Documentos Entregados</h3>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="BOLETA_PROPIEDAD" name="DOCUMENTOS" value="BOLETA_PROPIEDAD">
+                            <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="PAGO_MANTENIMIENTO" name="DOCUMENTOS" value="PAGO_MANTENIMIENTO">
+                            <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="INE_PROPIETARIO" name="DOCUMENTOS" value="INE_PROPIETARIO">
+                            <label for="INE_PROPIETARIO">INE Propietario</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="PARIENTE" name="DOCUMENTOS" value="PARIENTE">
+                            <label for="PARIENTE">Pariente</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="TESTIGOS" name="DOCUMENTOS" value="TESTIGOS">
+                            <label for="TESTIGOS">Testigos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="NVO_PROPIETARIO" name="DOCUMENTOS" value="NVO_PROPIETARIO">
+                            <label for="NVO_PROPIETARIO">Nvo. Propietario</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ACTA_DEFUNCION" name="DOCUMENTOS" value="ACTA_DEFUNCION">
+                            <label for="ACTA_DEFUNCION">Acta de Defunción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="INHUMADO" name="DOCUMENTOS" value="INHUMADO">
+                            <label for="INHUMADO">Inhumado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="PROPIETARIO_EXHUMADO" name="DOCUMENTOS" value="PROPIETARIO_EXHUMADO">
+                            <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ORDEN_INHUMACION" name="DOCUMENTOS" value="ORDEN_INHUMACION">
+                            <label for="ORDEN_INHUMACION">Orden de Inhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="OFICIO_SOLICITUD" name="DOCUMENTOS" value="OFICIO_SOLICITUD">
+                            <label for="OFICIO_SOLICITUD">Oficio de Solicitud</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ACTA_NACIMIENTO" name="DOCUMENTOS" value="ACTA_NACIMIENTO">
+                            <label for="ACTA_NACIMIENTO">Acta de Nacimiento</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ACTA_MATRIMONIO" name="DOCUMENTOS" value="ACTA_MATRIMONIO">
+                            <label for="ACTA_MATRIMONIO">Acta de Matrimonio</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CARTA_PODER" name="DOCUMENTOS" value="CARTA_PODER">
+                            <label for="CARTA_PODER">Carta Poder</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="FOTOGRAFIA_LOTE" name="DOCUMENTOS" value="FOTOGRAFIA_LOTE">
+                            <label for="FOTOGRAFIA_LOTE">Fotografía del Lote a Color</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CARTA_RESPONSIVA" name="DOCUMENTOS" value="FOTOGRAFIA_LOTE">
+                            <label for="FOTOGRAFIA_LOTE">Fotografía del Lote a Color</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkbox-section">
+                    <h3>Carta Responsiva</h3>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CONSTRUCCION_CARTA" name="CONSTRUCCION" value="CONSTRUCCION">
+                            <label for="CONSTRUCCION_CARTA">Construcción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="EXHUMACION_CARTA" name="CARTA_RESPONSIVA" value="EXHUMACION">
+                            <label for="EXHUMACION_CARTA">Exhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="TRASPASO_CARTA" name="CARTA_RESPONSIVA" value="TRASPASO">
+                            <label for="TRASPASO_CARTA">Traspaso</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid full-width">
+                    <div>
+                        <label for="OTROS">Otros:</label>
+                        <textarea id="OTROS" name="OTROS" rows="3" placeholder="Especifique otros documentos o detalles..."></textarea>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" class="btn-primary">Generar Documento de Trámite</button>
+                    <button type="button" class="btn-secondary" onclick="limpiarFormulario('tramiteForm')">Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="nota">
+            <strong>Nota:</strong> Los documentos se generarán automáticamente y se descargarán en formato Word (.docx). 
+            Asegúrese de completar todos los campos requeridos antes de generar el documento.
         </div>
     </div>
+
+    <script>
+        // Cambiar entre tabs
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remover clase activa de todos los tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activar el tab correspondiente
+            event.target.classList.add('active');
+        }
+
+        // Limpiar formulario
+        function limpiarFormulario(formId) {
+            document.getElementById(formId).reset();
+            mostrarMensaje('Formulario limpiado correctamente', 'success');
+        }
+
+        // Mostrar mensajes de estado
+        function mostrarMensaje(mensaje, tipo) {
+            const messageDiv = document.getElementById('status-message');
+            messageDiv.textContent = mensaje;
+            messageDiv.className = `status-message status-${tipo}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Recopilar datos del formulario
+        function recopilarDatosFicha() {
+            const form = document.getElementById('fichaForm');
+            const formData = new FormData(form);
+            const datos = {};
+            
+            for (let [key, value] of formData.entries()) {
+                datos[key] = value;
+            }
+            
+            return datos;
+        }
+
+        function recopilarDatosTramite() {
+            const form = document.getElementById('tramiteForm');
+            const datos = {};
+            
+            // Datos básicos
+            datos.NOMBRE_CONTRIBUYENTE = document.getElementById('NOMBRE_CONTRIBUYENTE').value;
+            datos.DIRECCION = document.getElementById('DIRECCION').value;
+            datos.UBICACION_LOTE = document.getElementById('UBICACION_LOTE').value;
+            datos.MEDIDA_TRAMITE = document.getElementById('MEDIDA_TRAMITE').value;
+            datos.OTROS = document.getElementById('OTROS').value;
+            
+            // Tipo de trámite (checkboxes)
+            datos.TIPO_TRAMITE = [];
+            document.querySelectorAll('input[name="TIPO_TRAMITE"]:checked').forEach(cb => {
+                datos.TIPO_TRAMITE.push(cb.value);
+            });
+            
+            // Documentos entregados (checkboxes)
+            datos.DOCUMENTOS = [];
+            document.querySelectorAll('input[name="DOCUMENTOS"]:checked').forEach(cb => {
+                datos.DOCUMENTOS.push(cb.value);
+            });
+            
+            // Carta responsiva (checkboxes)
+            datos.CARTA_RESPONSIVA = [];
+            document.querySelectorAll('input[name="CARTA_RESPONSIVA"]:checked').forEach(cb => {
+                datos.CARTA_RESPONSIVA.push(cb.value);
+            });
+            
+            return datos;
+        }
+
+        function generarDocumento(datos, tipo) {
+            // Simulación de generación de documento
+            mostrarMensaje(`Generando ${tipo === 'ficha' ? 'Ficha de Inspección' : 'Documento de Trámite'}...`, 'success');
+            
+            // Simulación de descarga
+            setTimeout(() => {
+                const filename = tipo === 'ficha' ? 'Ficha_Inspeccion.docx' : 'FormatoControlTramites.docx';
+                mostrarMensaje(`Descargando ${filename}...`, 'success');
+            }, 1500);
+        }
+
+        // Event listeners para los formularios
+        document.getElementById ('fichaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const datos = recopilarDatosFicha();
+            generarDocumento(datos, 'ficha');
+        });
+
+        document.getElementById('tramiteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const datos = recopilarDatosTramite();
+            generarDocumento(datos, 'tramite');
+        });
+
+        // Validación en tiempo real
+        document.querySelectorAll('input[required]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+        });
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sistema de generación de documentos iniciado');
+        });
+    </script>
 </body>
 </html>
