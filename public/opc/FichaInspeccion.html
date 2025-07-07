@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Documentos - Panteón Municipal</title>
+    <title>Panteón Municipal</title>
     <link rel="stylesheet" href="../css/stylesFicha.css" />
     <script src="../js/ficha.js" defer></script>
 </head>
 <body>
     <div class="form-container">
-        <h2>Generador de Documentos - Panteón Municipal</h2>
+        <h2>Ficha de Inspección y Control - Panteón Municipal</h2>
         
         <div class="tab-container">
             <button class="tab active" onclick="showTab('ficha')">Ficha de Inspección</button>
-            <button class="tab" onclick="showTab('tramite')">Documento de Trámite</button>
+            <button class="tab" onclick="showTab('tramite')">Documento de Control</button>
         </div>
 
         <div id="status-message" class="status-message"></div>
@@ -60,15 +60,14 @@
                     </div>
                 </div>
 
-                <div class="form-grid full-width">
-                    <div>
-                        <label for="CARAC_LOTE">Característica del Lote:</label>
-                        <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
-                    </div>
-                </div>
-
                 <div class="checkbox-section">
                     <h3>Colindancias</h3>
+                    <div class="form-grid full-width">
+                        <div>
+                            <label for="CARAC_LOTE">Característica del Lote:</label>
+                            <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
+                        </div>
+                    </div>
                     <div class="form-grid">
                         <div>
                             <label for="SUR">Lado Sur:</label>
@@ -78,13 +77,57 @@
                             <label for="NORTE">Lado Norte:</label>
                             <input type="text" id="NORTE" name="NORTE" required>
                         </div>
-                        <div>
-                            <label for="CONCEP">Conceptos:</label>
-                            <input type="text" id="CONCEP" name="CONCEP" required>
+                    </div>
+                    <div class="checkbox-section">
+                        <h3>Conceptos</h3>
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="INHUMACION" name="TIPO_TRAMITE" value="INHUMACION">
+                                <label for="INHUMACION">Inhumación</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="REP_BOLETA" name="TIPO_TRAMITE" value="REP_BOLETA">
+                                <label for="REP_BOLETA">Rep. Boleta</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="TRASPASO" name="TIPO_TRAMITE" value="TRASPASO">
+                                <label for="TRASPASO">Traspaso</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONSTRUCCION" name="TIPO_TRAMITE" value="CONSTRUCCION">
+                                <label for="CONSTRUCCION">Construcción</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="EXHUMACION" name="TIPO_TRAMITE" value="EXHUMACION">
+                                <label for="EXHUMACION">Exhumación</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ALTA_SISTEMA" name="TIPO_TRAMITE" value="ALTA_SISTEMA">
+                                <label for="ALTA_SISTEMA">Alta en el Sistema</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="DEPOSITO_CENIZAS" name="TIPO_TRAMITE" value="DEPOSITO_CENIZAS">
+                                <label for="DEPOSITO_CENIZAS">Depósito de Cenizas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="REDIFICACION" name="TIPO_TRAMITE" value="EXHUMACION">
+                                <label for="REDIFICACION">Redificación</label>
+                            </div>
+                            <div id="redificacion-options" style="display: none;">
+                                <label for="TIPO_REDIFICACION">Tipo de Redificación:</label>
+                                <select id="TIPO_REDIFICACION" name="TIPO_REDIFICACION" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="NUMERO">Redificación de Número</option>
+                                    <option value="FILA">Redificación de Fila</option>
+                                    <option value="UBICACION">Redificación de Ubicación</option>
+                                </select>
+                            </div>
                         </div>
+                    </div>
+                    <div class="form-grid full-width">
                         <div>
                             <label for="OBSER">Observación:</label>
-                            <input type="text" id="OBSER" name="OBSER" required>
+                            <textarea id="OBSER" name="OBSER" rows="3" required></textarea>
                         </div>
                     </div>
                 </div>
