@@ -178,3 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Sistema de generación de documentos iniciado');
 });
+document.addEventListener('DOMContentLoaded', function () {
+    const redificacionCheckbox = document.getElementById('REDIFICACION');
+    const redificacionOptions = document.getElementById('redificacion-options');
+
+    redificacionCheckbox.addEventListener('change', function () {
+        redificacionOptions.style.display = this.checked ? 'block' : 'none';
+    });
+});
