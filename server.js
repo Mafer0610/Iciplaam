@@ -45,12 +45,6 @@ app.post('/generar-ficha', async (req, res) => {
                     res.status(500).json({ error: 'Error al descargar el archivo' });
                 } else {
                     console.log('Archivo enviado exitosamente');
-                    // Opcional: eliminar el archivo después de enviarlo
-                    setTimeout(() => {
-                        fs.unlink(resultado.ruta, (unlinkErr) => {
-                            if (unlinkErr) console.error('Error al eliminar archivo temporal:', unlinkErr);
-                        });
-                    }, 5000);
                 }
             });
         } else {
@@ -80,12 +74,6 @@ app.post('/generar-tramite', async (req, res) => {
                     res.status(500).json({ error: 'Error al descargar el archivo' });
                 } else {
                     console.log('Archivo enviado exitosamente');
-                    // Opcional: eliminar el archivo después de enviarlo
-                    setTimeout(() => {
-                        fs.unlink(resultado.ruta, (unlinkErr) => {
-                            if (unlinkErr) console.error('Error al eliminar archivo temporal:', unlinkErr);
-                        });
-                    }, 5000);
                 }
             });
         } else {
@@ -158,101 +146,6 @@ async function generarFichaInspeccion(datos) {
     }
 }
 
-// Función para generar documento de trámite en PDF
-function generarDocumentoTramite(datos) {
-    try {
-        const doc = new PDFDocument({
-            size: 'A4',
-            margin: 50
-        });
-        
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const nombreArchivo = `Documento_Tramite_${timestamp}.pdf`;
-        const rutaCompleta = path.join(__dirname, 'documentos_generados', nombreArchivo);
-        
-        doc.pipe(fs.createWriteStream(rutaCompleta));
-        
-        // Título
-        doc.fontSize(20).font('Helvetica-Bold').text('FORMATO DE CONTROL DE TRÁMITES', { align: 'center' });
-        doc.moveDown(2);
-        
-        // Información básica
-        doc.fontSize(12).font('Helvetica-Bold').text('INFORMACIÓN DEL CONTRIBUYENTE:', { underline: true });
-        doc.moveDown(0.5);
-        doc.font('Helvetica').text(`Nombre del Contribuyente: ${datos.NOMB_CONTRI || 'N/A'}`);
-        doc.text(`Dirección: ${datos.DIRECCION || 'N/A'}`);
-        doc.text(`Ubicación del Lote: ${datos.UBICACION_LOTE || 'N/A'}`);
-        doc.text(`Medida: ${datos.MEDIDA_TRAMITE || 'N/A'}`);
-        doc.moveDown(1);
-        
-        // Tipo de trámite
-        doc.font('Helvetica-Bold').text('TIPO DE TRÁMITE:', { underline: true });
-        doc.moveDown(0.5);
-        doc.font('Helvetica');
-        if (datos.TIPO_TRAMITE && datos.TIPO_TRAMITE.length > 0) {
-            datos.TIPO_TRAMITE.forEach(tramite => {
-                doc.text(`• ${tramite}`);
-            });
-        } else {
-            doc.text('• No especificado');
-        }
-        doc.moveDown(1);
-        
-        // Documentos entregados
-        doc.font('Helvetica-Bold').text('DOCUMENTOS ENTREGADOS:', { underline: true });
-        doc.moveDown(0.5);
-        doc.font('Helvetica');
-        if (datos.DOCUMENTOS && datos.DOCUMENTOS.length > 0) {
-            datos.DOCUMENTOS.forEach(documento => {
-                doc.text(`• ${documento}`);
-            });
-        } else {
-            doc.text('• No especificado');
-        }
-        doc.moveDown(1);
-        
-        // Carta responsiva
-        if (datos.CARTA_RESPONSIVA && datos.CARTA_RESPONSIVA.length > 0) {
-            doc.font('Helvetica-Bold').text('CARTA RESPONSIVA:', { underline: true });
-            doc.moveDown(0.5);
-            doc.font('Helvetica');
-            datos.CARTA_RESPONSIVA.forEach(carta => {
-                doc.text(`• ${carta}`);
-            });
-            doc.moveDown(1);
-        }
-        
-        // Otros
-        if (datos.OTROS && datos.OTROS.trim() !== '') {
-            doc.font('Helvetica-Bold').text('OTROS:', { underline: true });
-            doc.moveDown(0.5);
-            doc.font('Helvetica').text(datos.OTROS);
-            doc.moveDown(1);
-        }
-        
-        // Fecha de generación
-        doc.moveDown(2);
-        doc.font('Helvetica').fontSize(10).text(`Documento generado el: ${new Date().toLocaleString('es-MX')}`, { align: 'right' });
-        
-        doc.end();
-        
-        return {
-            exito: true,
-            mensaje: "Documento de trámite generado exitosamente",
-            archivo: nombreArchivo,
-            ruta: rutaCompleta
-        };
-    } catch (error) {
-        console.error("Error al generar documento de trámite:", error);
-        return {
-            exito: false,
-            mensaje: `Error al generar el documento: ${error.message}`,
-            error: error
-        };
-    }
-}
-
-// Resto de tu código existente...
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
