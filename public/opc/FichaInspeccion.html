@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Documentos - Panteón Municipal</title>
+    <title>Panteón Municipal</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
     <link rel="stylesheet" href="../css/stylesFicha.css" />
     <script src="../js/ficha.js" defer></script>
 </head>
 <body>
     <div class="form-container">
-        <h2>Generador de Documentos - Panteón Municipal</h2>
-        
+        <h2>Ficha de inspección y control - Panteón Municipal</h2>
         <div class="tab-container">
             <button class="tab active" onclick="showTab('ficha')">Ficha de Inspección</button>
             <button class="tab" onclick="showTab('tramite')">Documento de Trámite</button>
         </div>
 
         <div id="status-message" class="status-message"></div>
-
+        
         <!-- Ficha de Inspección -->
         <div id="ficha" class="tab-content active">
             <form id="fichaForm">
@@ -59,16 +59,14 @@
                         <input type="text" id="TELEFONO" name="TELEFONO" required>
                     </div>
                 </div>
-
-                <div class="form-grid full-width">
-                    <div>
-                        <label for="CARAC_LOTE">Característica del Lote:</label>
-                        <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
-                    </div>
-                </div>
-
                 <div class="checkbox-section">
                     <h3>Colindancias</h3>
+                    <div class="form-grid full-width">
+                        <div>
+                            <label for="CARAC_LOTE">Característica del Lote:</label>
+                            <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
+                        </div>
+                    </div>
                     <div class="form-grid">
                         <div>
                             <label for="SUR">Lado Sur:</label>
@@ -78,10 +76,43 @@
                             <label for="NORTE">Lado Norte:</label>
                             <input type="text" id="NORTE" name="NORTE" required>
                         </div>
+                    </div>
+                    <div class="form-grid">
                         <div>
-                            <label for="CONCEP">Conceptos:</label>
-                            <input type="text" id="CONCEP" name="CONCEP" required>
+                            <label>Conceptos:</label>
+                            <div class="checkbox-grid" id="conceptos-container">
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_INHUMACION" name="CONCEP" value="INHUMACION"><label for="CONC_INHUMACION">Inhumación</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_REP_BOLETA" name="CONCEP" value="REP_BOLETA"><label for="CONC_REP_BOLETA">Reposición de Boleta</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_TRASP_LOTE" name="CONCEP" value="TRASP_LOTE"><label for="CONC_TRASP_LOTE">Traspaso de Lote</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA"><label for="CONC_TRASPA_SISTEMA">Traspaso de Sistema</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA"><label for="CONC_CONSTRUC_GAVETA">Construcción de Gaveta</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO"><label for="CONC_CONSTRUC_DEPOSITO">Construcción de Depósito</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_EXHUMA_CENIZAS" name="CONCEP" value="EXHUMA_CENIZAS"><label for="CONC_EXHUMA_CENIZAS">Exhumación de Cenizas</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="CONC_EXHUMA_DEPOSITO" name="CONCEP" value="EXHUMA_DEPOSITO"><label for="CONC_EXHUMA_DEPOSITO">Exhumación de Depósito</label></div>
+                                <div class="checkbox-item rectificacion-container">
+                                    <input type="checkbox" id="CONC_RECTIFICACION" name="CONCEP" value="RECTIFICACION" onchange="toggleRectificacionFicha()">
+                                    <label for="CONC_RECTIFICACION">Rectificación</label>
+                                    <div id="rectificacion-ficha-options" class="rectificacion-options" style="display: none;">
+                                        <div class="rectificacion-sub-options">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="FICHA_RECT_NUMERO" name="FICHA_RECT_TIPO" value="RECT_NUMERO">
+                                                <label for="FICHA_RECT_NUMERO">Rectificación de Número</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="FICHA_RECT_FILA" name="FICHA_RECT_TIPO" value="RECT_FILA">
+                                                <label for="FICHA_RECT_FILA">Rectificación de Fila</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="FICHA_RECT_UBICACION" name="FICHA_RECT_TIPO" value="RECT_UBICACION">
+                                                <label for="FICHA_RECT_UBICACION">Rectificación de Ubicación</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="form-grid">
                         <div>
                             <label for="OBSER">Observación:</label>
                             <input type="text" id="OBSER" name="OBSER" required>
@@ -95,7 +126,6 @@
                 </div>
             </form>
         </div>
-
         <!-- Documento de Trámite -->
         <div id="tramite" class="tab-content">
             <form id="tramiteForm">
@@ -153,8 +183,6 @@
                             <input type="checkbox" id="EXHUMA_DEPOSITO" name="TIPO_TRAMITE" value="EXHUMA_DEPOSITO">
                             <label for="EXHUMA_DEPOSITO">Exhumación de Depósito</label>
                         </div>
-                        
-                        <!-- Opciones de Rectificación -->
                         <div class="checkbox-item rectificacion-container">
                             <input type="checkbox" id="RECTIFICACION" name="TIPO_TRAMITE" value="RECTIFICACION" onchange="toggleRectificacionOptions()">
                             <label for="RECTIFICACION">Rectificación</label>
@@ -178,33 +206,75 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="checkbox-section">
                     <h3>Documentos Entregados</h3>
                     <div class="checkbox-grid">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="BOLETA_PROPIEDAD" name="DOCUMENTOS" value="BOLETA_PROPIEDAD">
-                            <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
+                            <input type="checkbox" id="BOLETA_PROPIEDAD"><label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="PAGO_MANTENIMIENTO" name="DOCUMENTOS" value="PAGO_MANTENIMIENTO">
-                            <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                            <input type="checkbox" id="PAGO_MANTENIMIENTO"><label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                        </div>
+                        <div class="checkbox-item rectificacion-container">
+                        <label>INE Propietario</label>
+                            <div class="rectificacion-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="PARIENTE" name="DOCUMENTOS" value="PARIENTE">
+                                    <label for="PARIENTE">Pariente</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="TESTIGOS" name="DOCUMENTOS" value="TESTIGOS">
+                                    <label for="TESTIGOS">Testigos</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="NVO_PROPIETARIO" name="DOCUMENTOS" value="NVO_PROPIETARIO">
+                                    <label for="NVO_PROPIETARIO">Nvo. Propietario</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox-item rectificacion-container">
+                        <label>Acta de Defunción</label>
+                            <div class="rectificacion-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="INHUMADO" name="DOCUMENTOS" value="INHUMADO">
+                                    <label for="INHUMADO">Inhumado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="PROPIETARIO_EXHUMADO" name="DOCUMENTOS" value="PROPIETARIO_EXHUMADO">
+                                    <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox-item"><input type="checkbox" id="ORDEN_INHUMACION"><label for="ORDEN_INHUMACION">Orden de Inhumación</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="OFICIO_SOLICITUD"><label for="OFICIO_SOLICITUD">Oficio de Solicitud</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="ACTA_NACIMIENTO"><label for="ACTA_NACIMIENTO">Acta de Nacimiento</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="ACTA_MATRIMONIO"><label for="ACTA_MATRIMONIO">Acta de Matrimonio</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="CARTA_PODER"><label for="CARTA_PODER">Carta Poder</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="FOTO_LOTE"><label for="FOTO_LOTE">Fotografía del Lote a Color</label></div>
+                        <div class="checkbox-item rectificacion-container">
+                        <label>Carta Responsiva</label>
+                        <div class="rectificacion-options">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="RESP_CONSTRUCCION" name="DOCUMENTOS" value="RESP_CONSTRUCCION">
+                                <label for="RESP_CONSTRUCCION">Construcción</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="RESP_EXHUMACION" name="DOCUMENTOS" value="RESP_EXHUMACION">
+                                <label for="RESP_EXHUMACION">Exhumación</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="RESP_TRASPASO" name="DOCUMENTOS" value="RESP_TRASPASO">
+                                <label for="RESP_TRASPASO">Traspaso</label>
+                            </div>
+                        </div>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="INE_PROPIETARIO" name="DOCUMENTOS" value="INE_PROPIETARIO">
-                            <label for="INE_PROPIETARIO">INE del Propietario</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="PARIENTE_TESTIGO" name="DOCUMENTOS" value="PARIENTE_TESTIGO">
-                            <label for="PARIENTE_TESTIGO">Pariente/Testigo</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="NVO_PROPIETARIO" name="DOCUMENTOS" value="NVO_PROPIETARIO">
-                            <label for="NVO_PROPIETARIO">Nuevo Propietario</label>
+                            <input type="checkbox" id="OTROS_CHECK" onchange="document.getElementById('OTROS').disabled = !this.checked;">
+                            <label for="OTROS_CHECK">Otros</label>
+                            <textarea id="OTROS" name="OTROS" rows="2" placeholder="Especificar..." disabled></textarea>
                         </div>
                     </div>
                 </div>
-
                 <div class="checkbox-section">
                     <h3>Carta Responsiva</h3>
                     <div class="checkbox-grid">
@@ -222,7 +292,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-grid full-width">
                     <div>
                         <label for="OTROS">Otros:</label>
@@ -239,7 +308,6 @@
     </div>
 
     <script>
-        // Función para mostrar/ocultar opciones de rectificación
         function toggleRectificacionOptions() {
             const rectificacionCheckbox = document.getElementById('RECTIFICACION');
             const rectificacionOptions = document.getElementById('rectificacion-options');
@@ -249,49 +317,22 @@
                 rectificacionOptions.style.display = 'block';
             } else {
                 rectificacionOptions.style.display = 'none';
-                // Desmarcar todas las sub-opciones
                 rectificacionSubOptions.forEach(option => {
                     option.checked = false;
                 });
             }
         }
+        function toggleRectificacionFicha() {
+            const checkbox = document.getElementById('CONC_RECTIFICACION');
+            const options = document.getElementById('rectificacion-ficha-options');
+            const subOptions = document.querySelectorAll('input[name="FICHA_RECT_TIPO"]');
 
-        // Función para recopilar datos del formulario de trámite actualizada
-        function recopilarDatosTramite() {
-            const datos = {};
-            
-            // Datos básicos
-            datos.NOMB_CONTRI = document.getElementById('NOMB_CONTRI').value;
-            datos.DIRECCION = document.getElementById('DIRECCION').value;
-            datos.UBICACION_LOTE = document.getElementById('UBICACION_LOTE').value;
-            datos.MEDIDA_TRAMITE = document.getElementById('MEDIDA_TRAMITE').value;
-            datos.OTROS = document.getElementById('OTROS').value;
-            
-            // Tipo de trámite (checkboxes)
-            datos.TIPO_TRAMITE = [];
-            document.querySelectorAll('input[name="TIPO_TRAMITE"]:checked').forEach(cb => {
-                datos.TIPO_TRAMITE.push(cb.value);
-            });
-            
-            // Opciones de rectificación
-            datos.RECT_TIPO = [];
-            document.querySelectorAll('input[name="RECT_TIPO"]:checked').forEach(cb => {
-                datos.RECT_TIPO.push(cb.value);
-            });
-            
-            // Documentos entregados (checkboxes)
-            datos.DOCUMENTOS = [];
-            document.querySelectorAll('input[name="DOCUMENTOS"]:checked').forEach(cb => {
-                datos.DOCUMENTOS.push(cb.value);
-            });
-            
-            // Carta responsiva (checkboxes)
-            datos.CARTA_RESPONSIVA = [];
-            document.querySelectorAll('input[name="CARTA_RESPONSIVA"]:checked').forEach(cb => {
-                datos.CARTA_RESPONSIVA.push(cb.value);
-            });
-            
-            return datos;
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(cb => cb.checked = false);
+            }
         }
     </script>
 </body>

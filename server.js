@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const PDFDocument = require('pdfkit');
+
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 require('dotenv').config();
@@ -163,7 +163,6 @@ function generarDocumentoTramite(datos) {
     try {
         const rutaPlantilla = path.join(__dirname, 'Docs', 'FormatoControlTramites.docx');
         
-        // Verificar si existe la plantilla
         if (!fs.existsSync(rutaPlantilla)) {
             console.error('Plantilla no encontrada en:', rutaPlantilla);
             return {
@@ -172,7 +171,6 @@ function generarDocumentoTramite(datos) {
             };
         }
 
-        // Leer la plantilla
         const content = fs.readFileSync(rutaPlantilla, 'binary');
         const zip = new PizZip(content);
         const doc = new Docxtemplater(zip, {
@@ -180,31 +178,36 @@ function generarDocumentoTramite(datos) {
             linebreaks: true,
         });
 
-        // Formatear fecha si existe
-        if (datos.FECHA_INHU) {
-            const fecha = new Date(datos.FECHA_INHU);
-            const meses = [
-                "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
-                "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
-            ];
-            datos.FECHA_INHU = `${fecha.getDate()} DE ${meses[fecha.getMonth()]} DEL ${fecha.getFullYear()}`;
-        }
+        // ✅ MARCAR CON "X" LOS CHECKBOXES QUE LLEGUEN COMO TRUE
+        const checkboxes = [
+            'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO',
+            'INE_PROPIETARIO', 'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
+            'ACTA_DEFUNCION', 'INHUMADO', 'PROPIETARIO_EXHUMADO',
+            'ORDEN_INHUMACION', 'OFICIO_SOLICITUD', 'ACTA_NACIMIENTO',
+            'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE',
+            'RESP_CONSTRUCCION', 'RESP_EXHUMACION', 'RESP_TRASPASO'
+        ];
 
-        // Configurar datos en la plantilla
-        doc.setData(datos);
+        // ✅ Convertir cada checkbox a 'X' o ''
+        checkboxes.forEach(id => {
+            datos[id] = datos[id] ? 'X' : '';
+        });
+
+        // ✅ Si hay OTROS escritos, dejarlo como está (ya viene en datos.OTROS)
+
+        doc.setData(datos);  // ✅ Ahora incluye "X" para celdas de tabla
         doc.render();
 
-        // Generar archivo
         const buf = doc.getZip().generate({ type: "nodebuffer" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const nombreArchivo = `Ficha_Inspeccion_${timestamp}.docx`;
+        const nombreArchivo = `FormatoControl_${timestamp}.docx`;
         const rutaCompleta = path.join(__dirname, 'documentos_generados', nombreArchivo);
         
         fs.writeFileSync(rutaCompleta, buf);
         
         return {
             exito: true,
-            mensaje: "Ficha de inspección generada exitosamente",
+            mensaje: "Formato de control generado exitosamente",
             archivo: nombreArchivo,
             ruta: rutaCompleta
         };
