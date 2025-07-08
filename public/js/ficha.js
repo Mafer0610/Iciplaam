@@ -64,6 +64,12 @@ function recopilarDatosTramite() {
         datos.TIPO_TRAMITE.push(cb.value);
     });
     
+    // Opciones de rectificación
+    datos.RECT_TIPO = [];
+    document.querySelectorAll('input[name="RECT_TIPO"]:checked').forEach(cb => {
+        datos.RECT_TIPO.push(cb.value);
+    });
+    
     // Documentos entregados (checkboxes)
     datos.DOCUMENTOS = [];
     document.querySelectorAll('input[name="DOCUMENTOS"]:checked').forEach(cb => {
@@ -77,6 +83,23 @@ function recopilarDatosTramite() {
     });
     
     return datos;
+}
+
+// Función para mostrar/ocultar opciones de rectificación
+function toggleRectificacionOptions() {
+    const rectificacionCheckbox = document.getElementById('RECTIFICACION');
+    const rectificacionOptions = document.getElementById('rectificacion-options');
+    const rectificacionSubOptions = document.querySelectorAll('input[name="RECT_TIPO"]');
+    
+    if (rectificacionCheckbox.checked) {
+        rectificacionOptions.style.display = 'block';
+    } else {
+        rectificacionOptions.style.display = 'none';
+        // Desmarcar todas las sub-opciones
+        rectificacionSubOptions.forEach(option => {
+            option.checked = false;
+        });
+    }
 }
 
 // Generar documento de ficha
@@ -176,13 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    console.log('Sistema de generación de documentos iniciado');
-});
-document.addEventListener('DOMContentLoaded', function () {
-    const redificacionCheckbox = document.getElementById('REDIFICACION');
-    const redificacionOptions = document.getElementById('redificacion-options');
+    // Agregar la función toggleRectificacionOptions al scope global
+    window.toggleRectificacionOptions = toggleRectificacionOptions;
 
-    redificacionCheckbox.addEventListener('change', function () {
-        redificacionOptions.style.display = this.checked ? 'block' : 'none';
-    });
+    console.log('Sistema de generación de documentos iniciado');
 });

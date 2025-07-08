@@ -45,6 +45,12 @@ app.post('/generar-ficha', async (req, res) => {
                     res.status(500).json({ error: 'Error al descargar el archivo' });
                 } else {
                     console.log('Archivo enviado exitosamente');
+                    // Opcional: eliminar el archivo después de enviarlo
+                    setTimeout(() => {
+                        fs.unlink(resultado.ruta, (unlinkErr) => {
+                            if (unlinkErr) console.error('Error al eliminar archivo temporal:', unlinkErr);
+                        });
+                    }, 5000);
                 }
             });
         } else {
@@ -74,6 +80,12 @@ app.post('/generar-tramite', async (req, res) => {
                     res.status(500).json({ error: 'Error al descargar el archivo' });
                 } else {
                     console.log('Archivo enviado exitosamente');
+                    // Opcional: eliminar el archivo después de enviarlo
+                    setTimeout(() => {
+                        fs.unlink(resultado.ruta, (unlinkErr) => {
+                            if (unlinkErr) console.error('Error al eliminar archivo temporal:', unlinkErr);
+                        });
+                    }, 5000);
                 }
             });
         } else {
@@ -90,6 +102,66 @@ app.post('/generar-tramite', async (req, res) => {
 async function generarFichaInspeccion(datos) {
     try {
         const rutaPlantilla = path.join(__dirname, 'Docs', 'Fichadeinspeccion_panteon.docx');
+        
+        // Verificar si existe la plantilla
+        if (!fs.existsSync(rutaPlantilla)) {
+            console.error('Plantilla no encontrada en:', rutaPlantilla);
+            return {
+                exito: false,
+                mensaje: `Plantilla no encontrada en: ${rutaPlantilla}`
+            };
+        }
+
+        // Leer la plantilla
+        const content = fs.readFileSync(rutaPlantilla, 'binary');
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, {
+            paragraphLoop: true,
+            linebreaks: true,
+        });
+
+        // Formatear fecha si existe
+        if (datos.FECHA_INHU) {
+            const fecha = new Date(datos.FECHA_INHU);
+            const meses = [
+                "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+                "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+            ];
+            datos.FECHA_INHU = `${fecha.getDate()} DE ${meses[fecha.getMonth()]} DEL ${fecha.getFullYear()}`;
+        }
+
+        // Configurar datos en la plantilla
+        doc.setData(datos);
+        doc.render();
+
+        // Generar archivo
+        const buf = doc.getZip().generate({ type: "nodebuffer" });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const nombreArchivo = `Ficha_Inspeccion_${timestamp}.docx`;
+        const rutaCompleta = path.join(__dirname, 'documentos_generados', nombreArchivo);
+        
+        fs.writeFileSync(rutaCompleta, buf);
+        
+        return {
+            exito: true,
+            mensaje: "Ficha de inspección generada exitosamente",
+            archivo: nombreArchivo,
+            ruta: rutaCompleta
+        };
+    } catch (error) {
+        console.error("Error al generar ficha de inspección:", error);
+        return {
+            exito: false,
+            mensaje: `Error al generar la ficha: ${error.message}`,
+            error: error
+        };
+    }
+}
+
+// Función para generar documento de trámite en word
+function generarDocumentoTramite(datos) {
+    try {
+        const rutaPlantilla = path.join(__dirname, 'Docs', 'FormatoControlTramites.docx');
         
         // Verificar si existe la plantilla
         if (!fs.existsSync(rutaPlantilla)) {
