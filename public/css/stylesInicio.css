@@ -36,13 +36,35 @@ header {
 }
 
 .table-container {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
-    width: 90%;
-    max-width: 1400px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden; /* Evita barras de scroll */
 }
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 10px;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#tabla-registros,
+#tabla-fichas {
+  width: 100%;
+  display: none;
+}
+
+#tabla-registros.active,
+#tabla-fichas.active {
+  display: block;
+}
+
 
 .contador-registros {
     margin-bottom: 20px;
@@ -329,4 +351,60 @@ thead th {
 
 #mensaje-flotante.visible {
     opacity: 1;
+}
+.botones-tabla {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px; /* CAMBIO de -10px a +20px */
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+
+.botones-tabla button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.botones-tabla button:not(:last-child) {
+  border-right: 1px solid white;
+}
+
+.botones-tabla button:hover {
+  opacity: 0.9;
+}
+
+.botones-tabla button.active {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+#tabla-registros, #tabla-fichas {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible; /* QUITA el scroll horizontal */
+  transition: opacity 0.3s ease;
+}
+
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
 }

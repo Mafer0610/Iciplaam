@@ -38,22 +38,50 @@
         placeholder="Buscar por nombre de registro o propietario"
         onkeyup="buscarRegistro()" />
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>REGISTRO</th>
-          <th>PROPIETARIO</th>
-          <th>TITULAR</th>
-          <th>MEDIDAS</th>
-          <th>ZONA</th>
-          <th>FILA</th>
-          <th>X</th>
-          <th>Y</th>
-          <th>ACCIONES</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-lapidas"></tbody>
-    </table>
+
+<div class="botones-tabla">
+  <button onclick="mostrarRegistros()" id="btn-registros" class="active">Registros</button>
+  <button onclick="mostrarFichas()" id="btn-fichas">Fichas</button>
+</div>
+
+
+<div id="tabla-registros" class="active">
+  <table>
+    <thead>
+      <tr>
+        <th>REGISTRO</th>
+        <th>PROPIETARIO</th>
+        <th>TITULAR</th>
+        <th>MEDIDAS</th>
+        <th>ZONA</th>
+        <th>FILA</th>
+        <th>X</th>
+        <th>Y</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-lapidas"></tbody>
+  </table>
+</div>
+
+<div id="tabla-fichas">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-fichas-body">
+      <!-- Dinámico -->
+    </tbody>
+  </table>
+</div>
+
+
   </div>
 </div>
 
@@ -76,6 +104,22 @@
     $menu.toggleClass('expanded');
     $(this).toggleClass('close');
   });
+
+function mostrarRegistros() {
+  document.getElementById("tabla-registros").classList.add("active");
+  document.getElementById("tabla-fichas").classList.remove("active");
+  document.getElementById("btn-registros").classList.add("active");
+  document.getElementById("btn-fichas").classList.remove("active");
+}
+
+function mostrarFichas() {
+  document.getElementById("tabla-registros").classList.remove("active");
+  document.getElementById("tabla-fichas").classList.add("active");
+  document.getElementById("btn-fichas").classList.add("active");
+  document.getElementById("btn-registros").classList.remove("active");
+}
+
+
 
   function cerrarSesion() {
     localStorage.clear();
