@@ -9,13 +9,11 @@ function showTab(tabName) {
     event.target.classList.add('active');
 }
 
-// Limpiar formulario
 function limpiarFormulario(formId) {
     document.getElementById(formId).reset();
     mostrarMensaje('Formulario limpiado correctamente', 'success');
 }
 
-// Mostrar mensajes de estado
 function mostrarMensaje(mensaje, tipo) {
     const messageDiv = document.getElementById('status-message');
     messageDiv.textContent = mensaje;
@@ -51,20 +49,16 @@ function recopilarDatosFicha() {
     for (let [key, value] of formData.entries()) {
         datos[key] = value;
     }
-
-    // Conceptos
     datos.CONCEP = [];
     document.querySelectorAll('input[name="CONCEP"]:checked').forEach(cb => {
         datos.CONCEP.push(cb.value);
     });
 
-    // Subopciones de rectificación
     datos.FICHA_RECT_TIPO = [];
     document.querySelectorAll('input[name="FICHA_RECT_TIPO"]:checked').forEach(cb => {
         datos.FICHA_RECT_TIPO.push(cb.value);
     });
 
-    // Fecha actual
     const hoy = new Date();
     const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
     datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
@@ -78,24 +72,20 @@ function recopilarDatosFicha() {
 function recopilarDatosTramite() {
     const datos = {};
 
-    // Datos simples
     datos.NOMB_CONTRI = document.getElementById('NOMB_CONTRI').value;
     datos.DIRECCION = document.getElementById('DIRECCION').value;
     datos.UBICACION_LOTE = document.getElementById('UBICACION_LOTE').value;
     datos.MEDIDA_TRAMITE = document.getElementById('MEDIDA_TRAMITE').value;
     datos.OTROS = document.getElementById('OTROS').value;
 
-    // Conceptos legibles
     datos.TIPO_TRAMITE = [];
     document.querySelectorAll('input[name="TIPO_TRAMITE"]:checked').forEach(cb => {
         const valorLegible = conceptosMap[cb.value] || cb.value;
         datos.TIPO_TRAMITE.push(valorLegible);
     });
 
-    // Para mostrar conceptos legibles en el Word
     datos.CONCEP = datos.TIPO_TRAMITE.join(', ');
 
-    // Inicializar todos los documentos posibles en true/false
     const documentosIds = [
         'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO', 'INE_PROPIETARIO',
         'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
@@ -110,7 +100,6 @@ function recopilarDatosTramite() {
         datos[id] = checkbox ? checkbox.checked : false;
     });
 
-    // Fecha actual
     const hoy = new Date();
     const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
     datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
