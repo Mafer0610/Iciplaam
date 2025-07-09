@@ -27,18 +27,16 @@ function mostrarMensaje(mensaje, tipo) {
 const conceptosMap = {
     REP_BOLETA: 'Reposición de Boleta',
     INHUMACION: 'Inhumación',
-    TRASP_LOTE: 'Traspaso de Lote',
+    TRASP_LOTE: 'Traspaso',
     TRASPA_SISTEMA: 'Alta en el Sistema',
-    CONSTRUC_GAVETA: 'Construcción de Gaveta',
-    CONSTRUC_DEPOSITO: 'Construcción de Depósito',
-    EXHUMA_CENIZAS: 'Exhumación de Cenizas',
-    EXHUMA_DEPOSITO: 'Exhumación de Depósito',
+    CONSTRUC_GAVETA: 'Construcción',
+    CONSTRUC_DEPOSITO: 'Depósito de Cenizas',
+    EXHUMA_CENIZAS: 'Exhumación',
     RECTIFICACION: 'Rectificación',
     RECT_NUMERO: 'Rectificación de Número',
     RECT_FILA: 'Rectificación de Fila',
     RECT_UBICACION: 'Rectificación de Ubicación'
 };
-
 
 // Recopilar datos del formulario de ficha
 function recopilarDatosFicha() {
@@ -67,7 +65,6 @@ function recopilarDatosFicha() {
 
     return datos;
 }
-
 // Recopilar datos del formulario de control
 function recopilarDatosTramite() {
     const datos = {};
@@ -106,8 +103,6 @@ function recopilarDatosTramite() {
 
     return datos;
 }
-
-
 
 // Función para mostrar/ocultar opciones de rectificación
 function toggleRectificacionOptions() {
