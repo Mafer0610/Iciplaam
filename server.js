@@ -178,17 +178,17 @@ function generarDocumentoTramite(datos) {
             linebreaks: true,
         });
 
-        // ✅ MARCAR CON "X" LOS CHECKBOXES QUE LLEGUEN COMO TRUE
         const checkboxes = [
+            'INHUMACION', 'REP_BOLETA', 'TRASPASO', 'CONSTRUCCION', 
+            'EXHUMACION', 'ALTA_SISTEMA', 'DEPOSITO_CENIZAS',
             'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO',
             'INE_PROPIETARIO', 'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
             'ACTA_DEFUNCION', 'INHUMADO', 'PROPIETARIO_EXHUMADO',
             'ORDEN_INHUMACION', 'OFICIO_SOLICITUD', 'ACTA_NACIMIENTO',
-            'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE',
-            'RESP_CONSTRUCCION', 'RESP_EXHUMACION', 'RESP_TRASPASO'
+            'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE', 'CARTA_RESPONSIVA',
+            'CONSTRUCCION_CARTA', 'EXHUMACION_CARTA', 'TRASPASO_CARTA', 'OTROS_CHECK'
         ];
 
-        // ✅ Convertir cada checkbox a 'X' o ''
         checkboxes.forEach(id => {
             datos[id] = datos[id] ? 'X' : '';
         });

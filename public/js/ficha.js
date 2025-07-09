@@ -84,6 +84,13 @@ function recopilarDatosTramite() {
         datos.CONCEP.push(valorLegible);
     });
     datos.CONCEP = datos.CONCEP.join(', ');
+    const TipodeTramiteIds = [
+        'INHUMACION', 'REP_BOLETA', 'TRASPASO', 'CONSTRUCCION', 'EXHUMACION', 'ALTA_SISTEMA', 'DEPOSITO_CENIZAS'
+    ];
+    TipodeTramiteIds.forEach(id => {
+        const checkbox = document.getElementById(id);
+        datos[id] = checkbox ? checkbox.checked : false;
+    });
 
     const documentosIds = [
         'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO', 'INE_PROPIETARIO',
@@ -91,18 +98,12 @@ function recopilarDatosTramite() {
         'ACTA_DEFUNCION', 'INHUMADO', 'PROPIETARIO_EXHUMADO',
         'ORDEN_INHUMACION', 'OFICIO_SOLICITUD', 'ACTA_NACIMIENTO',
         'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE',
-        'RESP_CONSTRUCCION', 'RESP_EXHUMACION', 'RESP_TRASPASO'
+        'CONSTRUCCION_CARTA', 'EXHUMACION_CARTA', 'TRASPASO_CARTA'
     ];
-
     documentosIds.forEach(id => {
         const checkbox = document.getElementById(id);
         datos[id] = checkbox ? checkbox.checked : false;
     });
-
-    const hoy = new Date();
-    const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
-    datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
-
     return datos;
 }
 
