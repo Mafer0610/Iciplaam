@@ -47,9 +47,11 @@ function recopilarDatosFicha() {
     for (let [key, value] of formData.entries()) {
         datos[key] = value;
     }
+
     datos.CONCEP = [];
     document.querySelectorAll('input[name="CONCEP"]:checked').forEach(cb => {
-        datos.CONCEP.push(cb.value);
+        const valorLegible = conceptosMap[cb.value] || cb.value; // Traduce el valor
+        datos.CONCEP.push(valorLegible);
     });
 
     datos.FICHA_RECT_TIPO = [];
@@ -61,10 +63,11 @@ function recopilarDatosFicha() {
     const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
     datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
 
-    datos.CONCEP = datos.CONCEP.join(', ');
+    datos.CONCEP = datos.CONCEP.join(', '); // Une los conceptos traducidos
 
     return datos;
 }
+
 // Recopilar datos del formulario de control
 function recopilarDatosTramite() {
     const datos = {};
@@ -75,13 +78,12 @@ function recopilarDatosTramite() {
     datos.MEDIDA_TRAMITE = document.getElementById('MEDIDA_TRAMITE').value;
     datos.OTROS = document.getElementById('OTROS').value;
 
-    datos.TIPO_TRAMITE = [];
+    datos.CONCEP = [];
     document.querySelectorAll('input[name="TIPO_TRAMITE"]:checked').forEach(cb => {
         const valorLegible = conceptosMap[cb.value] || cb.value;
-        datos.TIPO_TRAMITE.push(valorLegible);
+        datos.CONCEP.push(valorLegible);
     });
-
-    datos.CONCEP = datos.TIPO_TRAMITE.join(', ');
+    datos.CONCEP = datos.CONCEP.join(', ');
 
     const documentosIds = [
         'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO', 'INE_PROPIETARIO',
@@ -174,7 +176,7 @@ async function generarTramite(datos) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Documento_Tramite_${new Date().toISOString().split('T')[0]}.pdf`;
+            a.download = `Documento_Tramite_${new Date().toISOString().split('T')[0]}.word`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

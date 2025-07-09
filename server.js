@@ -193,9 +193,7 @@ function generarDocumentoTramite(datos) {
             datos[id] = datos[id] ? 'X' : '';
         });
 
-        // ✅ Si hay OTROS escritos, dejarlo como está (ya viene en datos.OTROS)
-
-        doc.setData(datos);  // ✅ Ahora incluye "X" para celdas de tabla
+        doc.setData(datos);
         doc.render();
 
         const buf = doc.getZip().generate({ type: "nodebuffer" });
