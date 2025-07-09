@@ -252,21 +252,21 @@
                         <div class="checkbox-item"><input type="checkbox" id="CARTA_PODER"><label for="CARTA_PODER">Carta Poder</label></div>
                         <div class="checkbox-item"><input type="checkbox" id="FOTO_LOTE"><label for="FOTO_LOTE">Fotografía del Lote a Color</label></div>
                         <div class="checkbox-item rectificacion-container">
-                        <label>Carta Responsiva</label>
-                        <div class="rectificacion-options">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="RESP_CONSTRUCCION" name="DOCUMENTOS" value="RESP_CONSTRUCCION">
-                                <label for="RESP_CONSTRUCCION">Construcción</label>
+                            <label>Carta Responsiva</label>
+                            <div class="rectificacion-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="RESP_CONSTRUCCION" name="DOCUMENTOS" value="RESP_CONSTRUCCION">
+                                    <label for="RESP_CONSTRUCCION">Construcción</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="RESP_EXHUMACION" name="DOCUMENTOS" value="RESP_EXHUMACION">
+                                    <label for="RESP_EXHUMACION">Exhumación</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="RESP_TRASPASO" name="DOCUMENTOS" value="RESP_TRASPASO">
+                                    <label for="RESP_TRASPASO">Traspaso</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="RESP_EXHUMACION" name="DOCUMENTOS" value="RESP_EXHUMACION">
-                                <label for="RESP_EXHUMACION">Exhumación</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="RESP_TRASPASO" name="DOCUMENTOS" value="RESP_TRASPASO">
-                                <label for="RESP_TRASPASO">Traspaso</label>
-                            </div>
-                        </div>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="OTROS_CHECK" onchange="document.getElementById('OTROS').disabled = !this.checked;">
@@ -275,30 +275,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="checkbox-section">
-                    <h3>Carta Responsiva</h3>
-                    <div class="checkbox-grid">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="ACTA_DEFUNCION" name="CARTA_RESPONSIVA" value="ACTA_DEFUNCION">
-                            <label for="ACTA_DEFUNCION">Acta de Defunción</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="INHUMADO" name="CARTA_RESPONSIVA" value="INHUMADO">
-                            <label for="INHUMADO">Inhumado</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="PROPIETARIO_EXHUMADO" name="CARTA_RESPONSIVA" value="PROPIETARIO_EXHUMADO">
-                            <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <div>
-                        <label for="OTROS">Otros:</label>
-                        <textarea id="OTROS" name="OTROS" rows="3" placeholder="Información adicional..."></textarea>
-                    </div>
-                </div>
-
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Generar Documento de Trámite</button>
                     <button type="button" class="btn-secondary" onclick="limpiarFormulario('tramiteForm')">Limpiar</button>
