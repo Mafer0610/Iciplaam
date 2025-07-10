@@ -12,6 +12,13 @@ function showTab(tabName) {
 function limpiarFormulario(formId) {
     document.getElementById(formId).reset();
     mostrarMensaje('Formulario limpiado correctamente', 'success');
+
+    document.querySelectorAll('.rectificacion-options').forEach(option => {
+        option.style.display = 'none';
+        option.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    });
+    document.getElementById('OTROS').style.display = 'none';
+    document.getElementById('OTROS_CHECK').checked = false;
 }
 
 function mostrarMensaje(mensaje, tipo) {
@@ -77,15 +84,9 @@ function recopilarDatosTramite() {
     datos.UBICACION_LOTE = document.getElementById('UBICACION_LOTE').value;
     datos.MEDIDA_TRAMITE = document.getElementById('MEDIDA_TRAMITE').value;
     datos.OTROS = document.getElementById('OTROS').value;
-
-    datos.CONCEP = [];
-    document.querySelectorAll('input[name="TIPO_TRAMITE"]:checked').forEach(cb => {
-        const valorLegible = conceptosMap[cb.value] || cb.value;
-        datos.CONCEP.push(valorLegible);
-    });
-    datos.CONCEP = datos.CONCEP.join(', ');
     const TipodeTramiteIds = [
-        'INHUMACION', 'REP_BOLETA', 'TRASPASO', 'CONSTRUCCION', 'EXHUMACION', 'ALTA_SISTEMA', 'DEPOSITO_CENIZAS'
+        'INHUMACION', 'REP_BOLETA', 'TRASPASO', 'CONSTRUCCION',
+        'EXHUMACION', 'ALTA_SISTEMA', 'DEPOSITO_CENIZAS'
     ];
     TipodeTramiteIds.forEach(id => {
         const checkbox = document.getElementById(id);
@@ -97,7 +98,7 @@ function recopilarDatosTramite() {
         'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
         'ACTA_DEFUNCION', 'INHUMADO', 'PROPIETARIO_EXHUMADO',
         'ORDEN_INHUMACION', 'OFICIO_SOLICITUD', 'ACTA_NACIMIENTO',
-        'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE',
+        'ACTA_MATRIMONIO', 'CARTA_PODER', 'FOTO_LOTE', 'CARTA_RESPONSIVA',
         'CONSTRUCCION_CARTA', 'EXHUMACION_CARTA', 'TRASPASO_CARTA'
     ];
     documentosIds.forEach(id => {

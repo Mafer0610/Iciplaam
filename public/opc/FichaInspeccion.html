@@ -65,17 +65,17 @@
                     <div class="form-grid full-width">
                         <div>
                             <label for="CARAC_LOTE">Característica del Lote:</label>
-                            <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3" required></textarea>
+                            <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="form-grid">
                         <div>
                             <label for="SUR">Lado Sur:</label>
-                            <input type="text" id="SUR" name="SUR" required>
+                            <input type="text" id="SUR" name="SUR" >
                         </div>
                         <div>
                             <label for="NORTE">Lado Norte:</label>
-                            <input type="text" id="NORTE" name="NORTE" required>
+                            <input type="text" id="NORTE" name="NORTE" >
                         </div>
                     </div>
                     <div class="form-grid">
@@ -115,7 +115,7 @@
                     <div class="form-grid">
                         <div>
                             <label for="OBSER">Observación:</label>
-                            <input type="text" id="OBSER" name="OBSER" required>
+                            <input type="text" id="OBSER" name="OBSER">
                         </div>
                     </div>
                 </div>
@@ -179,27 +179,6 @@
                             <input type="checkbox" id="EXHUMA_CENIZAS" name="TIPO_TRAMITE" value="EXHUMA_CENIZAS">
                             <label for="EXHUMA_CENIZAS">Exhumación</label>
                         </div>
-                        <div class="checkbox-item rectificacion-container">
-                            <input type="checkbox" id="RECTIFICACION" name="TIPO_TRAMITE" value="RECTIFICACION" onchange="toggleRectificacionOptions()">
-                            <label for="RECTIFICACION">Rectificación</label>
-                            
-                            <div id="rectificacion-options" class="rectificacion-options" style="display: none;">
-                                <div class="rectificacion-sub-options">
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="RECT_NUMERO" name="RECT_TIPO" value="RECT_NUMERO">
-                                        <label for="RECT_NUMERO">Rectificación de Número</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="RECT_FILA" name="RECT_TIPO" value="RECT_FILA">
-                                        <label for="RECT_FILA">Rectificación de Fila</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="RECT_UBICACION" name="RECT_TIPO" value="RECT_UBICACION">
-                                        <label for="RECT_UBICACION">Rectificación de Ubicación</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="checkbox-section">
@@ -213,7 +192,7 @@
                         </div>
                         <div class="checkbox-item rectificacion-container">
                             <input type="checkbox" id="INE_PROPIETARIO" onchange="toggleIneOptions()">
-                            <label for="INE_PROPIETARIO">INE Propietario</label>
+                            <label for="INE_PROPIETARIO" id="INE_PROPIETARIO" value="INE_PROPIETARIO">INE Propietario</label>
                             <div id="ine-options" class="rectificacion-options" style="display: none;">
                                 <div class="rectificacion-sub-options">
                                     <div class="checkbox-item">
@@ -233,7 +212,7 @@
                         </div>
                         <div class="checkbox-item rectificacion-container">
                             <input type="checkbox" id="ACTA_DEFUNCION" onchange="toggleActaOptions()">
-                            <label for="ACTA_DEFUNCION">Acta de Defunción</label>
+                            <label for="ACTA_DEFUNCION" id="ACTA_DEFUNCION" value="ACTA_DEFUNCION">Acta de Defunción</label>
                             <div id="acta-options" class="rectificacion-options" style="display: none;">
                                 <div class="rectificacion-sub-options">
                                     <div class="checkbox-item">
@@ -255,7 +234,7 @@
                         <div class="checkbox-item"><input type="checkbox" id="FOTO_LOTE"><label for="FOTO_LOTE">Fotografía del Lote a Color</label></div>
                         <div class="checkbox-item rectificacion-container">
                             <input type="checkbox" id="CARTA_RESPONSIVA" onchange="toggleResponsivaOptions()">
-                            <label for="CARTA_RESPONSIVA">Carta Responsiva</label>
+                            <label for="CARTA_RESPONSIVA" id="CARTA_RESPONSIVA" value="CARTA_RESPONSIVA">Carta Responsiva</label>
                             <div id="responsiva-options" class="rectificacion-options" style="display: none;">
                                 <div class="rectificacion-sub-options">
                                     <div class="checkbox-item">
