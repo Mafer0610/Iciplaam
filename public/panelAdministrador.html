@@ -8,6 +8,38 @@
   <link rel="stylesheet" href="css/stylesInicio.css" />
   <link rel="stylesheet" href="css/styleadmin.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .contenedor-tabla {
+      height: calc(100vh - 120px);
+      overflow: hidden;
+    }
+
+    .table-container {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    table tbody {
+      display: block;
+      max-height: 100%;
+      overflow: hidden;
+    }
+
+    table thead,
+    table tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+  </style>
 </head>
 <body>
 <div class="contenedor-tabla">
