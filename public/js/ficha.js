@@ -80,7 +80,6 @@ function recopilarDatosFicha() {
 function recopilarDatosTramite() {
     const datos = {};
 
-    // Datos básicos
     datos.NOMB_CONTRI = document.getElementById('NOMB_CONTRI').value || '';
     datos.DIRECCION = document.getElementById('DIRECCION').value || '';
     datos.UBICACION_LOTE = document.getElementById('UBICACION_LOTE').value || '';
@@ -89,7 +88,6 @@ function recopilarDatosTramite() {
 
     console.log('=== VERIFICANDO CHECKBOXES DE TIPO DE TRÁMITE ===');
     
-    // Mapear los nombres de nuestros checkboxes a los nombres que espera la plantilla Word
     const mapeoTipos = [
         { checkbox: 'INHUMACION', plantilla: 'INHUMACION' },
         { checkbox: 'REP_BOLETA', plantilla: 'REP_BOLETA' },
@@ -100,7 +98,6 @@ function recopilarDatosTramite() {
         { checkbox: 'EXHUMA_CENIZAS', plantilla: 'EXHUMACION' }
     ];
 
-    // Para el documento Word - usar nombres que espera la plantilla
     mapeoTipos.forEach(item => {
         const checkbox = document.getElementById(item.checkbox);
         if (checkbox) {
@@ -112,19 +109,17 @@ function recopilarDatosTramite() {
         }
     });
 
-    // Para la base de datos - usar nombres originales
     datos.TIPO_TRAMITE = [];
     mapeoTipos.forEach(item => {
         const checkbox = document.getElementById(item.checkbox);
         if (checkbox && checkbox.checked) {
-            datos.TIPO_TRAMITE.push(item.checkbox); // Guardar nombre original en BD
+            datos.TIPO_TRAMITE.push(item.checkbox);
         }
     });
 
     console.log('Array TIPO_TRAMITE para BD:', datos.TIPO_TRAMITE);
 
-    // Verificar documentos entregados
-    console.log('=== VERIFICANDO DOCUMENTOS ENTREGADOS ===');
+    console.log('=== DOCUMENTOS ENTREGADOS ===');
     const documentosIds = [
         'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO', 'INE_PROPIETARIO',
         'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
@@ -134,7 +129,6 @@ function recopilarDatosTramite() {
         'CONSTRUCCION_CARTA', 'EXHUMACION_CARTA', 'TRASPASO_CARTA', 'OTROS_CHECK'
     ];
 
-    // Para el documento Word - marcar con X los seleccionados
     documentosIds.forEach(id => {
         const checkbox = document.getElementById(id);
         if (checkbox) {
@@ -146,7 +140,6 @@ function recopilarDatosTramite() {
         }
     });
 
-    // Para la base de datos - crear array de seleccionados
     datos.DOCUMENTOS_ENTREGADOS = [];
     documentosIds.forEach(id => {
         const checkbox = document.getElementById(id);
@@ -304,31 +297,26 @@ async function generarTramite(datos) {
 
 // Event listeners para los formularios
 document.addEventListener('DOMContentLoaded', function() {
-    // Event listener para ficha de inspección
     document.getElementById('fichaForm').addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('=== ENVIANDO FICHA DE INSPECCIÓN ===');
         const datos = recopilarDatosFicha();
         console.log('Datos de ficha recopilados:', datos);
         
-        // Generar documento y guardar en BD
         generarFicha(datos);
         guardarFicha(datos);
     });
 
-    // Event listener para documento de trámite
     document.getElementById('tramiteForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('=== ENVIANDO DOCUMENTO DE TRÁMITE ===');
+        console.log('=== DOCUMENTO DE TRÁMITE ===');
         const datos = recopilarDatosTramite();
         console.log('Datos de trámite recopilados:', datos);
         
-        // Generar documento y guardar en BD
         generarTramite(datos);
         guardarControl(datos);
     });
 
-    // Validación de campos requeridos
     document.querySelectorAll('input[required]').forEach(input => {
         input.addEventListener('blur', function() {
             if (this.value.trim() === '') {
@@ -339,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Hacer las funciones de toggle disponibles globalmente
     window.toggleRectificacionOptions = toggleRectificacionOptions;
 
     console.log('Sistema de generación de documentos iniciado');

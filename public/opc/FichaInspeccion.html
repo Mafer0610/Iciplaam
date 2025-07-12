@@ -6,7 +6,17 @@
     <title>Panteón Municipal</title>
     <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
     <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/auth.js"></script>
     <script src="../js/ficha.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const auth = verificarAutenticacion();
+            if (!auth) {
+                return;
+            }
+            console.log('Usuario autenticado:', auth.userRole);
+        });
+    </script>
 </head>
 <body>
     <div class="form-container">
@@ -341,7 +351,6 @@
                 });
             }
         }
-        
         function toggleRectificacionFicha() {
             const checkbox = document.getElementById('CONC_RECTIFICACION');
             const options = document.getElementById('rectificacion-ficha-options');
@@ -354,7 +363,6 @@
                 subOptions.forEach(cb => cb.checked = false);
             }
         }
-        
         function toggleIneOptions() {
             const checkbox = document.getElementById('INE_PROPIETARIO');
             const options = document.getElementById('ine-options');
@@ -367,7 +375,6 @@
                 subOptions.forEach(option => option.checked = false);
             }
         }
-        
         function toggleActaOptions() {
             const checkbox = document.getElementById('ACTA_DEFUNCION');
             const options = document.getElementById('acta-options');
@@ -380,7 +387,6 @@
                 subOptions.forEach(option => option.checked = false);
             }
         }
-        
         function toggleResponsivaOptions() {
             const checkbox = document.getElementById('CARTA_RESPONSIVA');
             const options = document.getElementById('responsiva-options');
@@ -393,7 +399,6 @@
                 subOptions.forEach(option => option.checked = false);
             }
         }
-        
         function toggleOtrosField() {
             const checkbox = document.getElementById('OTROS_CHECK');
             const textarea = document.getElementById('OTROS');
@@ -407,7 +412,6 @@
                 textarea.value = '';
             }
         }
-        
         function mostrarDocumento(archivo) {
             const container = document.getElementById('documento-container');
             const iframe = document.getElementById('documento-iframe');
