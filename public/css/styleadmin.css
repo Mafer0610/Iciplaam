@@ -116,7 +116,6 @@
   user-select: none;
 }
 
-/* Asegurar que los dropdowns no se corten */
 .flexDiv {
   position: relative;
 }
@@ -152,7 +151,6 @@
   background-color: #f8f9fa;
 }
 
-/* Estilos específicos para el contenedor de la tabla */
 .contenedor-tabla {
   position: relative;
   overflow: visible;
@@ -163,7 +161,6 @@
   overflow: visible;
 }
 
-/* Mejoras adicionales para responsive */
 @media (max-width: 768px) {
   .top-bar {
     padding-right: 50px;

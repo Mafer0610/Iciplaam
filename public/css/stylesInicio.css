@@ -9,7 +9,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Ajusta header para ocupar solo lo necesario */
 header {
     flex-shrink: 0;
     background-color: #2E7FCF;
@@ -22,7 +21,6 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Envuelve el contenido principal */
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -31,7 +29,6 @@ header {
     padding: 20px;
 }
 
-/* Tabla ocupa el espacio vertical disponible */
 .contenedor-tabla {
     flex-grow: 1;
     display: flex;
@@ -71,7 +68,6 @@ thead th {
     text-align: left;
 }
 
-/* Sección de barra de búsqueda y botones ajustados */
 .barra-busqueda, .botones-tabla, .contador-registros {
     flex-shrink: 0;
     margin-bottom: 10px;
@@ -129,7 +125,6 @@ thead th {
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
 }
 
-/* Registros y fichas */
 #tabla-registros, #tabla-fichas {
     width: 100%;
     flex-grow: 1;

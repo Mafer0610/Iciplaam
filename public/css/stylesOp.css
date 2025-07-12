@@ -35,21 +35,21 @@ h2 {
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px; /* Reduje el espacio entre elementos */
+    gap: 6px;
 }
 
 form label {
     grid-column: 1 / 3;
     font-weight: bold;
     color: #2c3e50;
-    margin-bottom: -2px; /* Menor separación con el input */
-    margin-top: 6px; /* Evita que quede pegado al input anterior */
+    margin-bottom: -2px;
+    margin-top: 6px;
 }
 
 input[type="file"],
 input[type="text"] {
-    padding: 7px; /* Más compacto */
-    margin-bottom: 4px; /* Menor espacio vertical */
+    padding: 7px;
+    margin-bottom: 4px;
     border: 2px solid #ccddee;
     border-radius: 8px;
     font-size: 14px;
@@ -67,7 +67,7 @@ input[type="text"] {
     text-align: center;
     color: #2c3e50;
     font-weight: bold;
-    margin-top: 4px; /* Antes era 10px */
+    margin-top: 4px;
     font-size: 14px;
     line-height: 1.4;
 }
@@ -83,7 +83,7 @@ input[type="file"]:focus {
     grid-column: 1 / 3;
     display: flex;
     justify-content: center;
-    margin-top: 6px; /* Antes era 8px */
+    margin-top: 6px;
 }
 
 button {
