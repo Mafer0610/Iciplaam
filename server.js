@@ -8,11 +8,68 @@ const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 require('dotenv').config();
 
+// NUEVAS DEPENDENCIAS PARA GOOGLE DRIVE
+const { google } = require('googleapis');
+const NodeCache = require('node-cache');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/imagenes', express.static('FOTOS_PANTEON_MUNICIPAL'));
+
+// CONFIGURACIÓN DE GOOGLE DRIVE API
+const driveCache = new NodeCache({ stdTTL: 3600 }); // Cache por 1 hora
+
+const drive = google.drive({
+    version: 'v3',
+    auth: process.env.GOOGLE_DRIVE_API_KEY
+});
+
+const FOLDER_ID = '1R7G6TMC9AHszD5Hg95DAqjxXE9giIJVs';
+
+// Función para cargar todos los archivos de Google Drive
+async function cargarArchivosDelDrive() {
+    try {
+        console.log('🔄 Cargando archivos de Google Drive...');
+        let allFiles = [];
+        let pageToken = null;
+        let totalCargados = 0;
+
+        do {
+            const response = await drive.files.list({
+                q: `'${FOLDER_ID}' in parents and mimeType contains 'image/'`,
+                fields: 'nextPageToken, files(id, name, webViewLink, webContentLink)',
+                pageSize: 1000,
+                pageToken: pageToken
+            });
+
+            allFiles = allFiles.concat(response.data.files);
+            pageToken = response.data.nextPageToken;
+            totalCargados = allFiles.length;
+            
+            console.log(`📥 Cargados ${totalCargados} archivos hasta ahora...`);
+        } while (pageToken);
+
+        // Crear mapeo nombre -> datos del archivo
+        const fileMap = {};
+        allFiles.forEach(file => {
+            fileMap[file.name] = {
+                id: file.id,
+                webViewLink: file.webViewLink,
+                webContentLink: file.webContentLink
+            };
+        });
+
+        // Guardar en cache
+        driveCache.set('file_map', fileMap);
+        console.log(`✅ Total de archivos cargados: ${totalCargados}`);
+        
+        return fileMap;
+    } catch (error) {
+        console.error('❌ Error al cargar archivos de Drive:', error.message);
+        return {};
+    }
+}
 
 // Crear directorio para documentos generados
 const dirDocumentos = path.join(__dirname, 'documentos_generados');
@@ -32,6 +89,81 @@ mongoose.connect(process.env.MONGO_URI, {
 const Lapida = require('./models/lapida');
 const Ficha = require('./models/ficha');
 const Control = require('./models/control');
+
+// NUEVAS RUTAS PARA GOOGLE DRIVE
+// Ruta para servir imágenes desde Drive
+app.get('/imagenes/:nombreArchivo', async (req, res) => {
+    try {
+        const nombreArchivo = req.params.nombreArchivo;
+        
+        // Obtener mapeo del cache
+        let fileMap = driveCache.get('file_map');
+        
+        // Si no hay cache, cargar archivos
+        if (!fileMap) {
+            console.log('🔄 Cache vacío, cargando archivos...');
+            fileMap = await cargarArchivosDelDrive();
+        }
+
+        // Buscar el archivo
+        const archivo = fileMap[nombreArchivo];
+        
+        if (archivo) {
+            // Redireccionar a la URL directa de Google Drive
+            const directUrl = `https://drive.google.com/uc?export=view&id=${archivo.id}`;
+            res.redirect(directUrl);
+        } else {
+            console.log(`❌ Archivo no encontrado: ${nombreArchivo}`);
+            res.status(404).json({ error: 'Imagen no encontrada' });
+        }
+        
+    } catch (error) {
+        console.error('❌ Error al obtener imagen:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
+});
+
+// Ruta para obtener información de la imagen
+app.get('/api/imagen-url/:nombreArchivo', async (req, res) => {
+    try {
+        const nombreArchivo = req.params.nombreArchivo;
+        
+        let fileMap = driveCache.get('file_map');
+        if (!fileMap) {
+            fileMap = await cargarArchivosDelDrive();
+        }
+
+        const archivo = fileMap[nombreArchivo];
+        
+        if (archivo) {
+            res.json({
+                exists: true,
+                directUrl: `https://drive.google.com/uc?export=view&id=${archivo.id}`,
+                viewUrl: archivo.webViewLink,
+                downloadUrl: archivo.webContentLink
+            });
+        } else {
+            res.json({
+                exists: false,
+                message: 'Archivo no encontrado'
+            });
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
+});
+
+// Ruta para monitorear el estado del cache
+app.get('/api/cache-status', (req, res) => {
+    const fileMap = driveCache.get('file_map');
+    res.json({
+        cached: !!fileMap,
+        fileCount: fileMap ? Object.keys(fileMap).length : 0,
+        lastUpdate: driveCache.getTtl('file_map') ? new Date(driveCache.getTtl('file_map')).toISOString() : null
+    });
+});
 
 // Ruta para guardar ficha de inspección
 app.post('/fichas', async (req, res) => {
@@ -402,5 +534,19 @@ app.get('/lapidas/count/total', async (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
+
+// CARGAR ARCHIVOS AL INICIAR EL SERVIDOR
+console.log('🚀 Iniciando carga de archivos de Google Drive...');
+cargarArchivosDelDrive().then(() => {
+    console.log('✅ Carga inicial completada');
+}).catch(error => {
+    console.error('❌ Error en carga inicial:', error);
+});
+
+// Recargar cache cada hora
+setInterval(() => {
+    console.log('🔄 Actualizando cache de Google Drive...');
+    cargarArchivosDelDrive();
+}, 3600000); // 1 hora
 
 app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));
