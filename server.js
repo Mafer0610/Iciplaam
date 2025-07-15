@@ -90,6 +90,125 @@ const Lapida = require('./models/lapida');
 const Ficha = require('./models/ficha');
 const Control = require('./models/control');
 
+// MODELO DE HISTORIAL CON NOMBRE DE COLECCIÓN ESPECÍFICO
+const HistorialSchema = new mongoose.Schema({
+    NOM_REG: {
+        type: String,
+        required: true,
+        index: true
+    },
+    fecha_cambio: {
+        type: Date,
+        default: Date.now
+    },
+    usuario: {
+        type: String,
+        default: "Sistema"
+    },
+    tipo_operacion: {
+        type: String,
+        enum: ['CREACION', 'MODIFICACION'],
+        default: 'MODIFICACION'
+    },
+    datos_anteriores: {
+        NOMBRE_PROPIE: String,
+        DIRECCION: String,
+        UBICACION: String,
+        LOTE: String,
+        MEDIDAS_NO: String,
+        EDO_CONTRI: String,
+        COLONIA: String,
+        MEDIDAS: String,
+        LOTES_A: String,
+        ZONA: String,
+        FILA: String,
+        RUTA: String,
+        X: String,
+        Y: String,
+        CVE_POB: String,
+        CVE_PANTEO: String,
+        CVE_ZONA: String,
+        CVE_LOTE: String,
+        CUENTA: String
+    },
+    datos_nuevos: {
+        NOMBRE_PROPIE: String,
+        DIRECCION: String,
+        UBICACION: String,
+        LOTE: String,
+        MEDIDAS_NO: String,
+        EDO_CONTRI: String,
+        COLONIA: String,
+        MEDIDAS: String,
+        LOTES_A: String,
+        ZONA: String,
+        FILA: String,
+        RUTA: String,
+        X: String,
+        Y: String,
+        CVE_POB: String,
+        CVE_PANTEO: String,
+        CVE_ZONA: String,
+        CVE_LOTE: String,
+        CUENTA: String
+    },
+    campos_modificados: [{
+        campo: String,
+        valor_anterior: String,
+        valor_nuevo: String
+    }]
+});
+
+// FORZAR EL NOMBRE EXACTO DE LA COLECCIÓN
+const Historial = mongoose.model("Historial", HistorialSchema, "historial");
+
+// FUNCIÓN PARA GUARDAR EN HISTORIAL
+async function guardarHistorial(nomReg, datosAnteriores, datosNuevos, tipoOperacion = 'MODIFICACION') {
+    try {
+        console.log(`📝 Guardando historial para ${nomReg}`);
+        
+        const camposModificados = [];
+        
+        // Campos a comparar
+        const campos = [
+            'NOMBRE_PROPIE', 'DIRECCION', 'UBICACION', 'LOTE', 'MEDIDAS_NO', 
+            'EDO_CONTRI', 'COLONIA', 'MEDIDAS', 'LOTES_A', 'ZONA', 'FILA', 
+            'RUTA', 'X', 'Y', 'CVE_POB', 'CVE_PANTEO', 'CVE_ZONA', 'CVE_LOTE', 'CUENTA'
+        ];
+
+        // Comparar campos y registrar cambios
+        campos.forEach(campo => {
+            const valorAnterior = datosAnteriores[campo] || '';
+            const valorNuevo = datosNuevos[campo] || '';
+            
+            if (valorAnterior !== valorNuevo) {
+                camposModificados.push({
+                    campo: campo,
+                    valor_anterior: valorAnterior,
+                    valor_nuevo: valorNuevo
+                });
+            }
+        });
+
+        // Solo guardar si hay cambios (excepto para CREACION)
+        if (tipoOperacion === 'CREACION' || camposModificados.length > 0) {
+            const historial = new Historial({
+                NOM_REG: nomReg,
+                tipo_operacion: tipoOperacion,
+                datos_anteriores: datosAnteriores,
+                datos_nuevos: datosNuevos,
+                campos_modificados: camposModificados
+            });
+
+            const resultado = await historial.save();
+            console.log(`✅ Historial guardado exitosamente - ID: ${resultado._id}`);
+            console.log(`📊 Cambios registrados: ${camposModificados.length}`);
+        }
+    } catch (error) {
+        console.error('❌ Error al guardar historial:', error);
+    }
+}
+
 // NUEVAS RUTAS PARA GOOGLE DRIVE
 // Ruta para servir imágenes desde Drive
 app.get('/imagenes/:nombreArchivo', async (req, res) => {
@@ -152,6 +271,24 @@ app.get('/api/imagen-url/:nombreArchivo', async (req, res) => {
     } catch (error) {
         console.error('❌ Error:', error);
         res.status(500).json({ error: 'Error del servidor' });
+    }
+});
+
+// RUTA PARA OBTENER HISTORIAL
+app.get('/historial/:NOM_REG', async (req, res) => {
+    try {
+        console.log(`🔍 Buscando historial para: ${req.params.NOM_REG}`);
+        
+        const historial = await Historial.find({ NOM_REG: req.params.NOM_REG })
+            .sort({ fecha_cambio: -1 })
+            .limit(50);
+        
+        console.log(`📋 Historial encontrado: ${historial.length} entradas`);
+        
+        res.json(historial);
+    } catch (error) {
+        console.error('❌ Error al obtener historial:', error);
+        res.status(500).json({ error: 'Error al obtener historial' });
     }
 });
 
@@ -478,18 +615,26 @@ app.get('/lapidas/:NOM_REG', async (req, res) => {
     }
 });
 
-// Agregar
+// Agregar - CON HISTORIAL DE CREACIÓN
 app.post('/lapidas', async (req, res) => {
     try {
+        console.log('🆕 Creando nueva lápida');
+        
         const nuevaLapida = new Lapida(req.body);
         await nuevaLapida.save();
+        
+        // Guardar en historial como CREACION
+        await guardarHistorial(req.body.NOM_REG, {}, req.body, 'CREACION');
+        
+        console.log(`✅ Lápida ${req.body.NOM_REG} creada exitosamente`);
         res.json({ mensaje: "Lápida agregada correctamente" });
     } catch (err) {
+        console.error("Error al agregar lápida:", err);
         res.status(500).json({ error: "Error al agregar la lápida" });
     }
 });
 
-// Borrar
+// Borrar - SIN HISTORIAL
 app.delete('/lapidas/:id', async (req, res) => {
     try {
         await Lapida.findByIdAndDelete(req.params.id);
@@ -499,22 +644,37 @@ app.delete('/lapidas/:id', async (req, res) => {
     }
 });
 
-// Actualizar
+// Actualizar - CON HISTORIAL
 app.put('/lapidas/:NOM_REG', async (req, res) => {
     try {
-        const lapidaActualizada = await Lapida.findOneAndUpdate(
-            { NOM_REG: req.params.NOM_REG },
-            req.body,
-            { new: true } 
-        );
-
-        if (!lapidaActualizada) {
+        console.log(`🔄 Actualizando lápida: ${req.params.NOM_REG}`);
+        
+        // Primero obtener los datos actuales
+        const lapidaAnterior = await Lapida.findOne({ NOM_REG: req.params.NOM_REG });
+        
+        if (!lapidaAnterior) {
             return res.status(404).json({ error: "Lápida no encontrada" });
         }
 
+        // Actualizar la lápida
+        const lapidaActualizada = await Lapida.findOneAndUpdate(
+            { NOM_REG: req.params.NOM_REG },
+            req.body,
+            { new: true }
+        );
+
+        // Guardar en historial DESPUÉS de la actualización exitosa
+        await guardarHistorial(
+            req.params.NOM_REG,
+            lapidaAnterior.toObject(),
+            req.body,
+            'MODIFICACION'
+        );
+
+        console.log(`✅ Lápida ${req.params.NOM_REG} actualizada exitosamente`);
         res.json({ mensaje: "Lápida actualizada correctamente", lapidaActualizada });
     } catch (err) {
-        console.error("Error al actualizar la lápida:", err);
+        console.error("❌ Error al actualizar la lápida:", err);
         res.status(500).json({ error: "Error al actualizar la lápida" });
     }
 });
@@ -527,6 +687,22 @@ app.get('/lapidas/count/total', async (req, res) => {
     } catch (error) {
         console.error("Error al obtener el conteo:", error);
         res.status(500).json({ error: "Error al obtener el conteo de registros" });
+    }
+});
+
+// RUTA DE DEBUG
+app.get('/debug/historial', async (req, res) => {
+    try {
+        const totalHistorial = await Historial.countDocuments();
+        const ultimosRegistros = await Historial.find().sort({ fecha_cambio: -1 }).limit(5);
+        
+        res.json({
+            collection_name: Historial.collection.collectionName,
+            total_registros_historial: totalHistorial,
+            ultimos_5_registros: ultimosRegistros
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

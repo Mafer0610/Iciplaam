@@ -8,6 +8,141 @@
     <link rel="stylesheet" href="../css/stylesVer.css">
     <script src="../js/auth.js"></script>
     <script defer src="../js/ver.js"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin-right: 10px;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #e0e0e0;
+        }
+        
+        .tab.active {
+            background: #2E7FCF;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .historial-tabla {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        .historial-tabla table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .historial-tabla th {
+            background: linear-gradient(90deg, #2E7FCF, #398de0);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .historial-tabla td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top;
+        }
+        
+        .historial-tabla tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .fecha-cambio {
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .cambios-detalle {
+            max-width: 300px;
+        }
+        
+        .cambio-item {
+            background: #f8f9fa;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            border-left: 4px solid #2E7FCF;
+        }
+        
+        .cambio-campo {
+            font-weight: bold;
+            color: #2E7FCF;
+        }
+        
+        .cambio-valores {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .valor-anterior {
+            color: #dc3545;
+        }
+        
+        .valor-nuevo {
+            color: #28a745;
+        }
+        
+        .sin-historial {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge-creacion {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-modificacion {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
 </head>
 <body>
     <script>
@@ -18,28 +153,160 @@
         });
     </script>
     <div class="container">
-        <table class="detalle-lapida">
-            <tr><td><b>Número Registro:</b></td><td id="NOM_REG"></td></tr>
-            <tr><td><b>Nombre Propietario:</b></td><td id="NOMBRE_PROPIE"></td></tr>
-            <tr><td><b>Dirección:</b></td><td id="DIRECCION"></td></tr>
-            <tr><td><b>Ubicación:</b></td><td id="UBICACION"></td></tr>
-            <tr><td><b>Lote:</b></td><td id="LOTE"></td></tr>
-            <tr><td><b>Medidas no convencionales:</b></td><td id="MEDIDAS_NO"></td></tr>
-            <tr><td><b>Contrato:</b></td><td id="EDO_CONTRI"></td></tr>
-            <tr><td><b>Colonia:</b></td><td id="COLONIA"></td></tr>
-            <tr><td><b>Medidas:</b></td><td id="MEDIDAS"></td></tr>
-            <tr><td><b>Lote_a:</b></td><td id="LOTES_A"></td></tr>
-            <tr><td><b>Zona:</b></td><td id="ZONA"></td></tr>
-            <tr><td><b>Fila:</b></td><td id="FILA"></td></tr>
-            <tr><td><b>Imagen:</b></td><td id="RUTA"></td></tr>
-            <tr><td><b>Coordenada X:</b></td><td id="X"></td></tr>
-            <tr><td><b>Coordenada Y:</b></td><td id="Y"></td></tr>
-            <tr><td><b>Clave de Población:</b></td><td id="CVE_POB"></td></tr>
-            <tr><td><b>Clave de panteón:</b></td><td id="CVE_PANTEO"></td></tr>
-            <tr><td><b>Clave de zona:</b></td><td id="CVE_ZONA"></td></tr>
-            <tr><td><b>Clave de lote:</b></td><td id="CVE_LOTE"></td></tr>
-            <tr><td><b>Cuenta:</b></td><td id="CUENTA"></td></tr>
-        </table>
+        <div class="tabs">
+            <button class="tab active" onclick="mostrarTab('informacion')">Información Actual</button>
+            <button class="tab" onclick="mostrarTab('historial')">Historial de Cambios</button>
+        </div>
+        
+        <div id="tab-informacion" class="tab-content active">
+            <div class="table-container">
+                <table class="detalle-lapida">
+                    <tr><td><b>Número Registro:</b></td><td id="NOM_REG"></td></tr>
+                    <tr><td><b>Nombre Propietario:</b></td><td id="NOMBRE_PROPIE"></td></tr>
+                    <tr><td><b>Dirección:</b></td><td id="DIRECCION"></td></tr>
+                    <tr><td><b>Ubicación:</b></td><td id="UBICACION"></td></tr>
+                    <tr><td><b>Lote:</b></td><td id="LOTE"></td></tr>
+                    <tr><td><b>Medidas no convencionales:</b></td><td id="MEDIDAS_NO"></td></tr>
+                    <tr><td><b>Contrato:</b></td><td id="EDO_CONTRI"></td></tr>
+                    <tr><td><b>Colonia:</b></td><td id="COLONIA"></td></tr>
+                    <tr><td><b>Medidas:</b></td><td id="MEDIDAS"></td></tr>
+                    <tr><td><b>Lote_a:</b></td><td id="LOTES_A"></td></tr>
+                    <tr><td><b>Zona:</b></td><td id="ZONA"></td></tr>
+                    <tr><td><b>Fila:</b></td><td id="FILA"></td></tr>
+                    <tr><td><b>Imagen:</b></td><td id="RUTA"></td></tr>
+                    <tr><td><b>Coordenada X:</b></td><td id="X"></td></tr>
+                    <tr><td><b>Coordenada Y:</b></td><td id="Y"></td></tr>
+                    <tr><td><b>Clave de Población:</b></td><td id="CVE_POB"></td></tr>
+                    <tr><td><b>Clave de panteón:</b></td><td id="CVE_PANTEO"></td></tr>
+                    <tr><td><b>Clave de zona:</b></td><td id="CVE_ZONA"></td></tr>
+                    <tr><td><b>Clave de lote:</b></td><td id="CVE_LOTE"></td></tr>
+                    <tr><td><b>Cuenta:</b></td><td id="CUENTA"></td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <div id="tab-historial" class="tab-content">
+            <div class="historial-tabla">
+                <table id="tabla-historial">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Cambios Realizados</th>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historial-body">
+                        <!-- Contenido dinámico -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
+    <script>
+        let currentNomReg = null;
+        
+        function mostrarTab(tab) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab').forEach(tabBtn => {
+                tabBtn.classList.remove('active');
+            });
+            
+            // Mostrar tab seleccionado
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Cargar historial si se selecciona
+            if (tab === 'historial' && currentNomReg) {
+                cargarHistorial(currentNomReg);
+            }
+        }
+        
+        async function cargarHistorial(nomReg) {
+            try {
+                const response = await fetchAutenticado(`http://localhost:5000/historial/${nomReg}`);
+                if (!response.ok) throw new Error('Error al cargar historial');
+                
+                const historial = await response.json();
+                mostrarHistorial(historial);
+            } catch (error) {
+                console.error('Error al cargar historial:', error);
+                document.getElementById('historial-body').innerHTML = 
+                    '<tr><td colspan="4" class="sin-historial">Error al cargar el historial</td></tr>';
+            }
+        }
+        
+        function mostrarHistorial(historial) {
+            const tbody = document.getElementById('historial-body');
+            
+            if (historial.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="sin-historial">No hay historial de cambios para este registro</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = historial.map(item => {
+                const fecha = new Date(item.fecha_cambio).toLocaleString('es-ES');
+                const tipoBadge = item.tipo_operacion === 'CREACION' ? 'badge-creacion' : 'badge-modificacion';
+                
+                let cambiosHtml = '';
+                if (item.tipo_operacion === 'CREACION') {
+                    cambiosHtml = '<div class="cambio-item"><strong>Registro creado inicialmente</strong></div>';
+                } else if (item.campos_modificados && item.campos_modificados.length > 0) {
+                    cambiosHtml = item.campos_modificados.map(cambio => {
+                        const nombreCampo = obtenerNombreCampo(cambio.campo);
+                        return `
+                            <div class="cambio-item">
+                                <div class="cambio-campo">${nombreCampo}</div>
+                                <div class="cambio-valores">
+                                    <span class="valor-anterior">De: "${cambio.valor_anterior || 'vacío'}"</span><br>
+                                    <span class="valor-nuevo">A: "${cambio.valor_nuevo || 'vacío'}"</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                
+                return `
+                    <tr>
+                        <td class="fecha-cambio">${fecha}</td>
+                        <td><span class="badge ${tipoBadge}">${item.tipo_operacion}</span></td>
+                        <td class="cambios-detalle">${cambiosHtml}</td>
+                        <td>${item.usuario}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function obtenerNombreCampo(campo) {
+            const nombres = {
+                'NOM_REG': 'Número Registro',
+                'NOMBRE_PROPIE': 'Nombre Propietario',
+                'DIRECCION': 'Dirección',
+                'UBICACION': 'Ubicación',
+                'LOTE': 'Lote',
+                'MEDIDAS_NO': 'Medidas no convencionales',
+                'EDO_CONTRI': 'Estatus de titularidad',
+                'COLONIA': 'Colonia',
+                'MEDIDAS': 'Medidas',
+                'LOTES_A': 'Lote a',
+                'ZONA': 'Zona',
+                'FILA': 'Fila',
+                'RUTA': 'Ruta',
+                'X': 'Coordenada X',
+                'Y': 'Coordenada Y',
+                'CVE_POB': 'Clave de Población',
+                'CVE_PANTEO': 'Clave de panteón',
+                'CVE_ZONA': 'Clave de zona',
+                'CVE_LOTE': 'Clave de lote',
+                'CUENTA': 'Cuenta'
+            };
+            return nombres[campo] || campo;
+        }
+    </script>
 </body>
 </html>

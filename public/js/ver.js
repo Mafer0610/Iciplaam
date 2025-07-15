@@ -1,16 +1,22 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const params = new URLSearchParams(window.location.search);
     const registroId = params.get("NOM_REG");
+    
     if (!registroId) {
         console.warn("No se proporcionó un NOM_REG en la URL.");
         document.querySelector(".detalle-lapida").innerHTML = "<tr><td colspan='2'>No se proporcionó ID de registro.</td></tr>";
         return;
     }
+    
+    // Guardar el NOM_REG globalmente para el historial
+    currentNomReg = registroId;
+    
     try {
         const response = await fetchAutenticado(`http://localhost:5000/lapidas/${registroId}`);
         if (!response.ok) throw new Error("Error al obtener datos");
         const lapida = await response.json();
 
+        // Llenar la información actual
         document.getElementById("NOM_REG").textContent = lapida.NOM_REG || "Sin registro";
         document.getElementById("NOMBRE_PROPIE").textContent = lapida.NOMBRE_PROPIE || "Desconocido";
         document.getElementById("DIRECCION").textContent = lapida.DIRECCION || "No registrada"; 
@@ -31,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CVE_LOTE").textContent = lapida.CVE_LOTE || "Sin clave";
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
 
+        // Manejo de la imagen
         if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
             const nombreArchivo = lapida.RUTA.replace(/^.*[\\/]/, "");
             const rutaElement = document.getElementById("RUTA");
