@@ -536,17 +536,16 @@ app.get('/', (req, res) => {
 });
 
 // CARGAR ARCHIVOS AL INICIAR EL SERVIDOR
-console.log('🚀 Iniciando carga de archivos de Google Drive...');
+console.log('Iniciando carga de archivos de Google Drive...');
 cargarArchivosDelDrive().then(() => {
-    console.log('✅ Carga inicial completada');
+    console.log('Carga inicial completada');
 }).catch(error => {
-    console.error('❌ Error en carga inicial:', error);
+    console.error('Error en carga inicial:', error);
 });
 
-// Recargar cache cada hora
 setInterval(() => {
-    console.log('🔄 Actualizando cache de Google Drive...');
+    console.log('Actualizando cache de Google Drive...');
     cargarArchivosDelDrive();
-}, 3600000); // 1 hora
+}, 3600000);
 
 app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));

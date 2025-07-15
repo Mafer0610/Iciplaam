@@ -31,12 +31,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("CVE_LOTE").textContent = lapida.CVE_LOTE || "Sin clave";
         document.getElementById("CUENTA").textContent = lapida.CUENTA || "Sin cuenta";
 
-        // NUEVA LÓGICA PARA MANEJAR IMÁGENES DE GOOGLE DRIVE
         if (lapida.RUTA && lapida.RUTA !== "Sin imagen") {
             const nombreArchivo = lapida.RUTA.replace(/^.*[\\/]/, "");
             const rutaElement = document.getElementById("RUTA");
-
-            // Mostrar estado de carga
             rutaElement.innerHTML = `
                 <div>
                     <div style="margin-top: 5px;">
@@ -47,11 +44,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </div>
             `;
 
-            // Animar barra de carga
             const loadingBar = document.getElementById('loading-bar');
             setTimeout(() => loadingBar.style.width = '50%', 100);
 
-            // Verificar si la imagen existe en Google Drive
             fetch(`http://localhost:5000/api/imagen-url/${nombreArchivo}`)
                 .then(response => response.json())
                 .then(data => {
@@ -103,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                     <div style="font-weight: bold; color: #721c24;">Error de conexión</div>
                                     <div style="font-size: 12px; color: #721c24;">No se pudo verificar la imagen</div>
                                     <a href="http://localhost:5000/imagenes/${nombreArchivo}" target="_blank" 
-                                       style="color: #721c24; text-decoration: underline; font-size: 12px;">
+                                        style="color: #721c24; text-decoration: underline; font-size: 12px;">
                                         Intentar acceso directo
                                     </a>
                                 </div>
@@ -112,10 +107,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }, 500);
                 });
         } else {
-            // Si no hay imagen
             document.getElementById("RUTA").innerHTML = `
                 <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #e9ecef; border: 1px solid #ced4da; border-radius: 4px;">
-                    <span style="color: #6c757d;">📷</span>
                     <div>
                         <div style="font-weight: bold; color: #6c757d;">Sin imagen</div>
                         <div style="font-size: 12px; color: #6c757d;">No hay imagen asociada a este registro</div>
