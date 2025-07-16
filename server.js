@@ -85,6 +85,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Modelos
 const Lapida = require('./models/lapida');
+const Tramite = require('./models/tramite');
 const Ficha = require('./models/ficha');
 const Control = require('./models/control');
 
@@ -207,7 +208,6 @@ async function guardarHistorial(nomReg, datosAnteriores, datosNuevos, tipoOperac
     }
 }
 
-// NUEVAS RUTAS PARA GOOGLE DRIVE
 // Ruta para servir imágenes desde Drive
 app.get('/imagenes/:nombreArchivo', async (req, res) => {
     try {
@@ -721,5 +721,240 @@ setInterval(() => {
     console.log('Actualizando cache de Google Drive...');
     cargarArchivosDelDrive();
 }, 3600000);
+
+// Obtener todos los trámites con búsqueda
+app.get('/tramites', async (req, res) => {
+    try {
+        const busqueda = req.query.busqueda?.toLowerCase().trim() || "";
+        const limite = parseInt(req.query.limit) || 10;
+        
+        let resultados;
+        
+        if (busqueda) {
+            const palabras = busqueda.split(/\s+/).filter(palabra => palabra.length > 0);
+            
+            const condicionesPalabras = palabras.map(palabra => ({
+                $or: [
+                    { FOLIO: { $regex: palabra, $options: "i" } },
+                    { TITULAR: { $regex: palabra, $options: "i" } },
+                    { INHUMACION: { $regex: palabra, $options: "i" } },
+                    { TRASPASO: { $regex: palabra, $options: "i" } }
+                ]
+            }));
+            
+            resultados = await Tramite.find({
+                $and: condicionesPalabras
+            }).sort({ FECHA_ELA: -1 }).limit(limite);
+        } else {
+            resultados = await Tramite.find({}).sort({ FECHA_ELA: -1 }).limit(limite);
+        }
+        
+        res.json(resultados);
+    } catch (error) {
+        console.error("Error al obtener trámites:", error);
+        res.status(500).json({ error: "Error en la base de datos" });
+    }
+});
+
+// Obtener un trámite específico por ID
+app.get('/tramites/:id', async (req, res) => {
+    try {
+        const tramite = await Tramite.findById(req.params.id);
+        if (!tramite) {
+            return res.status(404).json({ error: "Trámite no encontrado" });
+        }
+        res.json(tramite);
+    } catch (err) {
+        console.error("Error al buscar trámite:", err);
+        res.status(500).json({ error: "Error en el servidor" });
+    }
+});
+
+// Crear nuevo trámite
+app.post('/tramites', async (req, res) => {
+    try {
+        console.log('🆕 Creando nuevo trámite');
+        
+        const nuevoTramite = new Tramite(req.body);
+        await nuevoTramite.save();
+        
+        console.log(`✅ Trámite ${req.body.FOLIO} creado exitosamente`);
+        res.json({ mensaje: "Trámite agregado correctamente", id: nuevoTramite._id });
+    } catch (err) {
+        console.error("Error al agregar trámite:", err);
+        if (err.code === 11000) {
+            res.status(400).json({ error: "El folio ya existe" });
+        } else {
+            res.status(500).json({ error: "Error al agregar el trámite" });
+        }
+    }
+});
+
+// Actualizar trámite
+app.put('/tramites/:id', async (req, res) => {
+    try {
+        console.log(`🔄 Actualizando trámite: ${req.params.id}`);
+        
+        const tramiteActualizado = await Tramite.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        
+        if (!tramiteActualizado) {
+            return res.status(404).json({ error: "Trámite no encontrado" });
+        }
+        
+        console.log(`✅ Trámite ${req.params.id} actualizado exitosamente`);
+        res.json({ mensaje: "Trámite actualizado correctamente", tramiteActualizado });
+    } catch (err) {
+        console.error("❌ Error al actualizar trámite:", err);
+        res.status(500).json({ error: "Error al actualizar el trámite" });
+    }
+});
+
+// Eliminar trámite
+app.delete('/tramites/:id', async (req, res) => {
+    try {
+        const tramiteEliminado = await Tramite.findByIdAndDelete(req.params.id);
+        if (!tramiteEliminado) {
+            return res.status(404).json({ error: "Trámite no encontrado" });
+        }
+        res.json({ mensaje: "Trámite eliminado correctamente" });
+    } catch (err) {
+        console.error("Error al eliminar trámite:", err);
+        res.status(500).json({ error: "Error al eliminar el trámite" });
+    }
+});
+
+// Conteo total de trámites
+app.get('/tramites/count/total', async (req, res) => {
+    try {
+        const total = await Tramite.countDocuments();
+        res.json({ total });
+    } catch (error) {
+        console.error("Error al obtener el conteo de trámites:", error);
+        res.status(500).json({ error: "Error al obtener el conteo de trámites" });
+    }
+});
+
+// Generar y descargar Excel con trámites del año especificado
+app.get('/tramites/excel/:year', async (req, res) => {
+    try {
+        const year = parseInt(req.params.year);
+        console.log(`📊 Generando Excel para trámites del año ${year}`);
+        
+        // Obtener trámites del año especificado
+        const inicioAño = new Date(year, 0, 1);
+        const finAño = new Date(year + 1, 0, 1);
+        
+        const tramites = await Tramite.find({
+            FECHA_ELA: {
+                $gte: inicioAño,
+                $lt: finAño
+            }
+        }).sort({ FECHA_ELA: 1 });
+        
+        console.log(`📋 Encontrados ${tramites.length} trámites para el año ${year}`);
+        
+        // Crear workbook
+        const XLSX = require('xlsx');
+        const workbook = XLSX.utils.book_new();
+        
+        // Crear encabezados del Excel basados en la estructura original
+        const encabezados = [
+            ['SECRETARIA DE SERVICIOS MUNICIPALES'],
+            ['DIRECCION DE PANTEONES'],
+            [`RELACION DE TRAMITES CORRESPONDIENTE AL EJERCICIO ${year} PANTEONES PUBLICOS MUNICIPALES`],
+            [''],
+            [
+                'FECHA DE ELABORACION',
+                'FOLIOS',
+                'NOMBRE  DEL TITULAR',
+                'INHUMACION DE:',
+                'NOMBRE TITULAR SALIENTE (TRASPASOS)',
+                'RECIBO OFICIAL',
+                'COSTO DE INHUMACION',
+                'COSTO DE LA EXHUMACIÓN',
+                'REPOSICIÓN CONSTANCIA',
+                'COSTO DEL TRASPASO',
+                'LOTE',
+                'MANTENIMIENTO',
+                'AMPL CM LINEAL',
+                'REGULARIZACION LOTES',
+                'CONSTRUCCION',
+                'BUSQUEDAD DE INFORMACION'
+            ]
+        ];
+        
+        // Agregar datos de trámites
+        const datosTramites = tramites.map(tramite => [
+            tramite.FECHA_ELA ? tramite.FECHA_ELA.toLocaleDateString('es-MX') : '',
+            tramite.FOLIO || '',
+            tramite.TITULAR || '',
+            tramite.INHUMACION || '',
+            tramite.TRASPASO || '',
+            tramite.RECIBO || '',
+            tramite.COSTO_INHU || '',
+            tramite.COSTO_EXHU || '',
+            tramite.REPOSICION || '',
+            tramite.COSTO_TRASPASO || '',
+            tramite.LOTE || '',
+            tramite.MANTENIMIENTO || '',
+            tramite.AMPL_CM || '',
+            tramite.REGULARIZACION || '',
+            tramite.CONSTRUCCION || '',
+            tramite.BUSQUEDA_INFO || ''
+        ]);
+        
+        // Combinar encabezados y datos
+        const todosLosDatos = [...encabezados, ...datosTramites];
+        
+        // Crear hoja de trabajo
+        const worksheet = XLSX.utils.aoa_to_sheet(todosLosDatos);
+        
+        // Configurar anchos de columnas
+        const columnWidths = [
+            { wch: 15 }, // FECHA DE ELABORACION
+            { wch: 10 }, // FOLIOS
+            { wch: 25 }, // NOMBRE DEL TITULAR
+            { wch: 20 }, // INHUMACION DE
+            { wch: 25 }, // NOMBRE TITULAR SALIENTE
+            { wch: 15 }, // RECIBO OFICIAL
+            { wch: 15 }, // COSTO DE INHUMACION
+            { wch: 15 }, // COSTO DE LA EXHUMACIÓN
+            { wch: 15 }, // REPOSICIÓN CONSTANCIA
+            { wch: 15 }, // COSTO DEL TRASPASO
+            { wch: 10 }, // LOTE
+            { wch: 15 }, // MANTENIMIENTO
+            { wch: 15 }, // AMPL CM LINEAL
+            { wch: 20 }, // REGULARIZACION LOTES
+            { wch: 15 }, // CONSTRUCCION
+            { wch: 20 }  // BUSQUEDAD DE INFORMACION
+        ];
+        
+        worksheet['!cols'] = columnWidths;
+        
+        // Agregar la hoja al workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Tramites');
+        
+        // Generar buffer del archivo
+        const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+        
+        // Configurar headers para descarga
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="Tramites_${year}.xlsx"`);
+        res.setHeader('Content-Length', buffer.length);
+        
+        // Enviar archivo
+        res.send(buffer);
+        
+        console.log(`✅ Excel generado exitosamente para ${tramites.length} trámites del año ${year}`);
+        
+    } catch (error) {
+        console.error('❌ Error al generar Excel:', error);
+        res.status(500).json({ error: 'Error al generar el archivo Excel' });
+    }
+});
 
 app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));

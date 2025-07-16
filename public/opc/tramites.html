@@ -1,41 +1,297 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/navegador.ico" type="image/x-icon" />
+    <title>Gestión de Trámites</title>
+    <link rel="stylesheet" href="../css/stylesInicio.css" />
+    <link rel="stylesheet" href="../css/styleadmin.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+    <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const auth = verificarAutenticacion();
+        if (!auth) {
+            return;
+        }
+        cargarTramites();
+        cargarConteoTramites();
+        });
+    </script>
 </head>
 <body>
-    <div>
-    <span style="font-size:11px;">
-        <span style="font-family:montserrat;">
-        <span style="font-size:14px;">
-            Ejemplo
-            <br /> &nbsp; <br />
-            <details>
-            <summary style="font-family:montserrat; font-size:14px; font-weight:bold; cursor:pointer; display:flex; align-items:center;">
-                <img src="https://images.icon-icons.com/934/PNG/512/play-black-triangle-interface-symbol-for-multimedia_icon-icons.com_72958.png" alt="icono" style="width:16px; height:16px; margin-right:8px;" />
-                Requisitos:
-            </summary>
-        <div style="font-family:montserrat; font-size:13px; padding:10px;">
-            <strong>1. </strong> zi
+    <div class="main-content">
+    <div class="contenedor-tabla">
+        <div class="table-container">
+        <div class="top-bar">
+            <div class="contador-registros">
+            Trámites en la base de datos:
+            <span class="numero" id="total-tramites">Cargando...</span>
+            </div>
+
+            <div class="menu adaptado">
+            <div class="acciones horizontal">
+                <a href="agregarTramite.html" onclick="event.stopPropagation()">Agregar Trámite</a>
+                <a href="#" onclick="descargarExcel()" onclick="event.stopPropagation()">Descargar Excel</a>
+                <a href="../panelAdministrador.html" onclick="event.stopPropagation()">Volver</a>
+                <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+            </div>
+            <div class="container">
+                <div class="toggle"></div>
+            </div>
+            </div>
         </div>
-        </details>
-        <br />
-        &nbsp;
-        <br />
-        <details>
-        <summary style="font-family:montserrat; font-size:14px; font-weight:bold; cursor:pointer;">
-            Requisitos :
-        </summary>
-        <div style="font-family:montserrat; font-size:13px; padding:10px;">
-            <br />
-            &nbsp;
-            <br />
-            <strong>1. </strong> no
-            <br />
+
+        <div class="barra-busqueda">
+            <input
+            type="text"
+            id="txtbuscar"
+            placeholder="Buscar por nombre del titular o folio"
+            onkeyup="buscarTramite()" />
         </div>
-        </details>
+
+        <div id="tabla-tramites" class="active">
+            <table>
+            <thead>
+                <tr>
+                <th>FECHA ELABORACIÓN</th>
+                <th>FOLIO</th>
+                <th>NOMBRE DEL TITULAR</th>
+                <th>INHUMACIÓN DE</th>
+                <th>TITULAR SALIENTE</th>
+                <th>RECIBO OFICIAL</th>
+                <th>COSTO INHUMACIÓN</th>
+                <th>COSTO EXHUMACIÓN</th>
+                <th>REPOSICIÓN CONSTANCIA</th>
+                <th>COSTO TRASPASO</th>
+                <th>LOTE</th>
+                <th>MANTENIMIENTO</th>
+                <th>AMPL CM LINEAL</th>
+                <th>REGULARIZACIÓN LOTES</th>
+                <th>CONSTRUCCIÓN</th>
+                <th>BÚSQUEDA INFO</th>
+                <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-tramites-body"></tbody>
+            </table>
+        </div>
+        </div>
     </div>
+    </div>
+
+    <div id="modal-confirmacion" class="modal oculto">
+    <div class="modal-contenido">
+        <p>¿Estás seguro de que deseas eliminar este trámite?</p>
+        <div class="modal-botones">
+        <button id="btn-confirmar">Sí</button>
+        <button id="btn-cancelar">Cancelar</button>
+        </div>
+    </div>
+    </div>
+
+    <div id="mensaje-flotante"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+    $('.toggle').on('click', function () {
+        const $menu = $(this).closest('.menu.adaptado');
+        $menu.toggleClass('expanded');
+        $(this).toggleClass('close');
+    });
+
+    function cerrarSesion() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "../index.html";
+    }
+
+    let idAEliminar = null;
+    let currentMenuId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("btn-confirmar").addEventListener("click", eliminarConfirmado);
+        document.getElementById("btn-cancelar").addEventListener("click", () => {
+        document.getElementById("modal-confirmacion").classList.add("oculto");
+        idAEliminar = null;
+        });
+    });
+
+    async function cargarConteoTramites() {
+        try {
+        const res = await fetchAutenticado("http://localhost:5000/tramites/count/total");
+        const data = await res.json();
+        document.getElementById("total-tramites").textContent = data.total;
+        } catch (err) {
+        document.getElementById("total-tramites").textContent = "Error";
+        }
+    }
+
+    async function cargarTramites() {
+        const tbody = document.getElementById("tabla-tramites-body");
+        tbody.innerHTML = "";
+        try {
+        const res = await fetchAutenticado("http://localhost:5000/tramites?limit=10");
+        const data = await res.json();
+        mostrarResultados(data, "");
+        } catch (err) {
+        console.error("Error al cargar los trámites:", err);
+        }
+    }
+
+    async function buscarTramite() {
+        const filtro = document.getElementById("txtbuscar").value.toLowerCase().trim();
+        if (!filtro) return cargarTramites();
+        try {
+        const res = await fetchAutenticado(`http://localhost:5000/tramites?busqueda=${filtro}`);
+        const data = await res.json();
+        mostrarResultados(data, filtro);
+        } catch (err) {
+        console.error("Error al buscar trámites:", err);
+        }
+    }
+
+    function mostrarResultados(datos, filtro) {
+        const tbody = document.getElementById("tabla-tramites-body");
+        tbody.innerHTML = "";
+        
+        if (!datos.length) {
+        tbody.innerHTML = '<tr><td colspan="17" style="text-align:center;">Sin resultados</td></tr>';
+        return;
+        }
+
+        datos.forEach((item, i) => {
+        const menuId = `menu-${i}`;
+        const fechaFormateada = item.FECHA_ELA ? new Date(item.FECHA_ELA).toLocaleDateString('es-MX') : '';
+        
+        tbody.innerHTML += `
+            <tr>
+            <td>${fechaFormateada}</td>
+            <td>${item.FOLIO || ''}</td>
+            <td>${item.TITULAR || ''}</td>
+            <td>${item.INHUMACION || ''}</td>
+            <td>${item.TRASPASO || ''}</td>
+            <td>${item.RECIBO || ''}</td>
+            <td>${item.COSTO_INHU || ''}</td>
+            <td>${item.COSTO_EXHU || ''}</td>
+            <td>${item.REPOSICION || ''}</td>
+            <td>${item.COSTO_TRASPASO || ''}</td>
+            <td>${item.LOTE || ''}</td>
+            <td>${item.MANTENIMIENTO || ''}</td>
+            <td>${item.AMPL_CM || ''}</td>
+            <td>${item.REGULARIZACION || ''}</td>
+            <td>${item.CONSTRUCCION || ''}</td>
+            <td>${item.BUSQUEDA_INFO || ''}</td>
+            <td>
+                <div class="flexDiv" id="${menuId}">
+                <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
+                <div class="selectWrapper">
+                    <div class="multiSelect" id="${menuId}-0">
+                    <div onclick="verTramite('${item._id}')">Ver detalles</div>
+                    <div onclick="editarTramite('${item._id}')">Editar trámite</div>
+                    <div onclick="eliminarTramite('${item._id}')" style="color:#dc3545;">Eliminar trámite</div>
+                    </div>
+                </div>
+                </div>
+            </td>
+            </tr>`;
+        });
+    }
+
+    function verTramite(id) {
+        window.location.href = `verTramite.html?id=${id}`;
+    }
+
+    function editarTramite(id) {
+        window.location.href = `editarTramite.html?id=${id}`;
+    }
+
+    function eliminarTramite(id) {
+        idAEliminar = id;
+        document.getElementById("modal-confirmacion").classList.remove("oculto");
+    }
+
+    async function eliminarConfirmado() {
+        try {
+        const res = await fetchAutenticado(`http://localhost:5000/tramites/${idAEliminar}`, {
+            method: 'DELETE',
+        });
+        if (res.ok) {
+            cargarTramites();
+            cargarConteoTramites();
+            mostrarMensaje("Trámite eliminado.");
+        } else {
+            mostrarMensaje("Error al eliminar.");
+        }
+        } catch {
+        mostrarMensaje("Error en la solicitud.");
+        } finally {
+        document.getElementById("modal-confirmacion").classList.add("oculto");
+        idAEliminar = null;
+        }
+    }
+
+    async function descargarExcel() {
+        try {
+        mostrarMensaje("Generando archivo Excel...");
+        
+        // Obtener todos los trámites del año actual
+        const añoActual = new Date().getFullYear();
+        const res = await fetchAutenticado(`http://localhost:5000/tramites/excel/${añoActual}`);
+        
+        if (!res.ok) {
+            throw new Error("Error al generar el archivo Excel");
+        }
+        
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Tramites_${añoActual}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        mostrarMensaje("Archivo Excel descargado correctamente");
+        } catch (error) {
+        console.error("Error al descargar Excel:", error);
+        mostrarMensaje("Error al descargar el archivo Excel");
+        }
+    }
+
+    function mostrarMensaje(msg) {
+        const mensaje = document.getElementById("mensaje-flotante");
+        mensaje.textContent = msg;
+        mensaje.classList.add("visible");
+        setTimeout(() => mensaje.classList.remove("visible"), 3000);
+    }
+
+    function openMulti(id) {
+        currentMenuId = id;
+        const wrapper = document.querySelector(`#${id} .selectWrapper`);
+        document.querySelectorAll('.selectWrapper').forEach(w => {
+        if (w !== wrapper) {
+            w.style.opacity = 0;
+            w.style.pointerEvents = "none";
+        }
+        });
+
+        const isVisible = wrapper.style.pointerEvents === "all";
+        wrapper.style.opacity = isVisible ? 0 : 1;
+        wrapper.style.pointerEvents = isVisible ? "none" : "all";
+    }
+
+    document.addEventListener("click", e => {
+        if (!e.target.closest('.flexDiv')) {
+        document.querySelectorAll('.selectWrapper').forEach(w => {
+            w.style.opacity = 0;
+            w.style.pointerEvents = "none";
+        });
+        }
+    });
+</script>
 </body>
 </html>
