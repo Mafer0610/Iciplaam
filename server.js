@@ -50,7 +50,6 @@ async function cargarArchivosDelDrive() {
             console.log(`📥 Cargados ${totalCargados} archivos hasta ahora...`);
         } while (pageToken);
 
-        // Crear mapeo nombre -> datos del archivo
         const fileMap = {};
         allFiles.forEach(file => {
             fileMap[file.name] = {
@@ -60,7 +59,6 @@ async function cargarArchivosDelDrive() {
             };
         });
 
-        // Guardar en cache
         driveCache.set('file_map', fileMap);
         console.log(`✅ Total de archivos cargados: ${totalCargados}`);
         
