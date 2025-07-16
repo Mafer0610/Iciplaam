@@ -280,6 +280,85 @@ function mostrarFichas() {
       });
     }
   });
+  async function cargarFichas() {
+  const tbody = document.getElementById("tabla-fichas-body");
+  tbody.innerHTML = "";
+
+  try {
+    const res = await fetch("http://localhost:5000/fichas");
+    const fichas = await res.json();
+
+    if (!fichas.length) {
+      tbody.innerHTML = '<tr><td colspan="5">Sin fichas registradas</td></tr>';
+      return;
+    }
+
+    fichas.forEach((ficha, i) => {
+      const estado = ficha.FECHA_INHU ? "Inhumado" : "Pendiente";
+      tbody.innerHTML += `
+        <tr>
+          <td>${ficha._id}</td>
+          <td>${ficha.ACTU_PROPIE || "Sin nombre"}</td>
+          <td>${ficha.CARAC_LOTE || ficha.OBSER || "Sin descripción"}</td>
+          <td>${estado}</td>
+          <td>
+            <div class="flexDiv" id="ficha-${i}">
+              <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
+              <div class="selectWrapper">
+                <div class="multiSelect" id="ficha-${i}-menu">
+                  <div onclick="verFicha('${ficha._id}')">Ver</div>
+                  <div onclick="editarFicha('${ficha._id}')">Editar</div>
+                  <div onclick="eliminarFicha('${ficha._id}')" style="color:#dc3545;">Eliminar</div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+    });
+  } catch (error) {
+    console.error("Error al cargar fichas:", error);
+    tbody.innerHTML = '<tr><td colspan="5">Error al cargar fichas</td></tr>';
+  }
+}
+function mostrarFichas() {
+  document.getElementById("tabla-registros").classList.remove("active");
+  document.getElementById("tabla-fichas").classList.add("active");
+  document.getElementById("btn-fichas").classList.add("active");
+  document.getElementById("btn-registros").classList.remove("active");
+
+  cargarFichas(); // 👈 esta línea es nueva
+}
+function verFicha(id) {
+  window.location.href = `opc/verFicha.html?id=${id}`;
+}
+
+function editarFicha(id) {
+  window.location.href = `opc/editarFicha.html?id=${id}`;
+}
+
+function eliminarFicha(id) {
+  idAEliminar = id;
+  document.getElementById("modal-confirmacion").classList.remove("oculto");
+
+  document.getElementById("btn-confirmar").onclick = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/fichas/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        cargarFichas();
+        mostrarMensaje("Ficha eliminada.");
+      } else {
+        mostrarMensaje("Error al eliminar ficha.");
+      }
+    } catch {
+      mostrarMensaje("Error en la solicitud.");
+    } finally {
+      document.getElementById("modal-confirmacion").classList.add("oculto");
+      idAEliminar = null;
+    }
+  };
+}
 </script>
 </body>
 </html>

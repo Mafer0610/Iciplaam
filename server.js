@@ -957,4 +957,23 @@ app.get('/tramites/excel/:year', async (req, res) => {
     }
 });
 
+app.get('/fichas', async (req, res) => {
+  try {
+    const fichas = await Ficha.find();
+    res.json(fichas);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener fichas' });
+  }
+});
+
+app.delete('/fichas/:id', async (req, res) => {
+  try {
+    await Ficha.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Ficha eliminada' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar la ficha' });
+  }
+});
+
+
 app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));
