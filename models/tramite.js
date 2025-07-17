@@ -46,7 +46,7 @@ const tramiteSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    MANTENIMIENTO: {
+    COSTO_MANTENIMIENTO: {
         type: String,
         default: ''
     },
@@ -54,15 +54,24 @@ const tramiteSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    REGULARIZACION: {
+    COSTO_REGULARIZACION: {
         type: String,
         default: ''
     },
-    CONSTRUCCION: {
+    COSTO_CONSTRUCCION: {
         type: String,
         default: ''
     },
-    BUSQUEDA_INFO: {
+    COSTO_BUSQUEDA: {
+        type: String,
+        default: ''
+    },
+    ESTADO: {
+        type: String,
+        enum: ['ACTIVO', 'COMPLETADO', 'CANCELADO'],
+        default: 'ACTIVO'
+    },
+    OBSERVACIONES: {
         type: String,
         default: ''
     },

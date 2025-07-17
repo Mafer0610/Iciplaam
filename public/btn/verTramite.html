@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Trámite - Panteón Municipal</title>
+    <link rel="icon" href="../img/navegador.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/auth.js"></script>
+    <script src="../js/verTramite.js" defer></script>
+    <style>
+        .info-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #34495e;
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+        
+        .info-value.empty {
+            color: #95a5a6;
+            font-style: italic;
+        }
+        
+        .section-title {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: white;
+            padding: 15px 20px;
+            margin: 0 -20px 20px -20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .cost-item {
+            background: #e8f5e8;
+            border-left-color: #27ae60;
+        }
+        
+        .cost-item .info-value {
+            font-weight: 600;
+            color: #27ae60;
+            font-size: 18px;
+        }
+        
+        .metadata {
+            background: #f1f2f6;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .metadata-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .metadata-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .metadata-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const auth = verificarAutenticacion();
+            if (!auth) {
+                return;
+            }
+            console.log('Usuario autenticado:', auth.userRole);
+        });
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Detalles del Trámite - Panteón Municipal</h2>
+        
+        <div id="status-message" class="status-message"></div>
+        
+        <div id="loading" class="loading">
+            <p>Cargando información del trámite...</p>
+        </div>
+        
+        <div id="error-container" style="display: none;"></div>
+        
+        <div id="tramite-container" style="display: none;">
+            <!-- Información básica -->
+            <div class="info-container">
+                <div class="section-title">Información General</div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Folio</div>
+                        <div class="info-value" id="display-folio"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Fecha de Elaboración</div>
+                        <div class="info-value" id="display-fecha"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Nombre del Titular</div>
+                        <div class="info-value" id="display-titular"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Recibo Oficial</div>
+                        <div class="info-value" id="display-recibo"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Lote</div>
+                        <div class="info-value" id="display-lote"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Inhumación de</div>
+                        <div class="info-value" id="display-inhumacion"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Titular Saliente (Traspasos)</div>
+                        <div class="info-value" id="display-traspaso"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="info-container">
+                <div class="section-title">Información Adicional</div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Mantenimiento</div>
+                        <div class="info-value" id="display-mantenimiento"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Ampl CM Lineal</div>
+                        <div class="info-value" id="display-ampl-cm"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Regularización Lotes</div>
+                        <div class="info-value" id="display-regularizacion"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Construcción</div>
+                        <div class="info-value" id="display-construccion"></div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Búsqueda de Información</div>
+                        <div class="info-value" id="display-busqueda"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Costos -->
+            <div class="info-container" id="costos-container">
+                <div class="section-title">Costos de Trámites</div>
+                <div class="info-grid" id="costos-grid">
+                    <!-- Se llenarán dinámicamente -->
+                </div>
+            </div>
+            
+            <!-- Metadatos -->
+            <div class="metadata">
+                <div class="metadata-title">Información del Sistema</div>
+                <div class="metadata-item">
+                    <span>ID del Trámite:</span>
+                    <span id="display-id"></span>
+                </div>
+                <div class="metadata-item">
+                    <span>Fecha de Creación:</span>
+                    <span id="display-fecha-creacion"></span>
+                </div>
+                <div class="metadata-item">
+                    <span>Última Actualización:</span>
+                    <span id="display-fecha-actualizacion"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button type="button" class="btn-primary" onclick="editarTramite()" id="btn-editar" style="display: none;">
+                Editar Trámite
+            </button>
+            <button type="button" class="btn-secondary" onclick="window.location.href='../opc/tramites.html'">
+                Volver a Trámites
+            </button>
+        </div>
+    </div>
+</body>
+</html>

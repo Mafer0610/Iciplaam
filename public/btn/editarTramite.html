@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Trámite</title>
+    <link rel="icon" href="../img/edit.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesEditarTramite.css" />
+    <script src="../js/auth.js"></script>
+    <script src="../js/editarTramite.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const auth = verificarAutenticacion();
+            if (!auth) {
+                return;
+            }
+            console.log('Usuario autenticado:', auth.userRole);
+        });
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Editar Trámite</h2>
+        
+        <div id="status-message" class="status-message"></div>
+        
+        <form id="editarTramiteForm">
+            <!-- Información básica del trámite -->
+            <div class="form-grid">
+                <div>
+                    <label for="FECHA_ELA">Fecha de Elaboración:</label>
+                    <input type="date" id="FECHA_ELA" name="FECHA_ELA" required>
+                </div>
+                <div>
+                    <label for="FOLIO">Folio:</label>
+                    <input type="text" id="FOLIO" name="FOLIO" required placeholder="Ej: 001-2024">
+                </div>
+                <div>
+                    <label for="TITULAR">Nombre del Titular:</label>
+                    <input type="text" id="TITULAR" name="TITULAR" required placeholder="Nombre completo del titular">
+                </div>
+                <div>
+                    <label for="RECIBO">Recibo Oficial:</label>
+                    <input type="text" id="RECIBO" name="RECIBO" placeholder="Número de recibo">
+                </div>
+            </div>
+
+            <!-- Sección de Tipos de Trámite con Costos -->
+            <div class="checkbox-section">
+                <h3>Tipos de Trámite y Costos</h3>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_INHUMACION" onchange="toggleTramiteField('INHUMACION')">
+                            <label for="TIPO_INHUMACION">Inhumación</label>
+                        </div>
+                        <div id="TRAMITE_INHUMACION_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="INHUMACION">Inhumación de:</label>
+                                <input type="text" id="INHUMACION" name="INHUMACION" placeholder="Nombre del difunto">
+                            </div>
+                            <div class="field-group">
+                                <label for="COSTO_INHU">Costo de Inhumación:</label>
+                                <input type="text" id="COSTO_INHU" name="COSTO_INHU" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_EXHUMACION" onchange="toggleTramiteField('EXHUMACION')">
+                            <label for="TIPO_EXHUMACION">Exhumación</label>
+                        </div>
+                        <div id="TRAMITE_EXHUMACION_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_EXHU">Costo de Exhumación:</label>
+                                <input type="text" id="COSTO_EXHU" name="COSTO_EXHU" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_REPOSICION" onchange="toggleTramiteField('REPOSICION')">
+                            <label for="TIPO_REPOSICION">Reposición de Constancia</label>
+                        </div>
+                        <div id="TRAMITE_REPOSICION_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="REPOSICION">Costo de Reposición:</label>
+                                <input type="text" id="REPOSICION" name="REPOSICION" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_TRASPASO" onchange="toggleTramiteField('TRASPASO')">
+                            <label for="TIPO_TRASPASO">Traspaso de Lote</label>
+                        </div>
+                        <div id="TRAMITE_TRASPASO_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="TRASPASO">Nombre Titular Saliente:</label>
+                                <input type="text" id="TRASPASO" name="TRASPASO" placeholder="Titular anterior">
+                            </div>
+                            <div class="field-group">
+                                <label for="COSTO_TRASPASO">Costo del Traspaso:</label>
+                                <input type="text" id="COSTO_TRASPASO" name="COSTO_TRASPASO" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_CONSTRUCCION" onchange="toggleTramiteField('CONSTRUCCION')">
+                            <label for="TIPO_CONSTRUCCION">Construcción</label>
+                        </div>
+                        <div id="TRAMITE_CONSTRUCCION_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_CONSTRUCCION">Costo de Construcción:</label>
+                                <input type="text" id="COSTO_CONSTRUCCION" name="COSTO_CONSTRUCCION" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_MANTENIMIENTO" onchange="toggleTramiteField('MANTENIMIENTO')">
+                            <label for="TIPO_MANTENIMIENTO">Mantenimiento</label>
+                        </div>
+                        <div id="TRAMITE_MANTENIMIENTO_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_MANTENIMIENTO">Costo de Mantenimiento:</label>
+                                <input type="text" id="COSTO_MANTENIMIENTO" name="COSTO_MANTENIMIENTO" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_LOTE" onchange="toggleTramiteField('LOTE')">
+                            <label for="TIPO_LOTE">Lote</label>
+                        </div>
+                        <div id="TRAMITE_LOTE_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_LOTE">Costo de Lote:</label>
+                                <input type="text" id="COSTO_LOTE" name="COSTO_LOTE" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_AMPL_CM" onchange="toggleTramiteField('AMPL_CM')">
+                            <label for="TIPO_AMPL_CM">Ampl CM Lineal</label>
+                        </div>
+                        <div id="TRAMITE_AMPL_CM_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_AMPL_CM">Costo Ampl CM Lineal:</label>
+                                <input type="text" id="COSTO_AMPL_CM" name="COSTO_AMPL_CM" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_REGULARIZACION" onchange="toggleTramiteField('REGULARIZACION')">
+                            <label for="TIPO_REGULARIZACION">Regularización</label>
+                        </div>
+                        <div id="TRAMITE_REGULARIZACION_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_REGULARIZACION">Costo de Regularización:</label>
+                                <input type="text" id="COSTO_REGULARIZACION" name="COSTO_REGULARIZACION" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-item tramite-container">
+                        <div class="tramite-header">
+                            <input type="checkbox" id="TIPO_BUSQUEDA" onchange="toggleTramiteField('BUSQUEDA')">
+                            <label for="TIPO_BUSQUEDA">Búsqueda de Información</label>
+                        </div>
+                        <div id="TRAMITE_BUSQUEDA_CONTAINER" class="tramite-fields" style="display: none;">
+                            <div class="field-group">
+                                <label for="COSTO_BUSQUEDA">Costo de Búsqueda:</label>
+                                <input type="text" id="COSTO_BUSQUEDA" name="COSTO_BUSQUEDA" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div> class="field-group">
+                                <label for="COSTO_BUSQUEDA">Costo de Búsqueda:</label>
+                                <input type="text" id="COSTO_BUSQUEDA" name="COSTO_BUSQUEDA" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-primary">Actualizar Trámite</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='../opc/tramites.html'">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function toggleTramiteField(tipo) {
+            const checkbox = document.getElementById(`TIPO_${tipo}`);
+            const container = document.getElementById(`TRAMITE_${tipo}_CONTAINER`);
+            const inputs = container.querySelectorAll('input');
+            
+            if (checkbox.checked) {
+                container.style.display = 'block';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                container.style.display = 'none';
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    input.value = '';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+}
+
+.form-container h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.tab-content {
+    padding: 40px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Grid para información básica */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-bottom: 35px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-grid > div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos de labels e inputs */
+label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+}
+
+input[type="text"], 
+input[type="date"] {
+    padding: 14px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    font-family: inherit;
+}
+
+input[type="text"]:focus, 
+input[type="date"]:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+input[type="text"]:valid, 
+input[type="date"]:valid {
+    border-color: #27ae60;
+}
+
+/* Sección de tipos de trámite */
+.checkbox-section {
+    margin-bottom: 35px;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    padding: 25px;
+    background: #f8f9fa;
+}
+
+.checkbox-section h3 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 22px;
+    font-weight: 700;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #667eea;
+    position: relative;
+    margin-top: -5px;
+}
+
+.checkbox-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #764ba2;
+    border-radius: 2px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Contenedores de trámite mejorados */
+.tramite-container {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    padding: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.tramite-container:hover {
+    border-color: #667eea;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.tramite-header {
+    display: flex;
+    align-items: center;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tramite-header:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.tramite-header input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    accent-color: #667eea;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tramite-header label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.tramite-fields {
+    padding: 20px;
+    background: white;
+    border-top: 2px solid #667eea;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.field-group {
+    margin-bottom: 18px;
+}
+
+.field-group:last-child {
+    margin-bottom: 0;
+}
+
+.field-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 6px;
+}
+
+.field-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.field-group input:focus {
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.field-group input[placeholder*="$"] {
+    background-image: linear-gradient(45deg, #e8f5e8 0%, #f8f9fa 100%);
+    border-color: #28a745;
+}
+
+.field-group input[placeholder*="$"]:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* Botones mejorados */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+    padding: 25px 25px 35px 25px;
+    border-top: 2px solid #e9ecef;
+    border-left: 2px solid #e9ecef;
+    border-right: 2px solid #e9ecef;
+    border-bottom: 2px solid #e9ecef;
+    border-radius: 0 0 15px 15px;
+    background: #f8f9fa;
+    margin-left: -40px;
+    margin-right: -40px;
+    margin-bottom: -25px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #5a6268 0%, #3d4348 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(108, 117, 125, 0.4);
+}
+
+/* Mensajes de estado */
+.status-message {
+    margin: 20px 35px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    font-weight: 500;
+    display: none;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 2px solid #28a745;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+
+.status-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border: 2px solid #dc3545;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+}
+
+/* Responsive design mejorado */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+    
+    .form-container {
+        margin: 0;
+        border-radius: 15px;
+        max-width: 100%;
+    }
+    
+    .form-container h2 {
+        padding: 20px;
+        font-size: 22px;
+    }
+    
+    .tab-content {
+        padding: 25px 20px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+        max-width: 100%;
+    }
+    
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 100%;
+    }
+    
+    .checkbox-section {
+        padding: 20px;
+        margin-left: -20px;
+        margin-right: -20px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .tramite-container {
+        margin-bottom: 15px;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        justify-content: center;
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-bottom: -25px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        max-width: 250px;
+        padding: 14px 30px;
+    }
+    
+    .checkbox-section h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        padding-top: 20px;
+    }
+    
+    .form-container h2 {
+        font-size: 20px;
+        padding: 18px 15px;
+    }
+    
+    .tab-content {
+        padding: 20px 15px;
+    }
+    
+    .checkbox-section {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 15px;
+    }
+    
+    .button-container {
+        margin-left: -15px;
+        margin-right: -15px;
+        margin-bottom: -20px;
+        padding: 20px 15px;
+    }
+    
+    .tramite-header {
+        padding: 15px;
+    }
+    
+    .tramite-fields {
+        padding: 15px;
+    }
+    
+    input[type="text"], 
+    input[type="date"] {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .form-container {
+        max-width: 1000px;
+    }
+    
+    .form-grid {
+        max-width: 900px;
+    }
+    
+    .checkbox-grid {
+        max-width: 900px;
+    }
+}
+
+/* Efectos adicionales */
+.tramite-container.selected {
+    border-color: #667eea;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+}
+
+.tramite-container.selected .tramite-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tramite-container.selected .tramite-header label {
+    color: white;
+}
+
+/* Animaciones para mejor UX */
+.field-group input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #dc3545;
+    background: #fff5f5;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.field-group input:valid:not(:focus):not(:placeholder-shown) {
+    border-color: #28a745;
+    background: #f8fff8;
+}
+
+/* Indicadores visuales para campos requeridos */
+label[for="FECHA_ELA"]::after,
+label[for="FOLIO"]::after,
+label[for="TITULAR"]::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Mejoras en accesibilidad */
+.tramite-container:focus-within {
+    outline: 3px solid rgba(102, 126, 234, 0.3);
+    outline-offset: 2px;
+}
+
+input[type="checkbox"]:focus {
+    outline: 3px solid rgba(102, 126, 234, 0.3);
+    outline-offset: 2px;
+    border-radius: 4px;
+}

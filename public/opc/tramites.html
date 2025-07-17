@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../img/navegador.ico" type="image/x-icon" />
-    <title>Gestión de Trámites</title>
-    <link rel="stylesheet" href="../css/stylesInicio.css" />
-    <link rel="stylesheet" href="../css/styleadmin.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
-    <script src="../js/auth.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        const auth = verificarAutenticacion();
-        if (!auth) {
-            return;
-        }
-        cargarTramites();
-        cargarConteoTramites();
-        });
-    </script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="../img/navegador.ico" type="image/x-icon" />
+<title>Gestión de Trámites</title>
+<link rel="stylesheet" href="../css/stylesInicio.css" />
+<link rel="stylesheet" href="../css/styleadmin.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+<script src="../js/auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const auth = verificarAutenticacion();
+    if (!auth) {
+    return;
+    }
+    cargarTramites();
+    cargarConteoTramites();
+});
+</script>
 </head>
 <body>
-    <div class="main-content">
+<div class="main-content">
     <div class="contenedor-tabla">
         <div class="table-container">
         <div class="top-bar">
@@ -32,10 +32,9 @@
 
             <div class="menu adaptado">
             <div class="acciones horizontal">
-                <a href="agregarTramite.html" onclick="event.stopPropagation()">Agregar Trámite</a>
+                <a href="../btn/agregarTramite.html" onclick="event.stopPropagation()">Agregar Trámite</a>
                 <a href="#" onclick="descargarExcel()" onclick="event.stopPropagation()">Descargar Excel</a>
                 <a href="../panelAdministrador.html" onclick="event.stopPropagation()">Volver</a>
-                <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
             </div>
             <div class="container">
                 <div class="toggle"></div>
@@ -58,19 +57,7 @@
                 <th>FECHA ELABORACIÓN</th>
                 <th>FOLIO</th>
                 <th>NOMBRE DEL TITULAR</th>
-                <th>INHUMACIÓN DE</th>
-                <th>TITULAR SALIENTE</th>
                 <th>RECIBO OFICIAL</th>
-                <th>COSTO INHUMACIÓN</th>
-                <th>COSTO EXHUMACIÓN</th>
-                <th>REPOSICIÓN CONSTANCIA</th>
-                <th>COSTO TRASPASO</th>
-                <th>LOTE</th>
-                <th>MANTENIMIENTO</th>
-                <th>AMPL CM LINEAL</th>
-                <th>REGULARIZACIÓN LOTES</th>
-                <th>CONSTRUCCIÓN</th>
-                <th>BÚSQUEDA INFO</th>
                 <th>ACCIONES</th>
                 </tr>
             </thead>
@@ -89,24 +76,18 @@
         <button id="btn-cancelar">Cancelar</button>
         </div>
     </div>
-    </div>
+</div>
 
-    <div id="mensaje-flotante"></div>
+<div id="mensaje-flotante"></div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
     $('.toggle').on('click', function () {
         const $menu = $(this).closest('.menu.adaptado');
         $menu.toggleClass('expanded');
         $(this).toggleClass('close');
     });
-
-    function cerrarSesion() {
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = "../index.html";
-    }
 
     let idAEliminar = null;
     let currentMenuId = null;
@@ -158,7 +139,7 @@
         tbody.innerHTML = "";
         
         if (!datos.length) {
-        tbody.innerHTML = '<tr><td colspan="17" style="text-align:center;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Sin resultados</td></tr>';
         return;
         }
 
@@ -171,19 +152,7 @@
             <td>${fechaFormateada}</td>
             <td>${item.FOLIO || ''}</td>
             <td>${item.TITULAR || ''}</td>
-            <td>${item.INHUMACION || ''}</td>
-            <td>${item.TRASPASO || ''}</td>
             <td>${item.RECIBO || ''}</td>
-            <td>${item.COSTO_INHU || ''}</td>
-            <td>${item.COSTO_EXHU || ''}</td>
-            <td>${item.REPOSICION || ''}</td>
-            <td>${item.COSTO_TRASPASO || ''}</td>
-            <td>${item.LOTE || ''}</td>
-            <td>${item.MANTENIMIENTO || ''}</td>
-            <td>${item.AMPL_CM || ''}</td>
-            <td>${item.REGULARIZACION || ''}</td>
-            <td>${item.CONSTRUCCION || ''}</td>
-            <td>${item.BUSQUEDA_INFO || ''}</td>
             <td>
                 <div class="flexDiv" id="${menuId}">
                 <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
@@ -201,11 +170,11 @@
     }
 
     function verTramite(id) {
-        window.location.href = `verTramite.html?id=${id}`;
+        window.location.href = `../btn/verTramite.html?id=${id}`;
     }
 
     function editarTramite(id) {
-        window.location.href = `editarTramite.html?id=${id}`;
+        window.location.href = `../btn/editarTramite.html?id=${id}`;
     }
 
     function eliminarTramite(id) {
