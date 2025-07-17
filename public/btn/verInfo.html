@@ -208,7 +208,6 @@
         let currentNomReg = null;
         
         function mostrarTab(tab) {
-            // Ocultar todos los tabs
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
@@ -216,12 +215,10 @@
             document.querySelectorAll('.tab').forEach(tabBtn => {
                 tabBtn.classList.remove('active');
             });
-            
-            // Mostrar tab seleccionado
+
             document.getElementById('tab-' + tab).classList.add('active');
             event.target.classList.add('active');
-            
-            // Cargar historial si se selecciona
+
             if (tab === 'historial' && currentNomReg) {
                 cargarHistorial(currentNomReg);
             }

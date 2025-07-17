@@ -205,8 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
     async function descargarExcel() {
         try {
         mostrarMensaje("Generando archivo Excel...");
-        
-        // Obtener todos los trámites del año actual
         const añoActual = new Date().getFullYear();
         const res = await fetchAutenticado(`http://localhost:5000/tramites/excel/${añoActual}`);
         

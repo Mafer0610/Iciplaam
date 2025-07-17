@@ -42,7 +42,6 @@ const LapidaSchema = new mongoose.Schema({
     CVE_ZONA: String,
     CVE_LOTE: String,
     CUENTA: String,
-    // HISTORIAL INTEGRADO
     historial: [CambioSchema]
 });
 

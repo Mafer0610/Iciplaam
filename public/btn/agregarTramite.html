@@ -218,7 +218,6 @@
         function limpiarFormulario() {
             document.getElementById('tramiteForm').reset();
             
-            // Ocultar todos los campos de trámite
             const containers = document.querySelectorAll('.tramite-fields');
             containers.forEach(container => {
                 container.style.display = 'none';
@@ -232,7 +231,6 @@
             mostrarMensaje('Formulario limpiado correctamente', 'success');
         }
 
-        // Establecer fecha actual por defecto
         document.addEventListener('DOMContentLoaded', function() {
             const fechaInput = document.getElementById('FECHA_ELA');
             const hoy = new Date();

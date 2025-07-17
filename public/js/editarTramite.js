@@ -44,7 +44,6 @@ async function cargarDatosTramite() {
 }
 
 function llenarFormulario(tramite) {
-    // Llenar campos básicos
     const campos = ['FOLIO', 'TITULAR', 'RECIBO'];
 
     campos.forEach(campo => {
@@ -54,14 +53,12 @@ function llenarFormulario(tramite) {
         }
     });
 
-    // Llenar fecha de elaboración
     if (tramite.FECHA_ELA) {
         const fecha = new Date(tramite.FECHA_ELA);
         const fechaFormateada = fecha.toISOString().split('T')[0];
         document.getElementById('FECHA_ELA').value = fechaFormateada;
     }
 
-    // Configurar campos de costos y checkboxes
     const tiposCosto = [
         { checkbox: 'TIPO_INHUMACION', campos: ['INHUMACION', 'COSTO_INHU'], tipo: 'INHUMACION' },
         { checkbox: 'TIPO_EXHUMACION', campos: ['COSTO_EXHU'], tipo: 'EXHUMACION' },
@@ -78,8 +75,7 @@ function llenarFormulario(tramite) {
     tiposCosto.forEach(item => {
         const checkbox = document.getElementById(item.checkbox);
         let tieneValor = false;
-        
-        // Verificar si alguno de los campos de este tipo tiene valor
+
         item.campos.forEach(campo => {
             if (tramite[campo] && tramite[campo].trim() !== '') {
                 tieneValor = true;
@@ -89,8 +85,7 @@ function llenarFormulario(tramite) {
                 }
             }
         });
-        
-        // Si tiene valor, marcar el checkbox y mostrar los campos
+
         if (tieneValor && checkbox) {
             checkbox.checked = true;
             toggleTramiteField(item.tipo);
@@ -103,7 +98,6 @@ function recopilarDatosTramite() {
     const formData = new FormData(form);
     const datos = {};
 
-    // Recopilar datos básicos del formulario (solo campos principales)
     const camposPrincipales = ['FECHA_ELA', 'FOLIO', 'TITULAR', 'RECIBO'];
     camposPrincipales.forEach(campo => {
         const input = document.getElementById(campo);
@@ -112,7 +106,6 @@ function recopilarDatosTramite() {
         }
     });
 
-    // Procesar campos de trámites - solo incluir si el checkbox está marcado
     const tiposTramite = [
         { checkbox: 'TIPO_INHUMACION', campos: ['INHUMACION', 'COSTO_INHU'] },
         { checkbox: 'TIPO_EXHUMACION', campos: ['COSTO_EXHU'] },
@@ -126,7 +119,6 @@ function recopilarDatosTramite() {
         { checkbox: 'TIPO_BUSQUEDA', campos: ['COSTO_BUSQUEDA'] }
     ];
 
-    // Inicializar todos los campos como vacíos
     const todosCampos = [
         'INHUMACION', 'COSTO_INHU', 'COSTO_EXHU', 'REPOSICION', 'TRASPASO', 'COSTO_TRASPASO',
         'COSTO_CONSTRUCCION', 'COSTO_MANTENIMIENTO', 'COSTO_LOTE', 'COSTO_AMPL_CM', 
@@ -137,7 +129,6 @@ function recopilarDatosTramite() {
         datos[campo] = '';
     });
 
-    // Llenar solo los campos de trámites seleccionados
     tiposTramite.forEach(item => {
         const checkbox = document.getElementById(item.checkbox);
         
@@ -171,7 +162,6 @@ function validarFormulario() {
         }
     });
 
-    // Validar que el folio no esté vacío y tenga formato válido
     const folio = document.getElementById('FOLIO').value.trim();
     if (folio && !/^[A-Za-z0-9\-_]+$/.test(folio)) {
         valido = false;
@@ -207,8 +197,7 @@ async function actualizarTramite(datos) {
         console.log('Trámite actualizado exitosamente:', result);
         
         mostrarMensaje('Trámite actualizado correctamente', 'success');
-        
-        // Redirigir después de 2 segundos
+
         setTimeout(() => {
             window.location.href = 'tramites.html';
         }, 2000);
@@ -219,9 +208,7 @@ async function actualizarTramite(datos) {
     }
 }
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Cargar datos del trámite
     cargarDatosTramite();
     
     const form = document.getElementById('editarTramiteForm');
@@ -239,7 +226,6 @@ document.addEventListener('DOMContentLoaded', function() {
         actualizarTramite(datos);
     });
 
-    // Validación en tiempo real para campos requeridos
     const camposRequeridos = ['FECHA_ELA', 'FOLIO', 'TITULAR'];
     camposRequeridos.forEach(campo => {
         const input = document.getElementById(campo);
@@ -254,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Formatear campos de dinero mientras se escribe
     const camposDinero = [
         'COSTO_INHU', 'COSTO_EXHU', 'REPOSICION', 'COSTO_TRASPASO',
         'COSTO_CONSTRUCCION', 'COSTO_MANTENIMIENTO', 'COSTO_LOTE', 'COSTO_AMPL_CM',
@@ -266,14 +251,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (input) {
             input.addEventListener('input', function() {
                 let value = this.value.replace(/[^\d.]/g, '');
-                
-                // Permitir solo un punto decimal
+
                 const parts = value.split('.');
                 if (parts.length > 2) {
                     value = parts[0] + '.' + parts.slice(1).join('');
                 }
-                
-                // Limitar a 2 decimales
+
                 if (parts[1] && parts[1].length > 2) {
                     value = parts[0] + '.' + parts[1].substring(0, 2);
                 }

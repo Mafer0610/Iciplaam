@@ -46,7 +46,6 @@ const conceptosMap = {
     RECT_UBICACION: 'Rectificación de Ubicación'
 };
 
-// Recopilar datos del formulario de ficha
 function recopilarDatosFicha() {
     const form = document.getElementById('fichaForm');
     const formData = new FormData(form);
@@ -76,7 +75,6 @@ function recopilarDatosFicha() {
     return datos;
 }
 
-// Recopilar datos del formulario de control
 function recopilarDatosTramite() {
     const datos = {};
 
@@ -155,7 +153,6 @@ function recopilarDatosTramite() {
     return datos;
 }
 
-// Función para mostrar/ocultar opciones de rectificación
 function toggleRectificacionOptions() {
     const rectificacionCheckbox = document.getElementById('RECTIFICACION');
     const rectificacionOptions = document.getElementById('rectificacion-options');
@@ -171,7 +168,6 @@ function toggleRectificacionOptions() {
     }
 }
 
-// Función para guardar ficha en base de datos
 async function guardarFicha(datos) {
     try {
         console.log('Enviando ficha a BD:', datos);
@@ -198,7 +194,6 @@ async function guardarFicha(datos) {
     }
 }
 
-// Función para guardar control en base de datos
 async function guardarControl(datos) {
     try {
         console.log('Enviando control a BD:', datos);
@@ -225,7 +220,6 @@ async function guardarControl(datos) {
     }
 }
 
-// Generar documento de ficha
 async function generarFicha(datos) {
     try {
         mostrarMensaje('Generando Ficha de Inspección...', 'success');
@@ -260,7 +254,6 @@ async function generarFicha(datos) {
     }
 }
 
-// Generar documento de trámite
 async function generarTramite(datos) {
     try {
         mostrarMensaje('Generando Documento de Trámite...', 'success');
@@ -295,7 +288,6 @@ async function generarTramite(datos) {
     }
 }
 
-// Event listeners para los formularios
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('fichaForm').addEventListener('submit', function(e) {
         e.preventDefault();

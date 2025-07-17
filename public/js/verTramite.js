@@ -59,8 +59,6 @@ function formatearFecha(fecha) {
 function mostrarCostos(tramite) {
     const costosGrid = document.getElementById('costos-grid');
     const costosContainer = document.getElementById('costos-container');
-    
-    // Definir todos los posibles costos
     const costos = [
         { campo: 'COSTO_INHU', label: 'Costo de Inhumación' },
         { campo: 'COSTO_EXHU', label: 'Costo de Exhumación' },
@@ -71,8 +69,6 @@ function mostrarCostos(tramite) {
         { campo: 'COSTO_REGULARIZACION', label: 'Costo de Regularización' },
         { campo: 'COSTO_BUSQUEDA', label: 'Costo de Búsqueda' }
     ];
-    
-    // Filtrar solo los costos que tienen valor
     const costosConValor = costos.filter(costo => 
         tramite[costo.campo] && tramite[costo.campo].trim() !== ''
     );
@@ -81,11 +77,8 @@ function mostrarCostos(tramite) {
         costosContainer.style.display = 'none';
         return;
     }
-    
-    // Limpiar grid de costos
     costosGrid.innerHTML = '';
-    
-    // Agregar cada costo
+
     costosConValor.forEach(costo => {
         const costoDiv = document.createElement('div');
         costoDiv.className = 'info-item cost-item';
@@ -133,7 +126,6 @@ async function cargarDatosTramite() {
 }
 
 function mostrarDatosTramite(tramite) {
-    // Información general
     mostrarValor('display-folio', tramite.FOLIO);
     mostrarValor('display-fecha', formatearFecha(tramite.FECHA_ELA));
     mostrarValor('display-titular', tramite.TITULAR);
@@ -142,25 +134,19 @@ function mostrarDatosTramite(tramite) {
     mostrarValor('display-inhumacion', tramite.INHUMACION);
     mostrarValor('display-traspaso', tramite.TRASPASO);
     
-    // Información adicional
     mostrarValor('display-mantenimiento', tramite.MANTENIMIENTO);
     mostrarValor('display-ampl-cm', tramite.AMPL_CM);
     mostrarValor('display-regularizacion', tramite.REGULARIZACION);
     mostrarValor('display-construccion', tramite.CONSTRUCCION);
     mostrarValor('display-busqueda', tramite.BUSQUEDA_INFO);
-    
-    // Mostrar costos
     mostrarCostos(tramite);
-    
-    // Metadatos
+
     mostrarValor('display-id', tramite._id);
     mostrarValor('display-fecha-creacion', formatearFecha(tramite.FECHA_CREACION));
     mostrarValor('display-fecha-actualizacion', formatearFecha(tramite.FECHA_ACTUALIZACION));
-    
-    // Mostrar botón de editar
+
     document.getElementById('btn-editar').style.display = 'inline-block';
-    
-    // Ocultar loading y mostrar contenido
+
     ocultarCarga();
 }
 
@@ -175,29 +161,20 @@ function imprimirTramite() {
 }
 
 function exportarPDF() {
-    // Función para exportar a PDF (requiere implementación adicional)
     mostrarMensaje('Funcionalidad de exportar PDF en desarrollo', 'info');
 }
-
-// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     cargarDatosTramite();
-    
-    // Agregar atajos de teclado
+
     document.addEventListener('keydown', function(e) {
-        // Ctrl/Cmd + E para editar
         if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
             e.preventDefault();
             editarTramite();
         }
-        
-        // Ctrl/Cmd + P para imprimir
         if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
             e.preventDefault();
             imprimirTramite();
         }
-        
-        // Escape para volver
         if (e.key === 'Escape') {
             window.location.href = 'tramites.html';
         }
