@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Ficha - Panteón Municipal</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Editar Ficha de Inspección - Panteón Municipal</h2>
+        
+        <div id="status-message" class="status-message"></div>
+        
+        <div id="loading" class="loading" style="text-align: center; padding: 40px;">
+            <p>Cargando información de la ficha...</p>
+        </div>
+
+        <form id="editarFichaForm" style="display: none;">
+            <div class="form-grid">
+                <div>
+                    <label for="NO_FICHI">No. Ficha de Inspección:</label>
+                    <input type="text" id="NO_FICHI" name="NO_FICHI" required>
+                </div>
+                <div>
+                    <label for="LOTE_ACT">Lote Actual:</label>
+                    <input type="text" id="LOTE_ACT" name="LOTE_ACT" required>
+                </div>
+                <div>
+                    <label for="MEDIDAS">Medidas:</label>
+                    <input type="text" id="MEDIDAS" name="MEDIDAS" required>
+                </div>
+                <div>
+                    <label for="INHU_CADA">Inhumación de Cadáver del(a):</label>
+                    <input type="text" id="INHU_CADA" name="INHU_CADA" required>
+                </div>
+                <div>
+                    <label for="FECHA_INHU">Fecha de Inhumación:</label>
+                    <input type="date" id="FECHA_INHU" name="FECHA_INHU" required>
+                </div>
+                <div>
+                    <label for="FOLIO">Folio:</label>
+                    <input type="text" id="FOLIO" name="FOLIO" required>
+                </div>
+                <div>
+                    <label for="HOJA">Hoja:</label>
+                    <input type="text" id="HOJA" name="HOJA" required>
+                </div>
+                <div>
+                    <label for="ACTU_PROPIE">Actual Propietario:</label>
+                    <input type="text" id="ACTU_PROPIE" name="ACTU_PROPIE" required>
+                </div>
+                <div>
+                    <label for="TELEFONO">No. Telefónico:</label>
+                    <input type="text" id="TELEFONO" name="TELEFONO" required>
+                </div>
+            </div>
+
+            <div class="checkbox-section">
+                <h3>Colindancias</h3>
+                <div class="form-grid full-width">
+                    <div>
+                        <label for="CARAC_LOTE">Característica del Lote:</label>
+                        <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label for="SUR">Lado Sur:</label>
+                        <input type="text" id="SUR" name="SUR">
+                    </div>
+                    <div>
+                        <label for="NORTE">Lado Norte:</label>
+                        <input type="text" id="NORTE" name="NORTE">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div>
+                        <label>Conceptos:</label>
+                        <div class="checkbox-grid" id="conceptos-container">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_INHUMACION" name="CONCEP" value="INHUMACION">
+                                <label for="CONC_INHUMACION">Inhumación</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_REP_BOLETA" name="CONCEP" value="REP_BOLETA">
+                                <label for="CONC_REP_BOLETA">Reposición de Boleta</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_TRASP_LOTE" name="CONCEP" value="TRASP_LOTE">
+                                <label for="CONC_TRASP_LOTE">Traspaso</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA">
+                                <label for="CONC_TRASPA_SISTEMA">Alta en el Sistema</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA">
+                                <label for="CONC_CONSTRUC_GAVETA">Construcción</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO">
+                                <label for="CONC_CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_EXHUMA_CENIZAS" name="CONCEP" value="EXHUMA_CENIZAS">
+                                <label for="CONC_EXHUMA_CENIZAS">Exhumación</label>
+                            </div>
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_RECTIFICACION" name="CONCEP" value="RECTIFICACION" onchange="toggleRectificacionFicha()">
+                                <label for="CONC_RECTIFICACION">Rectificación</label>
+                                <div id="rectificacion-ficha-options" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_NUMERO" name="FICHA_RECT_TIPO" value="RECT_NUMERO">
+                                            <label for="FICHA_RECT_NUMERO">Rectificación de Número</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_FILA" name="FICHA_RECT_TIPO" value="RECT_FILA">
+                                            <label for="FICHA_RECT_FILA">Rectificación de Fila</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_UBICACION" name="FICHA_RECT_TIPO" value="RECT_UBICACION">
+                                            <label for="FICHA_RECT_UBICACION">Rectificación de Ubicación</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div>
+                        <label for="OBSER">Observación:</label>
+                        <input type="text" id="OBSER" name="OBSER">
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-primary">Actualizar Ficha</button>
+                <button type="button" class="btn-secondary" onclick="window.history.back()">Cancelar</button>
+            </div>
+        </form>
+
+        <div id="error-message" class="error-message" style="display: none;">
+            <h3>Error al cargar la ficha</h3>
+            <p id="error-text">No se pudo cargar la información de la ficha.</p>
+        </div>
+    </div>
+
+    <script>
+        let fichaId = null;
+        const conceptosMap = {
+            REP_BOLETA: 'Reposición de Boleta',
+            INHUMACION: 'Inhumación',
+            TRASP_LOTE: 'Traspaso',
+            TRASPA_SISTEMA: 'Alta en el Sistema',
+            CONSTRUC_GAVETA: 'Construcción',
+            CONSTRUC_DEPOSITO: 'Depósito de Cenizas',
+            EXHUMA_CENIZAS: 'Exhumación',
+            RECTIFICACION: 'Rectificación',
+            RECT_NUMERO: 'Rectificación de Número',
+            RECT_FILA: 'Rectificación de Fila',
+            RECT_UBICACION: 'Rectificación de Ubicación'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const auth = verificarAutenticacion();
+            if (!auth) return;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            fichaId = urlParams.get('id');
+            
+            if (!fichaId) {
+                mostrarError('ID de ficha no proporcionado');
+                return;
+            }
+
+            cargarFicha();
+        });
+
+        async function cargarFicha() {
+            try {
+                const response = await fetch(`http://localhost:5000/fichas/${fichaId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const ficha = await response.json();
+                llenarFormulario(ficha);
+                
+            } catch (error) {
+                console.error('Error al cargar ficha:', error);
+                mostrarError(error.message);
+            }
+        }
+
+        function llenarFormulario(ficha) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('editarFichaForm').style.display = 'block';
+
+            document.getElementById('NO_FICHI').value = ficha.NO_FICHI || '';
+            document.getElementById('LOTE_ACT').value = ficha.LOTE_ACT || '';
+            document.getElementById('MEDIDAS').value = ficha.MEDIDAS || '';
+            document.getElementById('INHU_CADA').value = ficha.INHU_CADA || '';
+            document.getElementById('FOLIO').value = ficha.FOLIO || '';
+            document.getElementById('HOJA').value = ficha.HOJA || '';
+            document.getElementById('ACTU_PROPIE').value = ficha.ACTU_PROPIE || '';
+            document.getElementById('TELEFONO').value = ficha.TELEFONO || '';
+            document.getElementById('CARAC_LOTE').value = ficha.CARAC_LOTE || '';
+            document.getElementById('SUR').value = ficha.SUR || '';
+            document.getElementById('NORTE').value = ficha.NORTE || '';
+            document.getElementById('OBSER').value = ficha.OBSER || '';
+
+            if (ficha.FECHA_INHU) {
+                const fecha = new Date(ficha.FECHA_INHU);
+                const fechaFormateada = fecha.toISOString().split('T')[0];
+                document.getElementById('FECHA_INHU').value = fechaFormateada;
+            }
+
+            if (ficha.CONCEPTOS && Array.isArray(ficha.CONCEPTOS)) {
+                document.querySelectorAll('input[name="CONCEP"]').forEach(cb => cb.checked = false);
+                
+                ficha.CONCEPTOS.forEach(concepto => {
+                    const conceptoKey = Object.keys(conceptosMap).find(key => 
+                        conceptosMap[key] === concepto || key === concepto
+                    );
+                    
+                    if (conceptoKey) {
+                        const checkbox = document.querySelector(`input[name="CONCEP"][value="${conceptoKey}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('editarFichaForm').addEventListener('submit', actualizarFicha);
+        }
+
+        function mostrarError(mensaje) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('error-text').textContent = mensaje;
+        }
+
+        function toggleRectificacionFicha() {
+            const checkbox = document.getElementById('CONC_RECTIFICACION');
+            const options = document.getElementById('rectificacion-ficha-options');
+            const subOptions = document.querySelectorAll('input[name="FICHA_RECT_TIPO"]');
+
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(cb => cb.checked = false);
+            }
+        }
+
+        async function actualizarFicha(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const datos = {};
+
+            for (let [key, value] of formData.entries()) {
+                datos[key] = value;
+            }
+
+            datos.CONCEPTOS = [];
+            document.querySelectorAll('input[name="CONCEP"]:checked').forEach(cb => {
+                const valorLegible = conceptosMap[cb.value] || cb.value;
+                datos.CONCEPTOS.push(valorLegible);
+            });
+
+            datos.FICHA_RECT_TIPO = [];
+            document.querySelectorAll('input[name="FICHA_RECT_TIPO"]:checked').forEach(cb => {
+                datos.FICHA_RECT_TIPO.push(cb.value);
+            });
+
+            datos.FECHA_ACTUALIZACION = new Date();
+
+            try {
+                mostrarMensaje('Actualizando ficha...', 'success');
+                
+                const response = await fetch(`http://localhost:5000/fichas/${fichaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                if (response.ok) {
+                    mostrarMensaje('Ficha actualizada correctamente', 'success');
+                    setTimeout(() => {
+                        window.location.href = `verFicha.html?id=${fichaId}`;
+                    }, 1500);
+                } else {
+                    const error = await response.json();
+                    mostrarMensaje(`Error al actualizar: ${error.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('Error de conexión al actualizar ficha', 'error');
+            }
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const messageDiv = document.getElementById('status-message');
+            messageDiv.textContent = mensaje;
+            messageDiv.className = `status-message status-${tipo}`;
+            messageDiv.style.display = 'block';
+            
+            if (tipo === 'error') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -132,6 +132,7 @@
 
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Generar Ficha de Inspección</button>
+                    <button type="button" class="btn-success" onclick="guardarSoloFicha()">💾 Guardar</button>
                     <button type="button" class="btn-secondary" onclick="limpiarFormulario('fichaForm')">Limpiar</button>
                 </div>
             </form>
@@ -296,6 +297,7 @@
                 
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Generar Documento de Trámite</button>
+                    <button type="button" class="btn-success" onclick="guardarSoloTramite()">💾 Guardar</button>
                     <button type="button" class="btn-secondary" onclick="limpiarFormulario('tramiteForm')">Limpiar</button>
                 </div>
             </form>
@@ -418,6 +420,21 @@
             
             iframe.src = archivo;
             container.style.display = 'block';
+        }
+        async function guardarSoloFicha() {
+            console.log('=== GUARDANDO SOLO FICHA ===');
+            const datos = recopilarDatosFicha();
+            console.log('Datos de ficha recopilados:', datos);
+            
+            await guardarFicha(datos);
+        }
+
+        async function guardarSoloTramite() {
+            console.log('=== GUARDANDO SOLO TRÁMITE ===');
+            const datos = recopilarDatosTramite();
+            console.log('Datos de trámite recopilados:', datos);
+            
+            await guardarControl(datos);
         }
     </script>
 </body>

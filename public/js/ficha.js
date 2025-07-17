@@ -55,11 +55,15 @@ function recopilarDatosFicha() {
         datos[key] = value;
     }
 
-    datos.CONCEP = [];
+    const conceptosSeleccionados = [];
     document.querySelectorAll('input[name="CONCEP"]:checked').forEach(cb => {
         const valorLegible = conceptosMap[cb.value] || cb.value;
-        datos.CONCEP.push(valorLegible);
+        conceptosSeleccionados.push(valorLegible);
     });
+
+    datos.CONCEPTOS = conceptosSeleccionados;
+    
+    datos.CONCEP = conceptosSeleccionados.join(', ') || 'Sin conceptos especificados';
 
     datos.FICHA_RECT_TIPO = [];
     document.querySelectorAll('input[name="FICHA_RECT_TIPO"]:checked').forEach(cb => {
@@ -69,8 +73,6 @@ function recopilarDatosFicha() {
     const hoy = new Date();
     const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
     datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
-
-    datos.CONCEP = datos.CONCEP.join(', ');
 
     return datos;
 }
@@ -323,3 +325,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Sistema de generación de documentos iniciado');
 });
+
+async function guardarSoloFicha() {
+    console.log('=== GUARDANDO SOLO FICHA ===');
+    const datos = recopilarDatosFicha();
+    console.log('Datos de ficha recopilados:', datos);
+    
+    await guardarFicha(datos);
+}
+
+async function guardarSoloTramite() {
+    console.log('=== GUARDANDO SOLO TRÁMITE ===');
+    const datos = recopilarDatosTramite();
+    console.log('Datos de trámite recopilados:', datos);
+    
+    await guardarControl(datos);
+}

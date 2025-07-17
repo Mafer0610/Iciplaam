@@ -337,3 +337,31 @@ input[type="checkbox"]:focus {
     outline: 2px solid #3498db;
     outline-offset: 2px;
 }
+.contador-registros {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contador-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}

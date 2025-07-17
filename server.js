@@ -433,7 +433,7 @@ app.post('/generar-tramite', async (req, res) => {
     }
 });
 
-// Función para generar ficha de inspección usando plantilla Word
+// Función para generar ficha de inspección usando plantilla Word - CORREGIDA
 async function generarFichaInspeccion(datos) {
     try {
         const rutaPlantilla = path.join(__dirname, 'Docs', 'Fichadeinspeccion_panteon.docx');
@@ -453,6 +453,7 @@ async function generarFichaInspeccion(datos) {
             linebreaks: true,
         });
 
+        // Formatear fecha de inhumación
         if (datos.FECHA_INHU) {
             const fecha = new Date(datos.FECHA_INHU);
             const meses = [
@@ -461,6 +462,29 @@ async function generarFichaInspeccion(datos) {
             ];
             datos.FECHA_INHU = `${fecha.getDate()} DE ${meses[fecha.getMonth()]} DEL ${fecha.getFullYear()}`;
         }
+
+        // Asegurar que CONCEP existe para el documento Word
+        if (!datos.CONCEP) {
+            if (datos.CONCEPTOS && Array.isArray(datos.CONCEPTOS)) {
+                datos.CONCEP = datos.CONCEPTOS.join(', ');
+            } else {
+                datos.CONCEP = 'Sin conceptos especificados';
+            }
+        }
+
+        // Asegurar que todos los campos tienen valores por defecto
+        const camposRequeridos = [
+            'NO_FICHI', 'LOTE_ACT', 'MEDIDAS', 'INHU_CADA', 'FOLIO', 'HOJA', 
+            'ACTU_PROPIE', 'TELEFONO', 'CARAC_LOTE', 'SUR', 'NORTE', 'OBSER'
+        ];
+
+        camposRequeridos.forEach(campo => {
+            if (!datos[campo]) {
+                datos[campo] = '';
+            }
+        });
+
+        console.log('Datos que se enviarán a la plantilla Word:', JSON.stringify(datos, null, 2));
 
         doc.setData(datos);
         doc.render();
@@ -535,6 +559,65 @@ function generarDocumentoTramite(datos) {
         };
     }
 }
+
+// Obtener una ficha específica por ID
+app.get('/fichas/:id', async (req, res) => {
+    try {
+        const ficha = await Ficha.findById(req.params.id);
+        if (!ficha) {
+            return res.status(404).json({ error: "Ficha no encontrada" });
+        }
+        res.json(ficha);
+    } catch (err) {
+        console.error("Error al buscar ficha:", err);
+        res.status(500).json({ error: "Error en el servidor" });
+    }
+});
+
+// Actualizar una ficha específica
+app.put('/fichas/:id', async (req, res) => {
+    try {
+        console.log(`Actualizando ficha: ${req.params.id}`);
+        if (req.body.CONCEPTOS) {
+            if (typeof req.body.CONCEPTOS === 'string') {
+                req.body.CONCEPTOS = req.body.CONCEPTOS.split(', ');
+            } else if (!Array.isArray(req.body.CONCEPTOS)) {
+                req.body.CONCEPTOS = [req.body.CONCEPTOS];
+            }
+        }
+        if (req.body.FICHA_RECT_TIPO && !Array.isArray(req.body.FICHA_RECT_TIPO)) {
+            req.body.FICHA_RECT_TIPO = [req.body.FICHA_RECT_TIPO];
+        }
+        req.body.FECHA_ACTUALIZACION = new Date();
+
+        const fichaActualizada = await Ficha.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        if (!fichaActualizada) {
+            return res.status(404).json({ error: "Ficha no encontrada" });
+        }
+
+        console.log(`Ficha ${req.params.id} actualizada exitosamente`);
+        res.json({ mensaje: "Ficha actualizada correctamente", fichaActualizada });
+    } catch (err) {
+        console.error("Error al actualizar ficha:", err);
+        res.status(500).json({ error: "Error al actualizar la ficha" });
+    }
+});
+
+// Conteo total de fichas
+app.get('/fichas/count/total', async (req, res) => {
+    try {
+        const total = await Ficha.countDocuments();
+        res.json({ total });
+    } catch (error) {
+        console.error("Error al obtener el conteo de fichas:", error);
+        res.status(500).json({ error: "Error al obtener el conteo de fichas" });
+    }
+});
 
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
