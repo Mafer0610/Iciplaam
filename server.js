@@ -838,15 +838,55 @@ app.get('/tramites/count/total', async (req, res) => {
     }
 });
 
-// Generar y descargar Excel con trámites del año especificado
+// Generar y descargar Excel con trámites del año especificado usando plantilla
 app.get('/tramites/excel/:year', async (req, res) => {
     try {
         const year = parseInt(req.params.year);
-        console.log(`📊 Generando Excel para trámites del año ${year}`);
+        console.log(`📊 Generando Excel para trámites del año ${year} usando plantilla`);
+        
+        // Ruta corregida de la plantilla
+        const rutaPlantilla = path.join(__dirname, 'Docs', 'RelacionTramites.xlsx');
+        console.log(`📂 Buscando plantilla en: ${rutaPlantilla}`);
+        
+        if (!fs.existsSync(rutaPlantilla)) {
+            console.error('❌ Plantilla Excel no encontrada:', rutaPlantilla);
+            // Intentar ruta alternativa
+            const rutaAlternativa = path.join(__dirname, 'RelacionTramites.xlsx');
+            console.log(`📂 Intentando ruta alternativa: ${rutaAlternativa}`);
+            
+            if (!fs.existsSync(rutaAlternativa)) {
+                console.error('❌ Plantilla no encontrada en ninguna ubicación');
+                return res.status(500).json({ 
+                    error: 'Plantilla Excel no encontrada',
+                    rutaBuscada: rutaPlantilla,
+                    rutaAlternativa: rutaAlternativa
+                });
+            } else {
+                // Usar ruta alternativa
+                rutaPlantilla = rutaAlternativa;
+            }
+        }
+
+        // Leer la plantilla
+        const XLSX = require('xlsx');
+        console.log('📖 Leyendo plantilla Excel...');
+        const templateBuffer = fs.readFileSync(rutaPlantilla);
+        const workbook = XLSX.read(templateBuffer, {
+            cellStyles: true,
+            cellFormulas: true,
+            cellDates: true,
+            cellNF: true,
+            sheetStubs: true
+        });
+
+        console.log('📋 Hojas disponibles:', workbook.SheetNames);
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         
         // Obtener trámites del año especificado
         const inicioAño = new Date(year, 0, 1);
         const finAño = new Date(year + 1, 0, 1);
+        
+        console.log(`🔍 Buscando trámites entre ${inicioAño.toISOString()} y ${finAño.toISOString()}`);
         
         const tramites = await Tramite.find({
             FECHA_ELA: {
@@ -857,64 +897,170 @@ app.get('/tramites/excel/:year', async (req, res) => {
         
         console.log(`📋 Encontrados ${tramites.length} trámites para el año ${year}`);
         
-        // Crear workbook
-        const XLSX = require('xlsx');
-        const workbook = XLSX.utils.book_new();
+        // Actualizar el placeholder del año en la celda A3
+        console.log('🔄 Actualizando año en plantilla...');
+        const cellA3 = worksheet['A3'];
+        if (cellA3 && cellA3.v) {
+            const textoOriginal = cellA3.v;
+            console.log(`📝 Texto original A3: "${textoOriginal}"`);
+            cellA3.v = textoOriginal.replace('{FECHA_ACTU}', year.toString());
+            console.log(`📝 Texto actualizado A3: "${cellA3.v}"`);
+        } else {
+            console.log('⚠️ Celda A3 no encontrada, creando nueva...');
+            worksheet['A3'] = {
+                v: `RELACION DE TRAMITES CORRESPONDIENTE AL EJERCICIO ${year} PANTEONES PUBLICOS MUNICIPALES`,
+                t: 's'
+            };
+        }
+
+        // Limpiar datos existentes (mantener solo las primeras 5 filas de encabezados)
+        console.log('🧹 Limpiando datos existentes...');
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+        console.log(`📏 Rango actual: ${worksheet['!ref']}`);
         
-        // Crear encabezados del Excel basados en la estructura original
-        const encabezados = [
-            ['SECRETARIA DE SERVICIOS MUNICIPALES'],
-            ['DIRECCION DE PANTEONES'],
-            [`RELACION DE TRAMITES CORRESPONDIENTE AL EJERCICIO ${year} PANTEONES PUBLICOS MUNICIPALES`],
-            [''],
-            [
-                'FECHA DE ELABORACION',
-                'FOLIOS',
-                'NOMBRE  DEL TITULAR',
-                'INHUMACION DE:',
-                'NOMBRE TITULAR SALIENTE (TRASPASOS)',
-                'RECIBO OFICIAL',
-                'COSTO DE INHUMACION',
-                'COSTO DE LA EXHUMACIÓN',
-                'REPOSICIÓN CONSTANCIA',
-                'COSTO DEL TRASPASO',
-                'LOTE',
-                'MANTENIMIENTO',
-                'AMPL CM LINEAL',
-                'REGULARIZACION LOTES',
-                'CONSTRUCCION',
-                'BUSQUEDAD DE INFORMACION'
-            ]
+        for (let row = 5; row <= range.e.r; row++) {
+            for (let col = 0; col <= range.e.c; col++) {
+                const cellRef = XLSX.utils.encode_cell({r: row, c: col});
+                delete worksheet[cellRef];
+            }
+        }
+
+        // Agregar datos de trámites comenzando desde la fila 6 (índice 5)
+        console.log('📝 Agregando datos de trámites...');
+        tramites.forEach((tramite, index) => {
+            const rowIndex = 5 + index; // Comenzar en fila 6 (índice 5)
+            
+            const rowData = [
+                tramite.FECHA_ELA ? tramite.FECHA_ELA.toLocaleDateString('es-MX') : '', // A
+                tramite.FOLIO || '',                                                    // B
+                tramite.TITULAR || '',                                                  // C
+                tramite.INHUMACION || '',                                               // D
+                tramite.TRASPASO || '',                                                 // E
+                tramite.RECIBO || '',                                                   // F
+                tramite.COSTO_INHU || '',                                               // G
+                tramite.COSTO_EXHU || '',                                               // H
+                tramite.REPOSICION || '',                                               // I
+                tramite.COSTO_TRASPASO || '',                                           // J
+                tramite.LOTE || '',                                                     // K
+                tramite.COSTO_MANTENIMIENTO || '',                                      // L
+                tramite.AMPL_CM || '',                                                  // M
+                tramite.COSTO_REGULARIZACION || '',                                     // N
+                tramite.COSTO_CONSTRUCCION || '',                                       // O
+                tramite.COSTO_BUSQUEDA || ''                                            // P
+            ];
+
+            // Agregar cada celda con el estilo apropiado
+            rowData.forEach((value, colIndex) => {
+                const cellRef = XLSX.utils.encode_cell({r: rowIndex, c: colIndex});
+                worksheet[cellRef] = {
+                    v: value,
+                    t: 's', // tipo string
+                    s: {
+                        patternType: 'none',
+                        alignment: { 
+                            horizontal: 'left', 
+                            vertical: 'center' 
+                        },
+                        border: {
+                            top: { style: 'thin', color: { auto: 1 } },
+                            bottom: { style: 'thin', color: { auto: 1 } },
+                            left: { style: 'thin', color: { auto: 1 } },
+                            right: { style: 'thin', color: { auto: 1 } }
+                        }
+                    }
+                };
+            });
+
+            if (index % 100 === 0) {
+                console.log(`📊 Procesados ${index + 1} de ${tramites.length} trámites...`);
+            }
+        });
+
+        // Actualizar el rango de la hoja
+        const newRange = {
+            s: { c: 0, r: 0 },
+            e: { c: 15, r: Math.max(5, 5 + tramites.length - 1) }
+        };
+        worksheet['!ref'] = XLSX.utils.encode_range(newRange);
+        console.log(`📏 Nuevo rango: ${worksheet['!ref']}`);
+
+        // Asegurar que las celdas combinadas estén configuradas para los encabezados
+        console.log('🔗 Configurando celdas combinadas...');
+        if (!worksheet['!merges']) {
+            worksheet['!merges'] = [];
+        }
+        
+        // Limpiar merges existentes y agregar los correctos
+        worksheet['!merges'] = [
+            {s: {c: 0, r: 0}, e: {c: 15, r: 0}}, // SECRETARIA DE SERVICIOS MUNICIPALES
+            {s: {c: 0, r: 1}, e: {c: 15, r: 1}}, // DIRECCION DE PANTEONES
+            {s: {c: 0, r: 2}, e: {c: 15, r: 2}}  // RELACION DE TRAMITES...
         ];
-        
-        // Agregar datos de trámites
-        const datosTramites = tramites.map(tramite => [
-            tramite.FECHA_ELA ? tramite.FECHA_ELA.toLocaleDateString('es-MX') : '',
-            tramite.FOLIO || '',
-            tramite.TITULAR || '',
-            tramite.INHUMACION || '',
-            tramite.TRASPASO || '',
-            tramite.RECIBO || '',
-            tramite.COSTO_INHU || '',
-            tramite.COSTO_EXHU || '',
-            tramite.REPOSICION || '',
-            tramite.COSTO_TRASPASO || '',
-            tramite.LOTE || '',
-            tramite.MANTENIMIENTO || '',
-            tramite.AMPL_CM || '',
-            tramite.REGULARIZACION || '',
-            tramite.CONSTRUCCION || '',
-            tramite.BUSQUEDA_INFO || ''
-        ]);
-        
-        // Combinar encabezados y datos
-        const todosLosDatos = [...encabezados, ...datosTramites];
-        
-        // Crear hoja de trabajo
-        const worksheet = XLSX.utils.aoa_to_sheet(todosLosDatos);
-        
+
+        // Aplicar estilos a los encabezados principales (centrado y negrita)
+        console.log('🎨 Aplicando estilos a encabezados...');
+        ['A1', 'A2', 'A3'].forEach((cellRef, index) => {
+            if (!worksheet[cellRef]) {
+                // Crear la celda si no existe
+                const textos = [
+                    'SECRETARIA DE SERVICIOS MUNICIPALES',
+                    'DIRECCION DE PANTEONES',
+                    `RELACION DE TRAMITES CORRESPONDIENTE AL EJERCICIO ${year} PANTEONES PUBLICOS MUNICIPALES`
+                ];
+                worksheet[cellRef] = {
+                    v: textos[index],
+                    t: 's'
+                };
+            }
+            
+            worksheet[cellRef].s = {
+                alignment: { 
+                    horizontal: 'center', 
+                    vertical: 'center',
+                    wrapText: true
+                },
+                font: { 
+                    bold: true,
+                    size: cellRef === 'A3' ? 12 : 14,
+                    name: 'Calibri'
+                },
+                patternType: 'none'
+            };
+            console.log(`✅ Estilo aplicado a ${cellRef}: "${worksheet[cellRef].v}"`);
+        });
+
+        // Aplicar estilos a los encabezados de columnas (fila 5)
+        console.log('🎨 Aplicando estilos a encabezados de columnas...');
+        for (let col = 0; col < 16; col++) {
+            const cellRef = XLSX.utils.encode_cell({r: 4, c: col});
+            if (worksheet[cellRef]) {
+                worksheet[cellRef].s = {
+                    alignment: { 
+                        horizontal: 'center', 
+                        vertical: 'center',
+                        wrapText: true
+                    },
+                    font: { 
+                        bold: true,
+                        size: 10,
+                        name: 'Calibri'
+                    },
+                    patternType: 'solid',
+                    fgColor: { theme: 0, tint: -0.1499984740745262 },
+                    bgColor: { indexed: 64 },
+                    border: {
+                        top: { style: 'thin', color: { auto: 1 } },
+                        bottom: { style: 'thin', color: { auto: 1 } },
+                        left: { style: 'thin', color: { auto: 1 } },
+                        right: { style: 'thin', color: { auto: 1 } }
+                    }
+                };
+            }
+        }
+
         // Configurar anchos de columnas
-        const columnWidths = [
+        console.log('📐 Configurando anchos de columnas...');
+        worksheet['!cols'] = [
             { wch: 15 }, // FECHA DE ELABORACION
             { wch: 10 }, // FOLIOS
             { wch: 25 }, // NOMBRE DEL TITULAR
@@ -932,28 +1078,43 @@ app.get('/tramites/excel/:year', async (req, res) => {
             { wch: 15 }, // CONSTRUCCION
             { wch: 20 }  // BUSQUEDAD DE INFORMACION
         ];
-        
-        worksheet['!cols'] = columnWidths;
-        
-        // Agregar la hoja al workbook
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Tramites');
-        
+
+        // Configurar alturas de filas para los encabezados
+        if (!worksheet['!rows']) {
+            worksheet['!rows'] = [];
+        }
+        worksheet['!rows'][0] = { hpt: 25 }; // Fila 1
+        worksheet['!rows'][1] = { hpt: 25 }; // Fila 2
+        worksheet['!rows'][2] = { hpt: 30 }; // Fila 3
+        worksheet['!rows'][4] = { hpt: 40 }; // Fila 5 (encabezados de columnas)
+
         // Generar buffer del archivo
-        const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+        console.log('💾 Generando archivo Excel...');
+        const buffer = XLSX.write(workbook, { 
+            type: 'buffer', 
+            bookType: 'xlsx',
+            cellStyles: true
+        });
         
         // Configurar headers para descarga
+        const nombreArchivo = `Relacion_Tramites_${year}.xlsx`;
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="Tramites_${year}.xlsx"`);
+        res.setHeader('Content-Disposition', `attachment; filename="${nombreArchivo}"`);
         res.setHeader('Content-Length', buffer.length);
         
         // Enviar archivo
         res.send(buffer);
         
-        console.log(`✅ Excel generado exitosamente para ${tramites.length} trámites del año ${year}`);
+        console.log(`✅ Excel "${nombreArchivo}" generado exitosamente para ${tramites.length} trámites del año ${year}`);
         
     } catch (error) {
-        console.error('❌ Error al generar Excel:', error);
-        res.status(500).json({ error: 'Error al generar el archivo Excel' });
+        console.error('❌ Error detallado al generar Excel:', error);
+        console.error('Stack trace:', error.stack);
+        res.status(500).json({ 
+            error: 'Error al generar el archivo Excel',
+            detalle: error.message,
+            stack: error.stack
+        });
     }
 });
 

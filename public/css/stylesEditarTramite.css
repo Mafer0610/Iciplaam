@@ -45,22 +45,24 @@ body {
 }
 
 .tab-content {
-    padding: 40px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 200px);
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
 }
 
-/* Grid para información básica */
+/* Grid para información básica - MEJORADO */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    margin-bottom: 35px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 20px;
+    margin-bottom: 25px;
+    max-width: 100%;
+    padding: 0 10px;
 }
 
 .form-grid > div {
@@ -68,24 +70,25 @@ body {
     flex-direction: column;
 }
 
-/* Estilos de labels e inputs */
+/* Estilos de labels e inputs - MEJORADOS */
 label {
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 8px;
-    font-size: 15px;
+    margin-bottom: 6px;
+    font-size: 14px;
     letter-spacing: 0.3px;
 }
 
 input[type="text"], 
 input[type="date"] {
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: 2px solid #f1c40f;
-    border-radius: 10px;
-    font-size: 15px;
+    border-radius: 8px;
+    font-size: 14px;
     transition: all 0.3s ease;
     background: #fffbf0;
     font-family: inherit;
+    height: 42px;
 }
 
 input[type="text"]:focus, 
@@ -93,7 +96,7 @@ input[type="date"]:focus {
     outline: none;
     border-color: #e67e22;
     background: white;
-    box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
     transform: translateY(-1px);
 }
 
@@ -102,78 +105,84 @@ input[type="date"]:valid {
     border-color: #27ae60;
 }
 
-/* Sección de tipos de trámite */
+/* Sección de tipos de trámite - MEJORADA */
 .checkbox-section {
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     border: 2px solid #f39c12;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: 12px;
+    padding: 20px;
     background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%);
+    flex: 1;
 }
 
 .checkbox-section h3 {
     color: #d35400;
-    margin-bottom: 25px;
-    font-size: 22px;
+    margin-bottom: 20px;
+    font-size: 20px;
     font-weight: 700;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 3px solid #e67e22;
     position: relative;
-    margin-top: -5px;
+    margin-top: 0;
+    text-align: center;
 }
 
 .checkbox-section h3::before {
     content: '📝';
-    margin-right: 10px;
-    font-size: 20px;
+    margin-right: 8px;
+    font-size: 18px;
 }
 
 .checkbox-section h3::after {
     content: '';
     position: absolute;
     bottom: -3px;
-    left: 0;
-    width: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
     height: 3px;
     background: #f39c12;
     border-radius: 2px;
 }
 
+/* Grid de checkboxes - MEJORADO */
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 15px;
+    max-width: 100%;
+    align-items: start;
 }
 
-/* Contenedores de trámite mejorados */
+/* Contenedores de trámite - NIVELADOS */
 .tramite-container {
     background: white;
     border: 2px solid #f1c40f;
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 0;
     transition: all 0.3s ease;
     overflow: hidden;
+    display: flex;
     flex-direction: column;
+    min-height: 60px;
     align-items: stretch;
 }
 
 .tramite-container:hover {
     border-color: #e67e22;
-    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.15);
-    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.15);
+    transform: translateY(-1px);
 }
 
 .tramite-header {
     display: flex;
     align-items: center;
-    padding: 18px 20px;
+    padding: 12px 15px;
     background: linear-gradient(135deg, #fff9e6 0%, #f8f4e6 100%);
     border-bottom: 1px solid #f1c40f;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 50px;
 }
 
 .tramite-header:hover {
@@ -181,12 +190,13 @@ input[type="date"]:valid {
 }
 
 .tramite-header input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-right: 15px;
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
     accent-color: #e67e22;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 3px;
+    flex-shrink: 0;
 }
 
 .tramite-header label {
@@ -194,12 +204,13 @@ input[type="date"]:valid {
     cursor: pointer;
     font-weight: 600;
     color: #d35400;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0.3px;
+    line-height: 1.2;
 }
 
 .tramite-fields {
-    padding: 20px;
+    padding: 15px;
     background: white;
     border-top: 2px solid #e67e22;
     animation: slideDown 0.3s ease-out;
@@ -217,7 +228,7 @@ input[type="date"]:valid {
 }
 
 .field-group {
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .field-group:last-child {
@@ -225,26 +236,27 @@ input[type="date"]:valid {
 }
 
 .field-group label {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     color: #8e44ad;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .field-group input {
     width: 100%;
-    padding: 12px 14px;
+    padding: 8px 10px;
     border: 1px solid #f39c12;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 13px;
     background: #fffbf0;
     transition: all 0.3s ease;
+    height: 32px;
 }
 
 .field-group input:focus {
     border-color: #e67e22;
     background: white;
-    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+    box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.1);
 }
 
 .field-group input[placeholder*="$"] {
@@ -255,29 +267,67 @@ input[type="date"]:valid {
 
 .field-group input[placeholder*="$"]:focus {
     border-color: #e67e22;
-    box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.15);
+    box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.15);
 }
 
-/* Botones mejorados */
-.button-container {
+/* Estructura del formulario */
+#editarTramiteForm {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 40px;
-    padding: 25px 25px 35px 25px;
-    border-top: 2px solid #f39c12;
-    border-left: 2px solid #f39c12;
-    border-right: 2px solid #f39c12;
-    border-bottom: 2px solid #f39c12;
-    border-radius: 0 0 15px 15px;
-    background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%);
-    margin-left: -40px;
-    margin-right: -40px;
-    margin-bottom: -25px;
+    flex-direction: column;
+    flex: 1;
+    gap: 0;
+}
+
+/* BOTONES - DISEÑO FINAL NIVELADO SIN BORDE - FORZADO */
+.button-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 30px 0 0 0 !important;
+    padding: 25px 20px !important;
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Forzar que cualquier contenedor padre no tenga borde */
+.button-container, 
+.button-container::before, 
+.button-container::after {
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Si el problema está en el form, también quitarlo */
+#editarTramiteForm {
+    border: none !important;
+    background: transparent !important;
+}
+
+#editarTramiteForm .button-container {
+    border: none !important;
+    background: transparent !important;
+    margin: 30px 0 -30px 0 !important;
+    padding: 25px 0 30px 0 !important;
 }
 
 .btn-primary, .btn-secondary {
-    padding: 12px 25px;
+    padding: 14px 28px;
     border: none;
     border-radius: 8px;
     font-size: 14px;
@@ -288,45 +338,51 @@ input[type="date"]:valid {
     letter-spacing: 0.5px;
     position: relative;
     overflow: hidden;
-    min-width: 140px;
+    min-width: 160px;
+    flex-shrink: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
     color: white;
-    box-shadow: 0 8px 20px rgba(230, 126, 34, 0.3);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
 }
 
 .btn-primary:hover {
     background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(230, 126, 34, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
 }
 
 .btn-primary:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
 .btn-secondary {
     background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
     color: white;
-    box-shadow: 0 8px 20px rgba(149, 165, 166, 0.3);
+    box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
 }
 
 .btn-secondary:hover {
     background: linear-gradient(135deg, #7f8c8d 0%, #6c7b7b 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(149, 165, 166, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
 }
 
 /* Mensajes de estado */
 .status-message {
-    margin: 20px 40px;
-    padding: 18px 20px;
-    border-radius: 12px;
+    margin: 15px 30px;
+    padding: 12px 15px;
+    border-radius: 8px;
     font-weight: 500;
     display: none;
     animation: fadeInUp 0.4s ease-out;
+    font-size: 14px;
 }
 
 @keyframes fadeInUp {
@@ -341,25 +397,25 @@ input[type="date"]:valid {
 }
 
 .status-success {
-    background: linear-gradient(135d, #d4edda 0%, #c3e6cb 100%);
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
     color: #155724;
     border: 2px solid #27ae60;
-    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.2);
 }
 
 .status-error {
     background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
     color: #721c24;
     border: 2px solid #e74c3c;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.2);
 }
 
 /* Responsive design mejorado */
 @media (max-width: 768px) {
     body {
-        padding: 15px;
+        padding: 10px;
         align-items: flex-start;
-        padding-top: 30px;
+        padding-top: 20px;
     }
     
     .form-container {
@@ -370,125 +426,123 @@ input[type="date"]:valid {
     }
     
     .form-container h2 {
-        padding: 20px;
-        font-size: 22px;
+        padding: 18px;
+        font-size: 20px;
     }
     
     .tab-content {
-        padding: 25px 20px;
+        padding: 20px 15px;
+        min-height: auto;
     }
     
     .form-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
-        margin-bottom: 30px;
-        max-width: 100%;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 0;
     }
     
     .checkbox-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
-        max-width: 100%;
+        gap: 12px;
     }
     
     .checkbox-section {
-        padding: 20px;
-        margin-left: -20px;
-        margin-right: -20px;
+        padding: 15px;
+        margin-left: -15px;
+        margin-right: -15px;
         border-radius: 0;
         border-left: none;
         border-right: none;
-    }
-    
-    .tramite-container {
         margin-bottom: 15px;
     }
     
+    .checkbox-section h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .tramite-container {
+        margin-bottom: 10px;
+    }
+    
     .button-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        justify-content: center;
-        margin-left: -20px;
-        margin-right: -20px;
-        margin-bottom: -25px;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin: 25px 0 0 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+        background: transparent !important;
+        border: none !important;
     }
     
     .btn-primary, .btn-secondary {
-        width: 100%;
-        max-width: 250px;
-        padding: 14px 30px;
-    }
-    
-    .checkbox-section h3 {
-        font-size: 20px;
+        width: 100% !important;
+        max-width: 200px !important;
+        height: 44px !important;
+        font-size: 14px !important;
     }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-        padding-top: 20px;
-    }
-    
     .form-container h2 {
-        font-size: 20px;
-        padding: 18px 15px;
+        font-size: 18px;
+        padding: 15px;
     }
     
     .tab-content {
-        padding: 20px 15px;
+        padding: 15px 10px;
     }
     
     .checkbox-section {
-        margin-left: -15px;
-        margin-right: -15px;
-        padding: 15px;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 12px;
     }
     
     .button-container {
-        margin-left: -15px;
-        margin-right: -15px;
-        margin-bottom: -20px;
-        padding: 20px 15px;
+        margin: 20px 0 0 0 !important;
+        width: 100% !important;
+        padding: 15px !important;
+        background: transparent !important;
+        border: none !important;
     }
     
     .tramite-header {
-        padding: 15px;
+        padding: 10px 12px;
+        min-height: 44px;
     }
     
     .tramite-fields {
-        padding: 15px;
+        padding: 12px;
     }
     
     input[type="text"], 
     input[type="date"] {
-        padding: 12px 14px;
+        padding: 10px 12px;
         font-size: 14px;
+        height: 40px;
     }
 }
 
 @media (min-width: 1200px) {
     .form-container {
-        max-width: 1000px;
-    }
-    
-    .form-grid {
-        max-width: 900px;
+        max-width: 950px;
     }
     
     .checkbox-grid {
-        max-width: 900px;
+        gap: 18px;
+    }
+    
+    .tab-content {
+        padding: 35px;
     }
 }
 
-/* Efectos adicionales para edición */
+/* Efectos adicionales */
 .tramite-container.editing {
     border-color: #e67e22;
-    box-shadow: 0 10px 30px rgba(230, 126, 34, 0.2);
+    box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
     background: linear-gradient(135deg, #fff9e6 0%, white 100%);
 }
 
@@ -501,17 +555,17 @@ input[type="date"]:valid {
     color: white;
 }
 
-/* Animaciones para mejor UX */
+/* Animaciones mejoradas */
 .field-group input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #e74c3c;
     background: #fff5f5;
-    animation: shake 0.5s ease-in-out;
+    animation: shake 0.3s ease-in-out;
 }
 
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
 }
 
 .field-group input:valid:not(:focus):not(:placeholder-shown) {
@@ -519,40 +573,40 @@ input[type="date"]:valid {
     background: #f8fff8;
 }
 
-/* Indicadores visuales para campos requeridos */
+/* Indicadores para campos requeridos */
 label[for="FECHA_ELA"]::after,
 label[for="FOLIO"]::after,
 label[for="TITULAR"]::after {
     content: " *";
     color: #e74c3c;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-/* Mejoras en accesibilidad */
+/* Accesibilidad */
 .tramite-container:focus-within {
-    outline: 3px solid rgba(230, 126, 34, 0.3);
-    outline-offset: 2px;
+    outline: 2px solid rgba(230, 126, 34, 0.3);
+    outline-offset: 1px;
 }
 
 input[type="checkbox"]:focus {
-    outline: 3px solid rgba(230, 126, 34, 0.3);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline: 2px solid rgba(230, 126, 34, 0.3);
+    outline-offset: 1px;
+    border-radius: 3px;
 }
 
-/* Indicador visual de modo edición */
+/* Indicador de modo edición */
 .form-container::before {
     content: 'MODO EDICIÓN';
     position: absolute;
-    top: -3px;
-    right: 20px;
+    top: -2px;
+    right: 15px;
     background: #e74c3c;
     color: white;
-    padding: 5px 12px;
-    font-size: 12px;
+    padding: 4px 10px;
+    font-size: 11px;
     font-weight: 700;
-    border-radius: 0 0 8px 8px;
-    letter-spacing: 1px;
+    border-radius: 0 0 6px 6px;
+    letter-spacing: 0.5px;
     z-index: 10;
 }
