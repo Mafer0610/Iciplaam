@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="img/login.ico" type="image/x-icon" />
-    <title>Login</title>
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incio de Sesión</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body style="margin: 0;">
+<header class="custom-header">
+  <img src="img/vivatux.png" alt="Viva Tuxtla" />
+</header>
+
+  <div style="margin-top: 60px;"> <!-- Separación para evitar que el header se traslape -->
     <div class="login-box">
-        <div class="avatar-box">
-        <img src="img/avatar.png" alt="Avatar" />
-        </div>
-        <div class="form-box">
+      <div class="form-box">
+        <img src="img/logo.png" alt="Logo" style="display:block; margin: 0 auto 20px; width: 100px;" />
         <form id="login-form">
-            <input type="text" id="username" placeholder="Usuario" required />
-            <input type="password" id="password" placeholder="Contraseña" required />
-            <button type="submit">Ingresar</button>
+          <input type="text" id="username" placeholder="Usuario" required />
+          <input type="password" id="password" placeholder="Contraseña" required />
+          <button type="submit">Ingresar</button>
         </form>
-        </div>
+      </div>
     </div>
-    <script src="js/login.js"></script>
+  </div>
+  <script src="js/login.js"></script>
 </body>
 </html>

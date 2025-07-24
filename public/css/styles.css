@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #3acfd5, #3a4ed5);
+  background-color: #b3b3b3; /* fondo gris claro */
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -16,18 +16,18 @@ body {
 .login-box {
   display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #b3b3b3; /* caja blanca */
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .avatar-box img {
   width: 100px;
   height: 200px;
   object-fit: cover;
-  border-radius:60;
-  border: 0px solid #3a4ed5;
+  border-radius: 60px;
+  border: none;
   margin-right: 25px;
 }
 
@@ -54,20 +54,55 @@ button {
 }
 
 input:focus {
-  border-color: #3a4ed5;
-  box-shadow: 0 0 5px rgba(58, 78, 213, 0.3);
+  border-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   outline: none;
 }
-
+/* Boton login */
 button {
-  background-color: #2a365c;
+  background-color: #000000;
   color: white;
   border: none;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
+  border-radius: 6px;
+  padding: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-  background-color: #1f2a49;
+  background-color: #333333;
+  transform: scale(1.03);
 }
+
+button:active {
+  transform: scale(0.98);
+}
+
+.custom-header {
+  background-color: white;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* sombra ligera para darle presencia */
+}
+
+.custom-header img {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)); /* efecto sutil para destacar */
+}
+
+.custom-header img:hover {
+  transform: scale(1.05); /* efecto visual al pasar el cursor */
+}
+
