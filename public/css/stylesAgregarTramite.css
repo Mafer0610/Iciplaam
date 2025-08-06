@@ -44,7 +44,6 @@ body {
     display: block;
 }
 
-/* Grid para información básica */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -60,7 +59,6 @@ body {
     flex-direction: column;
 }
 
-/* Estilos de labels e inputs */
 label {
     font-weight: 600;
     color: #2c3e50;
@@ -94,7 +92,6 @@ input[type="date"]:valid {
     border-color: #27ae60;
 }
 
-/* Sección de tipos de trámite */
 .checkbox-section {
     margin-bottom: 35px;
     border: 2px solid #e9ecef;
@@ -134,7 +131,6 @@ input[type="date"]:valid {
     margin-right: auto;
 }
 
-/* Contenedores de trámite mejorados */
 .tramite-container {
     background: #f8f9fa;
     border: 2px solid #e9ecef;
@@ -243,7 +239,6 @@ input[type="date"]:valid {
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
-/* Botones mejorados */
 .button-container {
     display: flex;
     justify-content: center;
@@ -304,7 +299,6 @@ input[type="date"]:valid {
     box-shadow: 0 12px 30px rgba(108, 117, 125, 0.4);
 }
 
-/* Mensajes de estado */
 .status-message {
     margin: 20px 35px;
     padding: 18px 20px;
@@ -339,7 +333,6 @@ input[type="date"]:valid {
     box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
 }
 
-/* Responsive design mejorado */
 @media (max-width: 768px) {
     body {
         padding: 15px;
@@ -469,7 +462,6 @@ input[type="date"]:valid {
     }
 }
 
-/* Efectos adicionales */
 .tramite-container.selected {
     border-color: #667eea;
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
@@ -484,7 +476,6 @@ input[type="date"]:valid {
     color: white;
 }
 
-/* Animaciones para mejor UX */
 .field-group input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #dc3545;
     background: #fff5f5;
@@ -502,7 +493,6 @@ input[type="date"]:valid {
     background: #f8fff8;
 }
 
-/* Indicadores visuales para campos requeridos */
 label[for="FECHA_ELA"]::after,
 label[for="FOLIO"]::after,
 label[for="TITULAR"]::after {
@@ -512,7 +502,6 @@ label[for="TITULAR"]::after {
     font-size: 16px;
 }
 
-/* Mejoras en accesibilidad */
 .tramite-container:focus-within {
     outline: 3px solid rgba(102, 126, 234, 0.3);
     outline-offset: 2px;
