@@ -44,18 +44,45 @@ body {
     font-size: 24px;
 }
 
+.button-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 40px -40px -40px -40px !important;
+    padding: 25px !important;
+    background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%) !important;
+    border: 2px solid #f39c12 !important;
+    border-radius: 0 0 15px 15px !important;
+    gap: 15px !important;
+    box-sizing: border-box !important;
+}
+
+.form-container {
+    position: relative !important;
+}
+
 .tab-content {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 200px);
+    padding: 40px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#editarTramiteForm {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+}
+
+.checkbox-section {
+    flex: 1 !important;
+    margin-bottom: 0 !important;
 }
 
 .tab-content.active {
     display: flex;
 }
 
-/* Grid para información básica - MEJORADO */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -70,7 +97,6 @@ body {
     flex-direction: column;
 }
 
-/* Estilos de labels e inputs - MEJORADOS */
 label {
     font-weight: 600;
     color: #2c3e50;
@@ -105,14 +131,12 @@ input[type="date"]:valid {
     border-color: #27ae60;
 }
 
-/* Sección de tipos de trámite - MEJORADA */
 .checkbox-section {
     margin-bottom: 20px;
     border: 2px solid #f39c12;
     border-radius: 12px;
     padding: 20px;
     background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%);
-    flex: 1;
 }
 
 .checkbox-section h3 {
@@ -145,7 +169,6 @@ input[type="date"]:valid {
     border-radius: 2px;
 }
 
-/* Grid de checkboxes - MEJORADO */
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -154,7 +177,6 @@ input[type="date"]:valid {
     align-items: start;
 }
 
-/* Contenedores de trámite - NIVELADOS */
 .tramite-container {
     background: white;
     border: 2px solid #f1c40f;
@@ -270,62 +292,6 @@ input[type="date"]:valid {
     box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.15);
 }
 
-/* Estructura del formulario */
-#editarTramiteForm {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 0;
-}
-
-/* BOTONES - DISEÑO FINAL NIVELADO SIN BORDE - FORZADO */
-.button-container {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 20px !important;
-    width: 100% !important;
-    margin: 30px 0 0 0 !important;
-    padding: 25px 20px !important;
-    border: none !important;
-    border-top: none !important;
-    border-bottom: none !important;
-    border-left: none !important;
-    border-right: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    box-sizing: border-box !important;
-    flex-shrink: 0 !important;
-    margin-top: auto !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Forzar que cualquier contenedor padre no tenga borde */
-.button-container, 
-.button-container::before, 
-.button-container::after {
-    border: none !important;
-    background: transparent !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Si el problema está en el form, también quitarlo */
-#editarTramiteForm {
-    border: none !important;
-    background: transparent !important;
-}
-
-#editarTramiteForm .button-container {
-    border: none !important;
-    background: transparent !important;
-    margin: 30px 0 -30px 0 !important;
-    padding: 25px 0 30px 0 !important;
-}
-
 .btn-primary, .btn-secondary {
     padding: 14px 28px;
     border: none;
@@ -374,7 +340,6 @@ input[type="date"]:valid {
     box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
 }
 
-/* Mensajes de estado */
 .status-message {
     margin: 15px 30px;
     padding: 12px 15px;
@@ -410,7 +375,6 @@ input[type="date"]:valid {
     box-shadow: 0 3px 10px rgba(231, 76, 60, 0.2);
 }
 
-/* Responsive design mejorado */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -431,7 +395,7 @@ input[type="date"]:valid {
     }
     
     .tab-content {
-        padding: 20px 15px;
+        padding: 20px 15px !important;
         min-height: auto;
     }
     
@@ -467,13 +431,8 @@ input[type="date"]:valid {
     }
     
     .button-container {
+        margin: 40px -20px -25px -20px !important;
         flex-direction: column !important;
-        gap: 12px !important;
-        margin: 25px 0 0 0 !important;
-        width: 100% !important;
-        padding: 20px !important;
-        background: transparent !important;
-        border: none !important;
     }
     
     .btn-primary, .btn-secondary {
@@ -491,7 +450,7 @@ input[type="date"]:valid {
     }
     
     .tab-content {
-        padding: 15px 10px;
+        padding: 15px 10px !important;
     }
     
     .checkbox-section {
@@ -501,11 +460,7 @@ input[type="date"]:valid {
     }
     
     .button-container {
-        margin: 20px 0 0 0 !important;
-        width: 100% !important;
-        padding: 15px !important;
-        background: transparent !important;
-        border: none !important;
+        margin: 40px -15px -20px -15px !important;
     }
     
     .tramite-header {
@@ -535,11 +490,10 @@ input[type="date"]:valid {
     }
     
     .tab-content {
-        padding: 35px;
+        padding: 35px !important;
     }
 }
 
-/* Efectos adicionales */
 .tramite-container.editing {
     border-color: #e67e22;
     box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
@@ -555,7 +509,6 @@ input[type="date"]:valid {
     color: white;
 }
 
-/* Animaciones mejoradas */
 .field-group input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #e74c3c;
     background: #fff5f5;
@@ -573,7 +526,6 @@ input[type="date"]:valid {
     background: #f8fff8;
 }
 
-/* Indicadores para campos requeridos */
 label[for="FECHA_ELA"]::after,
 label[for="FOLIO"]::after,
 label[for="TITULAR"]::after {
@@ -583,7 +535,6 @@ label[for="TITULAR"]::after {
     font-size: 14px;
 }
 
-/* Accesibilidad */
 .tramite-container:focus-within {
     outline: 2px solid rgba(230, 126, 34, 0.3);
     outline-offset: 1px;
@@ -595,7 +546,6 @@ input[type="checkbox"]:focus {
     border-radius: 3px;
 }
 
-/* Indicador de modo edición */
 .form-container::before {
     content: 'MODO EDICIÓN';
     position: absolute;

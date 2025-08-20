@@ -17,56 +17,6 @@
             console.log('Usuario autenticado:', auth.userRole);
         });
     </script>
-    <style>
-        /* CSS INLINE PARA FORZAR LA CORRECCIÓN */
-        .button-container {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            width: 100% !important;
-            margin: 40px -40px -40px -40px !important;
-            padding: 25px !important;
-            background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%) !important;
-            border: 2px solid #f39c12 !important;
-            border-radius: 0 0 15px 15px !important;
-            gap: 15px !important;
-            box-sizing: border-box !important;
-        }
-        
-        .form-container {
-            position: relative !important;
-        }
-        
-        .tab-content {
-            padding: 40px !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-        
-        #editarTramiteForm {
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-        }
-        
-        .checkbox-section {
-            flex: 1 !important;
-            margin-bottom: 0 !important;
-        }
-        
-        @media (max-width: 768px) {
-            .button-container {
-                margin: 40px -20px -25px -20px !important;
-                flex-direction: column !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .button-container {
-                margin: 40px -15px -20px -15px !important;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="form-container">
@@ -240,7 +190,7 @@
                     </div>
                 </div>
 
-                <!-- Contenedor de botones corregido -->
+                <!-- Contenedor de botones -->
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Actualizar Trámite</button>
                     <button type="button" class="btn-secondary" onclick="window.location.href='../opc/tramites.html'">Cancelar</button>

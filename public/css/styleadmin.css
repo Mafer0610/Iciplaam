@@ -1,11 +1,11 @@
+/* 🔝 Top Bar */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
   padding-right: 60px;
-  margin-top: 0px;
 }
 
 .contador-registros {
@@ -17,6 +17,25 @@
   text-overflow: ellipsis;
 }
 
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .top-bar {
+    padding-right: 50px;
+  }
+
+  .menu.adaptado {
+    right: 5px;
+  }
+
+  .acciones.horizontal {
+    right: 50px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* 📂 Menú Adaptado */
 .menu.adaptado {
   position: absolute;
   top: 0;
@@ -30,20 +49,21 @@
   background: transparent;
 }
 
+/* ☰ Toggle */
 .toggle {
   width: 30px;
   height: 20px;
   position: relative;
   cursor: pointer;
 }
-
+/* ☰ Toggle de opciones = */
 .toggle::before,
 .toggle::after {
   content: '';
   position: absolute;
   width: 100%;
   height: 3px;
-  background-color: #1D90F5;
+  background-color: #000000;
   border-radius: 2px;
   transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease;
 }
@@ -66,6 +86,7 @@
   bottom: 8.5px;
 }
 
+/* 🎛 Acciones Horizontal */
 .acciones.horizontal {
   position: absolute;
   top: 50%;
@@ -73,9 +94,7 @@
   transform: translateY(-50%) scaleX(0);
   transform-origin: right;
   background-color: white;
-  border-radius: 8px;
   padding: 12px 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -84,7 +103,6 @@
   pointer-events: none;
   transition: transform 0.35s ease, opacity 0.35s ease;
   z-index: 30;
-  border: 1px solid #e0e0e0;
 }
 
 .menu.adaptado.expanded .acciones.horizontal {
@@ -116,6 +134,7 @@
   user-select: none;
 }
 
+/* 🧩 Selectores personalizados */
 .flexDiv {
   position: relative;
 }
@@ -151,29 +170,56 @@
   background-color: #f8f9fa;
 }
 
-.contenedor-tabla {
-  position: relative;
-  overflow: visible;
-}
-
+/* 📦 Contenedores de tabla */
+.contenedor-tabla,
 .table-container {
   position: relative;
   overflow: visible;
 }
+.main-content {
+  margin-top: 80px; /* Ajusta según el alto real del header */
+}
+/* Contenedor general con borde */
+.bloque-tabla {
+  border: 2px solid black;
+  margin-top: 20px;
+  padding: 0;
+}
 
-@media (max-width: 768px) {
-  .top-bar {
-    padding-right: 50px;
-  }
-  
-  .menu.adaptado {
-    right: 5px;
-  }
-  
-  .acciones.horizontal {
-    right: 50px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+/* Botones alineados y separados por borde inferior */
+.botones-tabla {
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid black;
+  margin: 0;
+  padding: 0;
+}
+
+.botones-tabla button {
+  padding: 10px 20px;
+  margin: 0;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.botones-tabla button.active {
+  background-color: #ddd;
+}
+
+/* Tabla con bordes horizontales */
+.tabla-estilizada {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.tabla-estilizada th,
+.tabla-estilizada td {
+  vertical-align: middle;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  text-align: center;
+  padding: 12px 8px; /* Aumenta el padding para igualar altura */
+  min-height: 48px;   /* ✅ Uniforma la altura visual */
 }
