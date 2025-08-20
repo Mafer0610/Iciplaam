@@ -96,8 +96,8 @@ button:active {
 .custom-header img {
   height: 100px;
   object-fit: contain;
+  display: block;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-  transition: transform 0.2s ease;
 }
 
 .custom-header img:hover {
