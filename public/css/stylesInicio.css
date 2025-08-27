@@ -379,11 +379,11 @@ thead th {
 .sec_btn:focus {
   --borColor: rgba(0, 0, 0, 0.4);
 }
-
+/* boton opciones poniendo encima el raton*/
 .sec_btn:hover {
-  background-color: #398de0;
+  background-color: #443f3f;
 }
-
+/* boton opciones dando click*/
 .sec_btn:active {
-  background-color: #1a5fa8;
+  background-color: #919090;
 }
