@@ -1,3 +1,43 @@
+function toggleTramiteField(tipo) {
+    const checkbox = document.getElementById(`TIPO_${tipo}`);
+    const container = document.getElementById(`TRAMITE_${tipo}_CONTAINER`);
+    const inputs = container.querySelectorAll('input');
+    
+    if (checkbox.checked) {
+        container.style.display = 'block';
+        inputs.forEach(input => input.disabled = false);
+    } else {
+        container.style.display = 'none';
+        inputs.forEach(input => {
+            input.disabled = true;
+            input.value = '';
+        });
+    }
+}
+
+function limpiarFormulario() {
+    document.getElementById('tramiteForm').reset();
+    
+    const containers = document.querySelectorAll('.tramite-fields');
+    containers.forEach(container => {
+        container.style.display = 'none';
+        const inputs = container.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.disabled = true;
+            input.value = '';
+        });
+    });
+    
+    mostrarMensaje('Formulario limpiado correctamente', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fechaInput = document.getElementById('FECHA_ELA');
+    const hoy = new Date();
+    const fechaFormateada = hoy.toISOString().split('T')[0];
+    fechaInput.value = fechaFormateada;
+});
+
 function mostrarMensaje(mensaje, tipo) {
     const messageDiv = document.getElementById('status-message');
     messageDiv.textContent = mensaje;
