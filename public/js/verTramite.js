@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
             imprimirTramite();
         }
         if (e.key === 'Escape') {
-            window.location.href = 'tramites.html';
+            window.location.href = '../opc/tramites.html';
         }
     });
     

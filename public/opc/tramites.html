@@ -22,51 +22,55 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </head>
 <body>
-<div class="main-content">
-    <div class="contenedor-tabla">
-        <div class="table-container">
-        <div class="top-bar">
-            <div class="contador-registros">
-            Trámites en la base de datos:
-            <span class="numero" id="total-tramites">Cargando...</span>
+    <header class="custom-header">
+        <img src="../img/vivatux.png" alt="Viva Tuxtla" class="logo-izquierda" />
+        <img src="../img/logo.png" alt="Logo" class="logo-derecha" />
+    </header>
+    <div class="main-content">
+        <div class="contenedor-tabla">
+            <div class="table-container">
+            <div class="top-bar">
+                <div class="contador-registros">
+                Trámites en la base de datos:
+                <span class="numero" id="total-tramites">Cargando...</span>
+                </div>
+
+                <div class="menu adaptado">
+                <div class="acciones horizontal">
+                    <a href="../btn/agregarTramite.html" onclick="event.stopPropagation()">Agregar Trámite</a>
+                    <a href="#" onclick="descargarExcel()" onclick="event.stopPropagation()">Descargar Excel</a>
+                    <a href="../panelRegistros.html" onclick="event.stopPropagation()">Volver</a>
+                </div>
+                <div class="container">
+                    <div class="toggle"></div>
+                </div>
+                </div>
             </div>
 
-            <div class="menu adaptado">
-            <div class="acciones horizontal">
-                <a href="../btn/agregarTramite.html" onclick="event.stopPropagation()">Agregar Trámite</a>
-                <a href="#" onclick="descargarExcel()" onclick="event.stopPropagation()">Descargar Excel</a>
-                <a href="../panelRegistros.html" onclick="event.stopPropagation()">Volver</a>
+            <div class="barra-busqueda">
+                <input
+                type="text"
+                id="txtbuscar"
+                placeholder="Buscar por nombre del titular o folio"
+                onkeyup="buscarTramite()" />
             </div>
-            <div class="container">
-                <div class="toggle"></div>
-            </div>
-            </div>
-        </div>
 
-        <div class="barra-busqueda">
-            <input
-            type="text"
-            id="txtbuscar"
-            placeholder="Buscar por nombre del titular o folio"
-            onkeyup="buscarTramite()" />
+            <div id="tabla-tramites" class="active">
+                <table>
+                <thead>
+                    <tr>
+                    <th>FECHA ELABORACIÓN</th>
+                    <th>FOLIO</th>
+                    <th>NOMBRE DEL TITULAR</th>
+                    <th>RECIBO OFICIAL</th>
+                    <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-tramites-body"></tbody>
+                </table>
+            </div>
+            </div>
         </div>
-
-        <div id="tabla-tramites" class="active">
-            <table>
-            <thead>
-                <tr>
-                <th>FECHA ELABORACIÓN</th>
-                <th>FOLIO</th>
-                <th>NOMBRE DEL TITULAR</th>
-                <th>RECIBO OFICIAL</th>
-                <th>ACCIONES</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-tramites-body"></tbody>
-            </table>
-        </div>
-        </div>
-    </div>
     </div>
 
     <div id="modal-confirmacion" class="modal oculto">

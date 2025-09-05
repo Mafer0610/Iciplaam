@@ -10,9 +10,24 @@
     <script src="../js/editarFicha.js" defer></script>
 </head>
 <body>
-    <div class="form-container">
-        <h2>Editar Ficha de Inspección - Panteón Municipal</h2>
-        
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) return;
+        });
+    </script>
+    <header class="header-banner">
+        <div class="header-left">
+        <img src="../img/vivatux.png" alt="Viva Tuxtla" />
+        </div>
+        <div class="header-center">
+        <h1>EDITAR FICHA DE INSPECCIÓN</h1>
+        <p>Ayuntamiento de Tuxtla Gutiérrez · Administración 2024–2027</p>
+        </div>
+        <div class="header-right">
+        <img src="../img/logo.png" alt="Escudo Chiapas" />
+        </div>
+    </header>
+    <div class="form-container">        
         <div id="status-message" class="status-message"></div>
         
         <div id="loading" class="loading" style="text-align: center; padding: 40px;">
