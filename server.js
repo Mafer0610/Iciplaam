@@ -785,6 +785,139 @@ setInterval(() => {
     cargarArchivosDelDrive();
 }, 3600000);
 
+// Obtener todos los formatos con búsqueda
+app.get('/formatos', async (req, res) => {
+    try {
+        const busqueda = req.query.search?.toLowerCase().trim() || "";
+        
+        let resultados;
+        
+        if (busqueda) {
+            const palabras = busqueda.split(/\s+/).filter(palabra => palabra.length > 0);
+            
+            const condicionesPalabras = palabras.map(palabra => ({
+                $or: [
+                    { NOMB_CONTRI: { $regex: palabra, $options: "i" } },
+                    { TIPO_TRAMITE: { $regex: palabra, $options: "i" } }
+                ]
+            }));
+            
+            resultados = await Control.find({
+                $and: condicionesPalabras
+            }).sort({ FECHA_CREACION: -1 });
+        } else {
+            resultados = await Control.find({}).sort({ FECHA_CREACION: -1 });
+        }
+        
+        res.json(resultados);
+    } catch (error) {
+        console.error("Error al obtener formatos:", error);
+        res.status(500).json({ error: "Error en la base de datos" });
+    }
+});
+
+// Obtener formato específico por ID
+app.get('/formatos/:id', async (req, res) => {
+    try {
+        const formato = await Control.findById(req.params.id);
+        if (!formato) {
+            return res.status(404).json({ error: "Formato no encontrado" });
+        }
+        res.json(formato);
+    } catch (err) {
+        console.error("Error al buscar formato:", err);
+        res.status(500).json({ error: "Error en el servidor" });
+    }
+});
+
+// Actualizar formato
+app.put('/formatos/:id', async (req, res) => {
+    try {
+        console.log(`Actualizando formato: ${req.params.id}`);
+        
+        // Asegurar que TIPO_TRAMITE sea un array
+        if (req.body.TIPO_TRAMITE && !Array.isArray(req.body.TIPO_TRAMITE)) {
+            req.body.TIPO_TRAMITE = [req.body.TIPO_TRAMITE];
+        }
+        
+        req.body.FECHA_ACTUALIZACION = new Date();
+
+        const formatoActualizado = await Control.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        if (!formatoActualizado) {
+            return res.status(404).json({ error: "Formato no encontrado" });
+        }
+
+        console.log(`Formato ${req.params.id} actualizado exitosamente`);
+        res.json({ mensaje: "Formato actualizado correctamente", formatoActualizado });
+    } catch (err) {
+        console.error("Error al actualizar formato:", err);
+        res.status(500).json({ error: "Error al actualizar el formato" });
+    }
+});
+
+// Eliminar formato
+app.delete('/formatos/:id', async (req, res) => {
+    try {
+        const formatoEliminado = await Control.findByIdAndDelete(req.params.id);
+        if (!formatoEliminado) {
+            return res.status(404).json({ error: "Formato no encontrado" });
+        }
+        res.json({ mensaje: "Formato eliminado correctamente" });
+    } catch (err) {
+        console.error("Error al eliminar formato:", err);
+        res.status(500).json({ error: "Error al eliminar el formato" });
+    }
+});
+
+// Conteo total de formatos
+app.get('/formatos/count/total', async (req, res) => {
+    try {
+        const total = await Control.countDocuments();
+        res.json({ total });
+    } catch (error) {
+        console.error("Error al obtener el conteo de formatos:", error);
+        res.status(500).json({ error: "Error al obtener el conteo de formatos" });
+    }
+});
+
+// Ruta para generar formato de control
+app.post('/generar-formato', async (req, res) => {
+    try {
+        console.log('Datos recibidos para formato:', req.body);
+        
+        const resultado = generarDocumentoTramite(req.body);
+        
+        if (resultado.exito) {
+            console.log('Formato generado exitosamente:', resultado.archivo);
+            
+            res.download(resultado.ruta, resultado.archivo, (err) => {
+                if (err) {
+                    console.error('Error al enviar archivo:', err);
+                    res.status(500).json({ error: 'Error al descargar el archivo' });
+                } else {
+                    console.log('Archivo enviado exitosamente');
+                    setTimeout(() => {
+                        fs.unlink(resultado.ruta, (unlinkErr) => {
+                            if (unlinkErr) console.error('Error al eliminar archivo temporal:', unlinkErr);
+                        });
+                    }, 5000);
+                }
+            });
+        } else {
+            console.error('Error al generar formato:', resultado.mensaje);
+            res.status(500).json({ error: resultado.mensaje });
+        }
+    } catch (error) {
+        console.error('Error en ruta generar-formato:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 // Obtener todos los trámites con búsqueda
 app.get('/tramites', async (req, res) => {
     try {

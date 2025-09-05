@@ -1,225 +1,389 @@
-/* 🔝 Top Bar */
-.top-bar {
+/* 🎨 Variables globales */
+:root {
+  --bgColor: #000000; /* letras y boton de opciones */
+  --txtColor: #ffffff;
+  --borColor: rgba(0, 0, 0, 0);
+  --sizeVar: 8px;
+  --textPrimary: #4b4760;
+  --textSecondary: #7f7989;
+  --borderColor: #cccccc;
+}
+
+/* 🧱 Layout base */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #b3b3b3;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* 🔝 Encabezado fijo */
+.custom-header {
+  background-color: #fff;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+
+  /* ✅ Nuevo layout */
+  gap: 1022px; /* espacio entre logos */
+  justify-content: flex-start; /* los logos se agrupan a la izquierda */
+}
+/* 🖼️ Imagen derecha (Logo) */
+.logo-derecha {
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  flex-shrink: 0;
+}
+/* 🖼️ Imagen izquierda (Viva Tuxtla) */
+.logo-izquierda {
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+/* 🖱️ Hover para ambas */
+.logo-izquierda:hover,
+.logo-derecha:hover {
+  transform: scale(1.05);
+}
+/* 📦 Contenido principal */
+.main-content {
+  margin-top: 80px; /* igual a la altura del header */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+
+.contenedor-tabla,
+.table-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 🔍 Barra de búsqueda */
+/* ✅ Consolidado: se eliminaron definiciones duplicadas */
+.barra-busqueda {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  margin: 0 0 10px 0;
-  padding-right: 60px;
+  margin-bottom: 20px;
+  gap: 10px;
 }
 
-.contador-registros {
+.barra-busqueda input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex-grow: 1;
   font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* 📱 Responsive */
-@media (max-width: 768px) {
-  .top-bar {
-    padding-right: 50px;
-  }
-
-  .menu.adaptado {
-    right: 5px;
-  }
-
-  .acciones.horizontal {
-    right: 50px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-}
-
-/* 📂 Menú Adaptado */
-.menu.adaptado {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  width: 48px;
-  height: 48px;
-  z-index: 10;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  background: transparent;
-}
-
-/* ☰ Toggle */
-.toggle {
-  width: 30px;
-  height: 20px;
-  position: relative;
+.barra-busqueda button {
+  background-color: var(--bgColor);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
   cursor: pointer;
-}
-/* ☰ Toggle de opciones = */
-.toggle::before,
-.toggle::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  background-color: #000000;
-  border-radius: 2px;
-  transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
 }
 
-.toggle::before {
-  top: 0;
+.barra-busqueda button:hover {
+  background-color: #398de0;
 }
 
-.toggle::after {
-  bottom: 0;
-}
-
-.toggle.close::before {
-  transform: rotate(45deg);
-  top: 8.5px;
-}
-
-.toggle.close::after {
-  transform: rotate(-45deg);
-  bottom: 8.5px;
-}
-
-/* 🎛 Acciones Horizontal */
-.acciones.horizontal {
-  position: absolute;
-  top: 50%;
-  right: 56px;
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: right;
-  background-color: white;
-  padding: 12px 16px;
+/* 📊 Botones de pestañas */
+/* ✅ Consolidado: se eliminaron duplicados y se agruparon estilos comunes */
+.botones-tabla {
   display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  border-radius: 0px;
+  overflow: hidden;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+.botones-tabla button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0;
+  background: linear-gradient(135deg, #DA9B4A 0%, #DA9B4A 100%);
+  color: rgb(0, 0, 0);
+}
+
+.botones-tabla button:not(:last-child) {
+  border-right: 1px solid rgb(0, 0, 0);
+}
+
+.botones-tabla button:hover {
+  opacity: 0.9;
+}
+/* Boton Registros-Ficha */
+.botones-tabla button.active {
+  background: linear-gradient(135deg, #DA9B4A 0%, #A55108 100%);
+}
+
+/* 📈 Tablas */
+/* ✅ Consolidado: se eliminó table-layout duplicado y se unificaron estilos */
+#tabla-registros,
+#tabla-fichas {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+#tabla-registros.active,
+#tabla-fichas.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+/* Color de la tabla */
+table th,
+table td {
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
+  border-bottom: 0px solid #000000;
+  background-color: #b3b3b3;
+}
+/* columna acciones */
+table td:last-child {
+  padding: 8px;
+}
+
+table td:last-child .flexDiv {
+  display: inline-flex; /* ✅ más controlado que flex */
+  justify-content: center;
   align-items: center;
-  gap: 12px;
-  min-width: max-content;
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.35s ease, opacity 0.35s ease;
-  z-index: 30;
+  gap: 8px;
 }
 
-.menu.adaptado.expanded .acciones.horizontal {
-  transform: translateY(-50%) scaleX(1);
-  opacity: 1;
-  pointer-events: auto;
+/* header de la tabla */
+thead th {
+  background-color: #DA9B4A;
+  font-weight: 600;
+  color: var(--bgColor);
+  text-align: left;
 }
 
-.acciones.horizontal a {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s;
-  white-space: nowrap;
-  padding: 6px 8px;
-  border-radius: 4px;
+/* 🔢 Contador */
+.contador-registros {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--bgColor);
 }
 
-.acciones.horizontal a:hover {
-  color: #1D90F5;
-  background-color: #f8f9fa;
-}
-
-.acciones.horizontal span {
-  color: #bbb;
-  font-weight: 500;
-  font-size: 14px;
-  user-select: none;
+.numero {
+  font-weight: bold;
+  color: var(--bgColor);
 }
 
 /* 🧩 Selectores personalizados */
 .flexDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
   position: relative;
 }
 
 .selectWrapper {
-  z-index: 25 !important;
-  position: absolute !important;
-  right: 0;
+  width: 100%;
+  position: absolute;
   top: 100%;
-  min-width: 160px;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms linear;
+  filter: drop-shadow(0 6px 26px rgba(0, 0, 0, 0.24));
+  padding-top: calc(var(--sizeVar) / 2);
+  min-width: 200px;
+  z-index: 9999;
 }
 
 .multiSelect {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--borderColor);
+  border-radius: calc(var(--sizeVar) / 2);
+  background: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
   overflow: hidden;
+  transition: transform 300ms ease-in-out, clip-path 300ms ease-in-out;
+  z-index: 9999;
 }
 
 .multiSelect div {
-  padding: 10px 12px;
+  color: var(--textPrimary);
+  padding: 12px 16px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.multiSelect div:last-child {
-  border-bottom: none;
+  white-space: nowrap;
 }
 
 .multiSelect div:hover {
-  background-color: #f8f9fa;
+  background-color: #f6f6f6;
 }
 
-/* 📦 Contenedores de tabla */
-.contenedor-tabla,
-.table-container {
-  position: relative;
-  overflow: visible;
-}
-.main-content {
-  margin-top: 80px; /* Ajusta según el alto real del header */
-}
-/* Contenedor general con borde */
-.bloque-tabla {
-  border: 2px solid black;
-  margin-top: 20px;
-  padding: 0;
+.multiSelect .placeholder {
+  color: var(--textSecondary);
+  font-style: italic;
 }
 
-/* Botones alineados y separados por borde inferior */
-.botones-tabla {
+.multiSelect .narrow {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.multiSelect i {
+  color: var(--textSecondary);
+}
+
+.iconDiv {
   display: flex;
-  justify-content: center;
-  border-bottom: 2px solid black;
-  margin: 0;
-  padding: 0;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.botones-tabla button {
-  padding: 10px 20px;
-  margin: 0;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
+.noSpace {
+  justify-content: flex-start;
+  gap: 6px;
 }
 
-.botones-tabla button.active {
-  background-color: #ddd;
+.titleDiv {
+  pointer-events: none;
+  font-weight: 700;
 }
 
-/* Tabla con bordes horizontales */
-.tabla-estilizada {
+/* 🪟 Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
   width: 100%;
-  border-collapse: collapse;
-  text-align: center;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.tabla-estilizada th,
-.tabla-estilizada td {
-  vertical-align: middle;
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000000;
+.modal:not(.oculto) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-contenido {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 8px;
   text-align: center;
-  padding: 12px 8px; /* Aumenta el padding para igualar altura */
-  min-height: 48px;   /* ✅ Uniforma la altura visual */
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-botones {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-botones button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#btn-confirmar {
+  background-color: #dc3545;
+  color: white;
+}
+
+#btn-cancelar {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* ✅ Mensaje flotante */
+#mensaje-flotante {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1001;
+}
+
+#mensaje-flotante.visible {
+  opacity: 1;
+}
+
+/* 🎯 Botón secundario */
+.sec_btn {
+  background-color: var(--bgColor);
+  color: var(--txtColor);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--borColor) inset;
+  transition: background-color 0.3s ease;
+}
+
+/* ✅ Consolidado: se eliminaron duplicados y se usaron variables para consistencia */
+.sec_btn:focus {
+  --borColor: rgba(0, 0, 0, 0.4);
+}
+/* boton opciones poniendo encima el raton*/
+.sec_btn:hover {
+  background-color: #443f3f;
+}
+/* boton opciones dando click*/
+.sec_btn:active {
+  background-color: #919090;
 }

@@ -37,7 +37,7 @@ async function cargarContadores() {
 
 async function cargarFichas() {
     const tbody = document.getElementById("tabla-fichas-body");
-    tbody.innerHTML = "";
+    tbody.innerHTML = '';
 
     try {
         const res = await fetch("http://localhost:5000/fichas");
@@ -48,36 +48,39 @@ async function cargarFichas() {
             return;
         }
 
-        fichas.forEach((ficha, i) => {
-            const fechaInhu = ficha.FECHA_INHU ? 
-                new Date(ficha.FECHA_INHU).toLocaleDateString('es-MX') : '-';
-            
-            const conceptos = ficha.CONCEPTOS && ficha.CONCEPTOS.length > 0 ? 
-                ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
-                'Sin conceptos';
+    let htmlContent = '';
+    fichas.forEach((ficha, i) => {
+        const fechaInhu = ficha.FECHA_INHU ? 
+            new Date(ficha.FECHA_INHU).toLocaleDateString('es-MX') : '-';
+        
+        const conceptos = ficha.CONCEPTOS && ficha.CONCEPTOS.length > 0 ? 
+            ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
+            'Sin conceptos';
 
-            tbody.innerHTML += `
-            <tr>
-                <td>${ficha.NO_FICHI || 'S/N'}</td>
-                <td>${ficha.ACTU_PROPIE || 'Sin propietario'}</td>
-                <td>${ficha.LOTE_ACT || '-'}</td>
-                <td>${fechaInhu}</td>
-                <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
-                <td>
-                    <div class="flexDiv" id="ficha-${i}">
-                        <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
-                        <div class="selectWrapper">
-                            <div class="multiSelect" id="ficha-${i}-menu">
-                                <div onclick="verFicha('${ficha._id}')">Ver detalle</div>
-                                <div onclick="editarFicha('${ficha._id}')">Editar</div>
-                                <div onclick="descargarFicha('${ficha._id}')">Descargar</div>
-                                <div onclick="eliminarFicha('${ficha._id}')" style="color:#dc3545;">Eliminar</div>
-                            </div>
+        htmlContent += `
+        <tr>
+            <td>${ficha.NO_FICHI || 'S/N'}</td>
+            <td>${ficha.ACTU_PROPIE || 'Sin propietario'}</td>
+            <td>${ficha.LOTE_ACT || '-'}</td>
+            <td>${fechaInhu}</td>
+            <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
+            <td>
+                <div class="flexDiv" id="ficha-${i}">
+                    <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
+                    <div class="selectWrapper">
+                        <div class="multiSelect" id="ficha-${i}-menu">
+                            <div onclick="verFicha('${ficha._id}')">Ver detalle</div>
+                            <div onclick="editarFicha('${ficha._id}')">Editar</div>
+                            <div onclick="descargarFicha('${ficha._id}')">Descargar</div>
+                            <div onclick="eliminarFicha('${ficha._id}')" style="color:#dc3545;">Eliminar</div>
                         </div>
                     </div>
-                </td>
-            </tr>`;
-        });
+                </div>
+            </td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = htmlContent;
     } catch (error) {
         console.error("Error al cargar fichas:", error);
         tbody.innerHTML = '<tr><td colspan="6">Error al cargar fichas</td></tr>';

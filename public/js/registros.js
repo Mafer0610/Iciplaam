@@ -25,8 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function cargarContadores() {
-    try {
-        // Cargar contador de lápidas
+    try {   
         const resLapidas = await fetch("http://localhost:5000/lapidas/count/total");
         const dataLapidas = await resLapidas.json();
         document.getElementById("total-lapidas").textContent = dataLapidas.total;
