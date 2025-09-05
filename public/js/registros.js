@@ -62,23 +62,24 @@ function mostrarResultados(datos, filtro) {
     const tbody = document.getElementById("tabla-lapidas");
     tbody.innerHTML = "";
     if (!datos.length) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Sin resultados</td></tr>';
         return;
     }
 
     datos.forEach((item, i) => {
         const menuId = `menu-${i}`;
         tbody.innerHTML += `
-            <tr>
-                <td>${item.NOM_REG}</td>
-                <td>${item.NOMBRE_PROPIE}</td>
-                <td>${item.EDO_CONTRI}</td>
-                <td>${item.MEDIDAS}</td>
-                <td>${item.ZONA}</td>
-                <td>${item.FILA}</td>
-                <td>${item.X}</td>
-                <td>${item.Y}</td>
-                <td>
+        <tr>
+            <td>${item.NOM_REG}</td>
+            <td>${item.NOMBRE_PROPIE}</td>
+            <td>${item.EDO_CONTRI}</td>
+            <td>${item.MEDIDAS}</td>
+            <td>${item.ZONA}</td>
+            <td>${item.FILA}</td>
+            <td>${item.X}</td>
+            <td>${item.Y}</td>
+            <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">ACTIVO</span></td>
+            <td>
                     <div class="flexDiv" id="${menuId}">
                         <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
                         <div class="selectWrapper">

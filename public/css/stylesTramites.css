@@ -1,0 +1,389 @@
+/* 🎨 Variables globales */
+:root {
+  --bgColor: #000000; /* letras y boton de opciones */
+  --txtColor: #ffffff;
+  --borColor: rgba(0, 0, 0, 0);
+  --sizeVar: 8px;
+  --textPrimary: #4b4760;
+  --textSecondary: #7f7989;
+  --borderColor: #cccccc;
+}
+
+/* 🧱 Layout base */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #b3b3b3;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* 🔝 Encabezado fijo */
+.custom-header {
+  background-color: #fff;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+
+  /* ✅ Nuevo layout */
+  gap: 1022px; /* espacio entre logos */
+  justify-content: flex-start; /* los logos se agrupan a la izquierda */
+}
+/* 🖼️ Imagen derecha (Logo) */
+.logo-derecha {
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  flex-shrink: 0;
+}
+/* 🖼️ Imagen izquierda (Viva Tuxtla) */
+.logo-izquierda {
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+/* 🖱️ Hover para ambas */
+.logo-izquierda:hover,
+.logo-derecha:hover {
+  transform: scale(1.05);
+}
+/* 📦 Contenido principal */
+.main-content {
+  margin-top: 80px; /* igual a la altura del header */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+
+.contenedor-tabla,
+.table-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 🔍 Barra de búsqueda */
+/* ✅ Consolidado: se eliminaron definiciones duplicadas */
+.barra-busqueda {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.barra-busqueda input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.barra-busqueda button {
+  background-color: var(--bgColor);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+
+.barra-busqueda button:hover {
+  background-color: #398de0;
+}
+
+/* 📊 Botones de pestañas */
+/* ✅ Consolidado: se eliminaron duplicados y se agruparon estilos comunes */
+.botones-tabla {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  border-radius: 0px;
+  overflow: hidden;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+.botones-tabla button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0;
+  background: linear-gradient(135deg, #DA9B4A 0%, #DA9B4A 100%);
+  color: rgb(0, 0, 0);
+}
+
+.botones-tabla button:not(:last-child) {
+  border-right: 1px solid rgb(0, 0, 0);
+}
+
+.botones-tabla button:hover {
+  opacity: 0.9;
+}
+/* Boton Registros-Ficha */
+.botones-tabla button.active {
+  background: linear-gradient(135deg, #DA9B4A 0%, #A55108 100%);
+}
+
+/* 📈 Tablas */
+/* ✅ Consolidado: se eliminó table-layout duplicado y se unificaron estilos */
+#tabla-registros,
+#tabla-fichas {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+#tabla-registros.active,
+#tabla-fichas.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+/* Color de la tabla */
+table th,
+table td {
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
+  border-bottom: 0px solid #000000;
+  background-color: #b3b3b3;
+}
+/* columna acciones */
+table td:last-child {
+  padding: 8px;
+}
+
+table td:last-child .flexDiv {
+  display: inline-flex; /* ✅ más controlado que flex */
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* header de la tabla */
+thead th {
+  background-color: #DA9B4A;
+  font-weight: 600;
+  color: var(--bgColor);
+  text-align: left;
+}
+
+/* 🔢 Contador */
+.contador-registros {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--bgColor);
+}
+
+.numero {
+  font-weight: bold;
+  color: var(--bgColor);
+}
+
+/* 🧩 Selectores personalizados */
+.flexDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  position: relative;
+}
+
+.selectWrapper {
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms linear;
+  filter: drop-shadow(0 6px 26px rgba(0, 0, 0, 0.24));
+  padding-top: calc(var(--sizeVar) / 2);
+  min-width: 200px;
+  z-index: 9999;
+}
+
+.multiSelect {
+  border: 1px solid var(--borderColor);
+  border-radius: calc(var(--sizeVar) / 2);
+  background: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  transition: transform 300ms ease-in-out, clip-path 300ms ease-in-out;
+  z-index: 9999;
+}
+
+.multiSelect div {
+  color: var(--textPrimary);
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.multiSelect div:hover {
+  background-color: #f6f6f6;
+}
+
+.multiSelect .placeholder {
+  color: var(--textSecondary);
+  font-style: italic;
+}
+
+.multiSelect .narrow {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.multiSelect i {
+  color: var(--textSecondary);
+}
+
+.iconDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.noSpace {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.titleDiv {
+  pointer-events: none;
+  font-weight: 700;
+}
+
+/* 🪟 Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal:not(.oculto) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-contenido {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-botones {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-botones button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#btn-confirmar {
+  background-color: #dc3545;
+  color: white;
+}
+
+#btn-cancelar {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* ✅ Mensaje flotante */
+#mensaje-flotante {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1001;
+}
+
+#mensaje-flotante.visible {
+  opacity: 1;
+}
+
+/* 🎯 Botón secundario */
+.sec_btn {
+  background-color: var(--bgColor);
+  color: var(--txtColor);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--borColor) inset;
+  transition: background-color 0.3s ease;
+}
+
+/* ✅ Consolidado: se eliminaron duplicados y se usaron variables para consistencia */
+.sec_btn:focus {
+  --borColor: rgba(0, 0, 0, 0.4);
+}
+/* boton opciones poniendo encima el raton*/
+.sec_btn:hover {
+  background-color: #443f3f;
+}
+/* boton opciones dando click*/
+.sec_btn:active {
+  background-color: #919090;
+}

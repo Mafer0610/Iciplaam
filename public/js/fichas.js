@@ -44,7 +44,7 @@ async function cargarFichas() {
         const fichas = await res.json();
 
         if (!fichas.length) {
-            tbody.innerHTML = '<tr><td colspan="6">Sin fichas registradas</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7">Sin fichas registradas</td></tr>';
             return;
         }
 
@@ -64,6 +64,7 @@ async function cargarFichas() {
             <td>${ficha.LOTE_ACT || '-'}</td>
             <td>${fechaInhu}</td>
             <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
+            <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
             <td>
                 <div class="flexDiv" id="ficha-${i}">
                     <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
@@ -105,7 +106,7 @@ function mostrarResultadosFichas(fichas) {
     tbody.innerHTML = "";
     
     if (!fichas.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sin resultados</td></tr>';
         return;
     }
 

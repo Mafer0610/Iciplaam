@@ -408,7 +408,7 @@ app.post('/generar-tramite', async (req, res) => {
         const resultado = generarDocumentoTramite(req.body);
         
         if (resultado.exito) {
-            console.log('Documento de trámite generado exitosamente:', resultado.archivo);
+            console.log('Fortamto de control generado exitosamente:', resultado.archivo);
             
             res.download(resultado.ruta, resultado.archivo, (err) => {
                 if (err) {
@@ -424,7 +424,7 @@ app.post('/generar-tramite', async (req, res) => {
                 }
             });
         } else {
-            console.error('Error al generar documento de trámite:', resultado.mensaje);
+            console.error('Error al generar formato de control:', resultado.mensaje);
             res.status(500).json({ error: resultado.mensaje });
         }
     } catch (error) {
@@ -551,7 +551,7 @@ function generarDocumentoTramite(datos) {
             ruta: rutaCompleta
         };
     } catch (error) {
-        console.error("Error al generar documento de trámite:", error);
+        console.error("Error al generar formato de control:", error);
         return {
             exito: false,
             mensaje: `Error al generar el documento: ${error.message}`,

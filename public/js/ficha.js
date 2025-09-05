@@ -258,7 +258,7 @@ async function generarFicha(datos) {
 
 async function generarTramite(datos) {
     try {
-        mostrarMensaje('Generando Documento de Trámite...', 'success');
+        mostrarMensaje('Generando Formato de Control...', 'success');
         
         const response = await fetch('http://localhost:5000/generar-tramite', {
             method: 'POST',
@@ -279,14 +279,14 @@ async function generarTramite(datos) {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
             
-            mostrarMensaje('Documento de trámite generado y descargado correctamente', 'success');
+            mostrarMensaje('Formato de control generado y descargado correctamente', 'success');
         } else {
             const error = await response.json();
             mostrarMensaje(`Error: ${error.error}`, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        mostrarMensaje('Error al generar el documento de trámite', 'error');
+        mostrarMensaje('Error al generar el formato de control', 'error');
     }
 }
 
@@ -303,7 +303,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('tramiteForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('=== DOCUMENTO DE TRÁMITE ===');
         const datos = recopilarDatosTramite();
         console.log('Datos de trámite recopilados:', datos);
         

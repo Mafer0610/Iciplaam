@@ -44,7 +44,7 @@ async function cargarFormatos() {
         const formatos = await res.json();
 
         if (!formatos.length) {
-            tbody.innerHTML = '<tr><td colspan="5">Sin formatos registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7">Sin formatos registrados</td></tr>';
             return;
         }
 
@@ -59,6 +59,7 @@ async function cargarFormatos() {
                 <td>${formato.NOMB_CONTRI || 'Sin nombre'}</td>
                 <td>${formato.UBICACION_LOTE || '-'}</td>
                 <td>${formato.TIPO_TRAMITE || 'Sin especificar'}</td>
+                <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
                 <td>
                     <div class="flexDiv" id="formato-${i}">
                         <button class="sec_btn" onclick="openMulti('formato-${i}')">Opciones</button>
@@ -77,7 +78,7 @@ async function cargarFormatos() {
         tbody.innerHTML = htmlContent;
     } catch (error) {
         console.error("Error al cargar formatos:", error);
-        tbody.innerHTML = '<tr><td colspan="5">Error al cargar formatos</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">Error al cargar formatos</td></tr>';
     }
 }
 
@@ -99,7 +100,7 @@ function mostrarResultadosFormatos(formatos) {
     tbody.innerHTML = "";
     
     if (!formatos.length) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sin resultados</td></tr>';
         return;
     }
 
@@ -113,6 +114,7 @@ function mostrarResultadosFormatos(formatos) {
             <td>${formato.NOMB_CONTRI || 'Sin nombre'}</td>
             <td>${formato.UBICACION_LOTE || '-'}</td>
             <td>${formato.TIPO_TRAMITE || 'Sin especificar'}</td>
+            <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
             <td>
                 <div class="flexDiv" id="formato-${i}">
                     <button class="sec_btn" onclick="openMulti('formato-${i}')">Opciones</button>
