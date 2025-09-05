@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
+  <title>Gestión de Fichas</title>
+  <link rel="stylesheet" href="css/stylesAdminIns.css" />
+  <link rel="stylesheet" href="css/stylesAdmin.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!verificarRolAdmin()) return;
+      cargarFichas();
+      cargarContadores();
+    });
+  </script>
+</head>
+<body>
+  <header class="custom-header">
+    <img src="img/vivatux.png" alt="Viva Tuxtla" class="logo-izquierda" />
+    <img src="img/logo.png" alt="Logo" class="logo-derecha" />
+  </header>
+
+  <div class="main-content">
+    <div class="contenedor-tabla">
+      <div class="top-bar">
+        <div class="contador-registros">
+          <div class="contador-item">
+            Fichas de Inspección: <span class="numero" id="total-fichas">Cargando...</span>
+          </div>
+        </div>
+
+        <div class="menu adaptado">
+          <div class="acciones horizontal">
+            <a href="opc/FichaInspeccion.html" onclick="event.stopPropagation()">Agregar Ficha</a>
+            <a href="opc/tramites.html" onclick="event.stopPropagation()">Trámites</a>
+            <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+          </div>
+          <div class="container">
+            <div class="toggle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="barra-busqueda">
+        <input
+          type="text"
+          id="txtbuscar"
+          placeholder="Buscar por número de ficha o propietario"
+          onkeyup="buscarFicha()" />
+      </div>
+
+      <div class="bloque-tabla">
+        <div class="botones-tabla" style="margin-bottom: 0; padding-bottom: 0;">
+          <button onclick="location.href='panelRegistros.html'" id="btn-registros">Registros</button>
+          <button class="active" id="btn-fichas">Fichas</button>
+          <button onclick="location.href='panelFormatos.html'" id="btn-formatos">Formatos</button>
+        </div>
+
+        <div id="tabla-fichas" class="active" style="margin-top: 0; padding-top: 0;">
+          <table class="tabla-estilizada">
+            <thead>
+              <tr>
+                <th>No. FICHA</th>
+                <th>PROPIETARIO</th>
+                <th>LOTE</th>
+                <th>FECHA INHUMACIÓN</th>
+                <th>CONCEPTOS</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-fichas-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-confirmacion" class="modal oculto">
+    <div class="modal-contenido">
+      <p>¿Estás seguro de que deseas eliminar esta ficha?</p>
+      <div class="modal-botones">
+        <button id="btn-confirmar">Sí</button>
+        <button id="btn-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mensaje-flotante"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/fichas.js"></script>
+</body>
+</html>

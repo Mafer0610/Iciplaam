@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
       localStorage.setItem('userRole', data.role);
       
       if (data.role === "admin") {
-        window.location.href = "panelAdministrador.html";
+        window.location.href = "panelRegistros.html";
       } else if (data.role === "user") {
         window.location.href = "panelUser.html";
       } else {

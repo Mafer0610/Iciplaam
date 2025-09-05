@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
+  <title>Gestión de Datos</title>
+  <link rel="stylesheet" href="css/stylesAdminRegis.css" />
+  <link rel="stylesheet" href="css/stylesAdmin.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!verificarRolAdmin()) return;
+      cargarTabla();
+      cargarContadores();
+    });
+  </script>
+</head>
+<body>
+  <header class="custom-header">
+  <img src="img/vivatux.png" alt="Viva Tuxtla" class="logo-izquierda" />
+  <img src="img/logo.png" alt="Logo" class="logo-derecha" />
+  </header>
+
+  <div class="main-content">
+    <div class="contenedor-tabla">
+      <div class="top-bar">
+        <div class="contador-registros">
+          <div class="contador-item">
+            Registros de Lápidas: <span class="numero" id="total-lapidas">Cargando...</span>
+          </div>
+        </div>
+
+        <div class="menu adaptado">
+          <div class="acciones horizontal">
+            <a href="btn/agregarInfo.html" onclick="event.stopPropagation()">Agregar Registro</a>
+            <a href="opc/tramites.html" onclick="event.stopPropagation()">Trámites</a>
+            <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+          </div>
+          <div class="container">
+            <div class="toggle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="barra-busqueda">
+        <input
+          type="text"
+          id="txtbuscar"
+          placeholder="Buscar por nombre de registro o propietario"
+          onkeyup="buscarRegistro()" />
+      </div>
+
+      <div class="bloque-tabla">
+      <div class="botones-tabla" style="margin-bottom: 0; padding-bottom: 0;">
+        <button class="active" id="btn-registros">Lapidas</button>
+        <button onclick="location.href='panelFichas.html'" id="btn-fichas">Fichas</button>
+        <button onclick="location.href='panelFormatos.html'" id="btn-formatos">Formatos</button>
+      </div>
+
+        <div id="tabla-registros" class="active" style="margin-top: 0; padding-top: 0;">
+          <table class="tabla-estilizada">
+            <thead>
+              <tr>
+                <th>REGISTRO</th>
+                <th>PROPIETARIO</th>
+                <th>TITULAR</th>
+                <th>MEDIDAS</th>
+                <th>ZONA</th>
+                <th>FILA</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-lapidas"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-confirmacion" class="modal oculto">
+    <div class="modal-contenido">
+      <p>¿Estás seguro de que deseas eliminar este registro?</p>
+      <div class="modal-botones">
+        <button id="btn-confirmar">Sí</button>
+        <button id="btn-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mensaje-flotante"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/registros.js"></script>
+</body>
+</html>
