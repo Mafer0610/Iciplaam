@@ -11,7 +11,11 @@
   <script src="js/auth.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      if (!verificarRolAdmin()) return;
+      const auth = verificarAutenticacion();
+      if (!auth) {
+          return;
+      }
+      console.log('Usuario autenticado:', auth.userRole);
       cargarFormatos();
       cargarContadores();
     });

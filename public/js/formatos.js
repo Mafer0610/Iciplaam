@@ -67,7 +67,6 @@ async function cargarFormatos() {
                             <div class="multiSelect" id="formato-${i}-menu">
                                 <div onclick="verFormato('${formato._id}')">Ver detalle</div>
                                 <div onclick="editarFormato('${formato._id}')">Editar</div>
-                                <div onclick="descargarFormato('${formato._id}')">Descargar</div>
                                 <div onclick="eliminarFormato('${formato._id}')" style="color:#dc3545;">Eliminar</div>
                             </div>
                         </div>
@@ -122,7 +121,6 @@ function mostrarResultadosFormatos(formatos) {
                         <div class="multiSelect" id="formato-${i}-menu">
                             <div onclick="verFormato('${formato._id}')">Ver detalle</div>
                             <div onclick="editarFormato('${formato._id}')">Editar</div>
-                            <div onclick="descargarFormato('${formato._id}')">Descargar</div>
                             <div onclick="eliminarFormato('${formato._id}')" style="color:#dc3545;">Eliminar</div>
                         </div>
                     </div>
@@ -138,48 +136,6 @@ function verFormato(id) {
 
 function editarFormato(id) {
     window.location.href = `btn/editarFormato.html?id=${id}`;
-}
-
-async function descargarFormato(id) {
-    try {
-        // Primero obtener los datos del formato
-        const resFormato = await fetch(`http://localhost:5000/formatos/${id}`);
-        if (!resFormato.ok) {
-            throw new Error('Error al obtener los datos del formato');
-        }
-        
-        const formatoData = await resFormato.json();
-        
-        console.log('Datos de formato para generar documento:', formatoData);
-        
-        // Luego generar el documento
-        const response = await fetch('http://localhost:5000/generar-formato', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formatoData)
-        });
-        
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Formato_${formatoData.TIPO_TRAMITE || 'Sin_Tipo'}_${formatoData.NOMB_CONTRI || 'Sin_Nombre'}_${new Date().toISOString().split('T')[0]}.docx`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-            mostrarMensaje("Documento descargado correctamente");
-        } else {
-            const error = await response.json();
-            mostrarMensaje(`Error al generar documento: ${error.error}`);
-        }
-    } catch (error) {
-        console.error('Error al descargar:', error);
-        mostrarMensaje('Error al descargar el documento');
-    }
 }
 
 function eliminarFormato(id) {

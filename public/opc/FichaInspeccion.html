@@ -19,8 +19,19 @@
     </script>
 </head>
 <body>
+      <header class="header-banner">
+        <div class="header-left">
+        <img src="../img/vivatux.png" alt="Viva Tuxtla" />
+        </div>
+        <div class="header-center">
+        <h1>INFORMACIÓN DE LA LÁPIDA</h1>
+        <p>Ayuntamiento de Tuxtla Gutiérrez · Administración 2024–2027</p>
+        </div>
+        <div class="header-right">
+        <img src="../img/logo.png" alt="Escudo Chiapas" />
+        </div>
+    </header>
     <div class="form-container">
-        <h2>Ficha de inspección y control - Panteón Municipal</h2>
         <div class="tab-container">
             <button class="tab active" onclick="showTab('ficha')">Ficha de Inspección</button>
             <button class="tab" onclick="showTab('tramite')">Formato de Control</button>
@@ -132,7 +143,7 @@
 
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Generar Ficha de Inspección</button>
-                    <button type="button" class="btn-success" onclick="guardarSoloFicha()">💾 Guardar</button>
+                    <button type="button" class="btn-success" onclick="guardarSoloFicha()">Guardar</button>
                     <button type="button" class="btn-secondary" onclick="limpiarFormulario('fichaForm')">Limpiar</button>
                 </div>
             </form>
@@ -297,7 +308,7 @@
                 
                 <div class="button-container">
                     <button type="submit" class="btn-primary">Generar Formato de Control</button>
-                    <button type="button" class="btn-success" onclick="guardarSoloTramite()">💾 Guardar</button>
+                    <button type="button" class="btn-success" onclick="guardarSoloTramite()">Guardar</button>
                     <button type="button" class="btn-secondary" onclick="limpiarFormulario('tramiteForm')">Limpiar</button>
                 </div>
             </form>

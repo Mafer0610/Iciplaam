@@ -119,7 +119,6 @@ function recopilarDatosTramite() {
 
     console.log('Array TIPO_TRAMITE para BD:', datos.TIPO_TRAMITE);
 
-    console.log('=== DOCUMENTOS ENTREGADOS ===');
     const documentosIds = [
         'BOLETA_PROPIEDAD', 'PAGO_MANTENIMIENTO', 'INE_PROPIETARIO',
         'PARIENTE', 'TESTIGOS', 'NVO_PROPIETARIO',
@@ -149,7 +148,6 @@ function recopilarDatosTramite() {
     });
 
     console.log('Array DOCUMENTOS_ENTREGADOS para BD:', datos.DOCUMENTOS_ENTREGADOS);
-    console.log('=== DATOS COMPLETOS ===');
     console.log(JSON.stringify(datos, null, 2));
 
     return datos;
@@ -273,7 +271,7 @@ async function generarTramite(datos) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Documento_Tramite_${new Date().toISOString().split('T')[0]}.docx`;
+            a.download = `Formato_de_Control_${new Date().toISOString().split('T')[0]}.docx`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
