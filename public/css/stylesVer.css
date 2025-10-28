@@ -120,8 +120,6 @@ html, body {
   table-layout: fixed; /* Evita que las celdas se expandan fuera del contenedor */
 }
 
-
-
 .detalle-lapida tr {
   border-bottom: 1px solid #eee;
 }
@@ -152,6 +150,93 @@ html, body {
 .historial-tabla {
   overflow-x: auto;
 }
+/* Estilo tipo ficha para tabla de historial */
+#tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Encabezado */
+#tabla-historial thead {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#tabla-historial th {
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Cuerpo */
+#tabla-historial td {
+  padding: 12px;
+  vertical-align: top;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+  color: #666;
+}
+
+/* Última fila sin borde */
+#tabla-historial tr:last-child td {
+  border-bottom: none;
+}
+
+/* Hover fila */
+#tabla-historial tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Estilo para campos especiales */
+.fecha-cambio {
+  white-space: nowrap;
+  font-size: 13px;
+  color: #666;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.badge-creacion {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-modificacion {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.valor-anterior {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.valor-nuevo {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.cambio-valores {
+  font-size: 13px;
+}
+
 
 #tabla-historial {
   width: 100%;

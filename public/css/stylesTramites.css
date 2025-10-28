@@ -170,6 +170,7 @@ table {
   table-layout: auto;
   border-collapse: collapse;
   font-size: 15px;
+   margin: 0 auto; /* ← centrado horizontal */
 }
 /* Color de la tabla */
 table th,
@@ -177,9 +178,10 @@ table td {
   padding: 8px;
   text-align: center;
   word-wrap: break-word;
-  border-bottom: 0px solid #000000;
+  border: 2px solid #000000; /* ← bordes negros */
   background-color: #b3b3b3;
 }
+
 /* columna acciones */
 table td:last-child {
   padding: 8px;
