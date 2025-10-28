@@ -1,9 +1,9 @@
-/* CSS para Ver Ficha */
 html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto; /* permite scroll vertical */
+  overflow-x: hidden; /* elimina scroll horizontal */
   font-family: Arial, sans-serif;
   background-color: #b3b3b3;
   display: flex;
@@ -34,8 +34,9 @@ html, body {
   padding: 15px 30px;
   overflow-y: auto;
   box-sizing: border-box;
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;           /* ← nuevo */
+  max-width: none;       /* ← nuevo */
+  margin: 0;             /* ← nuevo */
 }
 
 /* Encabezado de la página */
@@ -127,30 +128,42 @@ html, body {
 
 /* Contenido de la ficha */
 .ficha-content {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: #e0e0e0;
   border: 2px solid #999;
   border-radius: 8px;
-  padding: 20px;
+  padding: 0;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 /* Grid de información */
+/* Grid de información */
 .info-grid {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
   gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+/* Secciones de información */
 .info-section {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 15px;
+  box-sizing: border-box;
 }
 
+/* Sección inferior que ocupa todo el ancho */
 .info-section.full-width {
-  grid-column: 1 / -1;
+  grid-column: 1 / -1; /* Ocupa ambas columnas */
 }
+
 
 .info-section h3 {
   margin: 0 0 15px 0;

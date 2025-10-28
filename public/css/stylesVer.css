@@ -97,12 +97,18 @@ html, body {
 }
 
 /* Contenedor de tabla */
+/* Contenedor de tabla */
 .table-container {
+  width: 100%;
+  max-width: 100vw;
   overflow-x: auto;
+  overflow-y: hidden;
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-radius: 6px;
-  padding: 15px;
+  padding: 0;
+  box-sizing: border-box;
+  direction: rtl; /* Scroll horizontal al lado izquierdo */
 }
 
 /* Tabla de detalle de lápida */
@@ -110,7 +116,11 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  direction: ltr; /* Mantiene el orden natural del contenido */
+  table-layout: fixed; /* Evita que las celdas se expandan fuera del contenedor */
 }
+
+
 
 .detalle-lapida tr {
   border-bottom: 1px solid #eee;
