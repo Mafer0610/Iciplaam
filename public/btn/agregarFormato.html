@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Formato de Control</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const auth = verificarAutenticacion();
+            if (!auth) {
+                return;
+            }
+            console.log('Usuario autenticado:', auth.userRole);
+        });
+    </script>
+</head>
+<body>
+    <header class="header-banner">
+        <div class="header-left">
+            <img src="../img/vivatux.png" alt="Viva Tuxtla" />
+        </div>
+        <div class="header-center">
+            <h1>AGREGAR FORMATO DE CONTROL</h1>
+            <p>Ayuntamiento de Tuxtla Gutiérrez · Administración 2024–2027</p>
+        </div>
+        <div class="header-right">
+            <img src="../img/logo.png" alt="Escudo Chiapas" />
+        </div>
+    </header>
+
+    <div class="form-container">
+        <div id="status-message" class="status-message"></div>
+        
+        <form id="formatoForm">
+            <div class="form-grid">
+                <div>
+                    <label for="NOMB_CONTRI">Nombre del Contribuyente:</label>
+                    <input type="text" id="NOMB_CONTRI" name="NOMB_CONTRI" required>
+                </div>
+                <div>
+                    <label for="DIRECCION">Dirección:</label>
+                    <input type="text" id="DIRECCION" name="DIRECCION" required>
+                </div>
+                <div>
+                    <label for="UBICACION_LOTE">Ubicación del Lote:</label>
+                    <input type="text" id="UBICACION_LOTE" name="UBICACION_LOTE" required>
+                </div>
+                <div>
+                    <label for="MEDIDA_TRAMITE">Medida:</label>
+                    <input type="text" id="MEDIDA_TRAMITE" name="MEDIDA_TRAMITE" required>
+                </div>
+            </div>
+
+            <div class="checkbox-section">
+                <h3>Tipo de Trámite</h3>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="INHUMACION">
+                        <label for="INHUMACION">Inhumación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="REP_BOLETA">
+                        <label for="REP_BOLETA">Reposición de Boleta</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="TRASP_LOTE">
+                        <label for="TRASP_LOTE">Traspaso</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="TRASPA_SISTEMA">
+                        <label for="TRASPA_SISTEMA">Alta en el Sistema</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CONSTRUC_GAVETA">
+                        <label for="CONSTRUC_GAVETA">Construcción</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CONSTRUC_DEPOSITO">
+                        <label for="CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="EXHUMA_CENIZAS">
+                        <label for="EXHUMA_CENIZAS">Exhumación</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkbox-section">
+                <h3>Documentos Entregados</h3>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="BOLETA_PROPIEDAD">
+                        <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="PAGO_MANTENIMIENTO">
+                        <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                    </div>
+                    <div class="checkbox-item rectificacion-container">
+                        <input type="checkbox" id="INE_PROPIETARIO" onchange="toggleIneOptions()">
+                        <label for="INE_PROPIETARIO">INE Propietario</label>
+                        <div id="ine-options" class="rectificacion-options" style="display: none;">
+                            <div class="rectificacion-sub-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="PARIENTE">
+                                    <label for="PARIENTE">Pariente</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="TESTIGOS">
+                                    <label for="TESTIGOS">Testigos</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="NVO_PROPIETARIO">
+                                    <label for="NVO_PROPIETARIO">Nvo. Propietario</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item rectificacion-container">
+                        <input type="checkbox" id="ACTA_DEFUNCION" onchange="toggleActaOptions()">
+                        <label for="ACTA_DEFUNCION">Acta de Defunción</label>
+                        <div id="acta-options" class="rectificacion-options" style="display: none;">
+                            <div class="rectificacion-sub-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="INHUMADO">
+                                    <label for="INHUMADO">Inhumado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="PROPIETARIO_EXHUMADO">
+                                    <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ORDEN_INHUMACION">
+                        <label for="ORDEN_INHUMACION">Orden de Inhumación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="OFICIO_SOLICITUD">
+                        <label for="OFICIO_SOLICITUD">Oficio de Solicitud</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ACTA_NACIMIENTO">
+                        <label for="ACTA_NACIMIENTO">Acta de Nacimiento</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ACTA_MATRIMONIO">
+                        <label for="ACTA_MATRIMONIO">Acta de Matrimonio</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CARTA_PODER">
+                        <label for="CARTA_PODER">Carta Poder</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="FOTO_LOTE">
+                        <label for="FOTO_LOTE">Fotografía del Lote a Color</label>
+                    </div>
+                    <div class="checkbox-item rectificacion-container">
+                        <input type="checkbox" id="CARTA_RESPONSIVA" onchange="toggleResponsivaOptions()">
+                        <label for="CARTA_RESPONSIVA">Carta Responsiva</label>
+                        <div id="responsiva-options" class="rectificacion-options" style="display: none;">
+                            <div class="rectificacion-sub-options">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="CONSTRUCCION_CARTA">
+                                    <label for="CONSTRUCCION_CARTA">Construcción</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="EXHUMACION_CARTA">
+                                    <label for="EXHUMACION_CARTA">Exhumación</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="TRASPASO_CARTA">
+                                    <label for="TRASPASO_CARTA">Traspaso</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center;">
+                            <input type="checkbox" id="OTROS_CHECK" onchange="toggleOtrosField()">
+                            <label for="OTROS_CHECK">Otros</label>
+                        </div>
+                        <textarea id="OTROS" name="OTROS" rows="2" placeholder="Especificar..." style="display: none; width: 100%; margin-top: 10px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button type="submit" class="btn-primary">Generar y Guardar Formato</button>
+                <button type="button" class="btn-success" onclick="guardarSoloFormato()">Solo Guardar</button>
+                <button type="button" class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='../panelFormatos.html'">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/agregarFormato.js"></script>
+    <script>
+        function toggleIneOptions() {
+            const checkbox = document.getElementById('INE_PROPIETARIO');
+            const options = document.getElementById('ine-options');
+            const subOptions = document.querySelectorAll('#ine-options input[type="checkbox"]');
+            
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(option => option.checked = false);
+            }
+        }
+
+        function toggleActaOptions() {
+            const checkbox = document.getElementById('ACTA_DEFUNCION');
+            const options = document.getElementById('acta-options');
+            const subOptions = document.querySelectorAll('#acta-options input[type="checkbox"]');
+            
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(option => option.checked = false);
+            }
+        }
+
+        function toggleResponsivaOptions() {
+            const checkbox = document.getElementById('CARTA_RESPONSIVA');
+            const options = document.getElementById('responsiva-options');
+            const subOptions = document.querySelectorAll('#responsiva-options input[type="checkbox"]');
+            
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(option => option.checked = false);
+            }
+        }
+
+        function toggleOtrosField() {
+            const checkbox = document.getElementById('OTROS_CHECK');
+            const textarea = document.getElementById('OTROS');
+            
+            if (checkbox.checked) {
+                textarea.style.display = 'block';
+                textarea.disabled = false;
+            } else {
+                textarea.style.display = 'none';
+                textarea.disabled = true;
+                textarea.value = '';
+            }
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('formatoForm').reset();
+            document.querySelectorAll('.rectificacion-options').forEach(option => {
+                option.style.display = 'none';
+                option.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            });
+            document.getElementById('OTROS').style.display = 'none';
+            mostrarMensaje('Formulario limpiado correctamente', 'success');
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const messageDiv = document.getElementById('status-message');
+            messageDiv.textContent = mensaje;
+            messageDiv.className = `status-message status-${tipo}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

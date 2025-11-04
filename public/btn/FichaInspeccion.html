@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Ficha de Inspección</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const auth = verificarAutenticacion();
+            if (!auth) {
+                return;
+            }
+            console.log('Usuario autenticado:', auth.userRole);
+        });
+    </script>
+</head>
+<body>
+    <header class="header-banner">
+        <div class="header-left">
+            <img src="../img/vivatux.png" alt="Viva Tuxtla" />
+        </div>
+        <div class="header-center">
+            <h1>AGREGAR FICHA DE INSPECCIÓN</h1>
+            <p>Ayuntamiento de Tuxtla Gutiérrez · Administración 2024–2027</p>
+        </div>
+        <div class="header-right">
+            <img src="../img/logo.png" alt="Escudo Chiapas" />
+        </div>
+    </header>
+
+    <div class="form-container">
+        <div id="status-message" class="status-message"></div>
+        
+        <form id="fichaForm">
+            <div class="form-grid">
+                <div>
+                    <label for="NO_FICHI">No. Ficha de Inspección:</label>
+                    <input type="text" id="NO_FICHI" name="NO_FICHI" required>
+                </div>
+                <div>
+                    <label for="LOTE_ACT">Lote Actual:</label>
+                    <input type="text" id="LOTE_ACT" name="LOTE_ACT" required>
+                </div>
+                <div>
+                    <label for="MEDIDAS">Medidas:</label>
+                    <input type="text" id="MEDIDAS" name="MEDIDAS" required>
+                </div>
+                <div>
+                    <label for="INHU_CADA">Inhumación de Cadáver del(a):</label>
+                    <input type="text" id="INHU_CADA" name="INHU_CADA" required>
+                </div>
+                <div>
+                    <label for="FECHA_INHU">Fecha de Inhumación:</label>
+                    <input type="date" id="FECHA_INHU" name="FECHA_INHU" required>
+                </div>
+                <div>
+                    <label for="FOLIO">Folio:</label>
+                    <input type="text" id="FOLIO" name="FOLIO" required>
+                </div>
+                <div>
+                    <label for="HOJA">Hoja:</label>
+                    <input type="text" id="HOJA" name="HOJA" required>
+                </div>
+                <div>
+                    <label for="ACTU_PROPIE">Actual Propietario:</label>
+                    <input type="text" id="ACTU_PROPIE" name="ACTU_PROPIE" required>
+                </div>
+                <div>
+                    <label for="TELEFONO">No. Telefónico:</label>
+                    <input type="text" id="TELEFONO" name="TELEFONO" required>
+                </div>
+            </div>
+
+            <div class="checkbox-section">
+                <h3>Colindancias</h3>
+                <div class="form-grid full-width">
+                    <div>
+                        <label for="CARAC_LOTE">Característica del Lote:</label>
+                        <textarea id="CARAC_LOTE" name="CARAC_LOTE" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label for="SUR">Lado Sur:</label>
+                        <input type="text" id="SUR" name="SUR">
+                    </div>
+                    <div>
+                        <label for="NORTE">Lado Norte:</label>
+                        <input type="text" id="NORTE" name="NORTE">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div>
+                        <label>Conceptos:</label>
+                        <div class="checkbox-grid" id="conceptos-container">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_INHUMACION" name="CONCEP" value="INHUMACION">
+                                <label for="CONC_INHUMACION">Inhumación</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_REP_BOLETA" name="CONCEP" value="REP_BOLETA">
+                                <label for="CONC_REP_BOLETA">Reposición de Boleta</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_TRASP_LOTE" name="CONCEP" value="TRASP_LOTE">
+                                <label for="CONC_TRASP_LOTE">Traspaso</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA">
+                                <label for="CONC_TRASPA_SISTEMA">Alta en el Sistema</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA">
+                                <label for="CONC_CONSTRUC_GAVETA">Construcción</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO">
+                                <label for="CONC_CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="CONC_EXHUMA_CENIZAS" name="CONCEP" value="EXHUMA_CENIZAS">
+                                <label for="CONC_EXHUMA_CENIZAS">Exhumación</label>
+                            </div>
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_RECTIFICACION" name="CONCEP" value="RECTIFICACION" onchange="toggleRectificacionFicha()">
+                                <label for="CONC_RECTIFICACION">Rectificación</label>
+                                <div id="rectificacion-ficha-options" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_NUMERO" name="FICHA_RECT_TIPO" value="RECT_NUMERO">
+                                            <label for="FICHA_RECT_NUMERO">Rectificación de Número</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_FILA" name="FICHA_RECT_TIPO" value="RECT_FILA">
+                                            <label for="FICHA_RECT_FILA">Rectificación de Fila</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="FICHA_RECT_UBICACION" name="FICHA_RECT_TIPO" value="RECT_UBICACION">
+                                            <label for="FICHA_RECT_UBICACION">Rectificación de Ubicación</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div>
+                        <label for="OBSER">Observación:</label>
+                        <input type="text" id="OBSER" name="OBSER">
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-primary">Generar y Guardar Ficha</button>
+                <button type="button" class="btn-success" onclick="guardarSoloFicha()">Solo Guardar</button>
+                <button type="button" class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='../panelFichas.html'">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/agregarFicha.js"></script>
+    <script>
+        function toggleRectificacionFicha() {
+            const checkbox = document.getElementById('CONC_RECTIFICACION');
+            const options = document.getElementById('rectificacion-ficha-options');
+            const subOptions = document.querySelectorAll('input[name="FICHA_RECT_TIPO"]');
+
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(cb => cb.checked = false);
+            }
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('fichaForm').reset();
+            document.querySelectorAll('.rectificacion-options').forEach(option => {
+                option.style.display = 'none';
+                option.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            });
+            mostrarMensaje('Formulario limpiado correctamente', 'success');
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const messageDiv = document.getElementById('status-message');
+            messageDiv.textContent = mensaje;
+            messageDiv.className = `status-message status-${tipo}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
