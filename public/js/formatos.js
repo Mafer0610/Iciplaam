@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function cargarContadores() {
     try {
-        // Cargar contador de formatos
         const resFormatos = await fetch("http://localhost:5000/formatos/count/total");
         const dataFormatos = await resFormatos.json();
         document.getElementById("total-formatos").textContent = dataFormatos.total;
@@ -34,6 +33,34 @@ async function cargarContadores() {
         document.getElementById("total-formatos").textContent = "Error";
     }
 }
+
+// ✅ NUEVA FUNCIÓN PARA CAMBIAR ESTADO DE FORMATO
+async function cambiarEstadoFormato(id, estadoActual) {
+    const nuevoEstado = estadoActual === 'COMPLETO' ? 'INCOMPLETO' : 'COMPLETO';
+    
+    try {
+        const res = await fetch(`http://localhost:5000/formatos/${id}/estado`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estado: nuevoEstado })
+        });
+        
+        if (res.ok) {
+            mostrarMensaje(`Estado cambiado a ${nuevoEstado}`);
+            cargarFormatos();
+        } else {
+            mostrarMensaje("Error al cambiar estado");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarMensaje("Error en la solicitud");
+    }
+}
+
+// ✅ Hacer función global
+window.cambiarEstadoFormato = cambiarEstadoFormato;
 
 async function cargarFormatos() {
     const tbody = document.getElementById("tabla-formatos-body");
@@ -44,7 +71,7 @@ async function cargarFormatos() {
         const formatos = await res.json();
 
         if (!formatos.length) {
-            tbody.innerHTML = '<tr><td colspan="7">Sin formatos registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6">Sin formatos registrados</td></tr>';
             return;
         }
 
@@ -53,13 +80,25 @@ async function cargarFormatos() {
             const fechaCreacion = formato.FECHA_CREACION ? 
                 new Date(formato.FECHA_CREACION).toLocaleDateString('es-MX') : '-';
 
-            htmlContent += ` 
+            const tipoTramite = Array.isArray(formato.TIPO_TRAMITE) ? 
+                formato.TIPO_TRAMITE.join(', ') : formato.TIPO_TRAMITE || 'Sin especificar';
+
+            const estado = formato.ESTADO || 'COMPLETO';
+            const colorEstado = estado === 'COMPLETO' ? '#28a745' : '#ffc107';
+
+            htmlContent += `
             <tr>
                 <td>${fechaCreacion}</td>
                 <td>${formato.NOMB_CONTRI || 'Sin nombre'}</td>
                 <td>${formato.UBICACION_LOTE || '-'}</td>
-                <td>${formato.TIPO_TRAMITE || 'Sin especificar'}</td>
-                <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
+                <td>${tipoTramite}</td>
+                <td>
+                    <select onchange="cambiarEstadoFormato('${formato._id}', this.value)" 
+                            style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
+                        <option value="COMPLETO" ${estado === 'COMPLETO' ? 'selected' : ''}>COMPLETO</option>
+                        <option value="INCOMPLETO" ${estado === 'INCOMPLETO' ? 'selected' : ''}>INCOMPLETO</option>
+                    </select>
+                </td>
                 <td>
                     <div class="flexDiv" id="formato-${i}">
                         <button class="sec_btn" onclick="openMulti('formato-${i}')">Opciones</button>
@@ -77,7 +116,7 @@ async function cargarFormatos() {
         tbody.innerHTML = htmlContent;
     } catch (error) {
         console.error("Error al cargar formatos:", error);
-        tbody.innerHTML = '<tr><td colspan="7">Error al cargar formatos</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6">Error al cargar formatos</td></tr>';
     }
 }
 
@@ -99,7 +138,7 @@ function mostrarResultadosFormatos(formatos) {
     tbody.innerHTML = "";
     
     if (!formatos.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Sin resultados</td></tr>';
         return;
     }
 
@@ -107,13 +146,25 @@ function mostrarResultadosFormatos(formatos) {
         const fechaCreacion = formato.FECHA_CREACION ? 
             new Date(formato.FECHA_CREACION).toLocaleDateString('es-MX') : '-';
 
+        const tipoTramite = Array.isArray(formato.TIPO_TRAMITE) ? 
+            formato.TIPO_TRAMITE.join(', ') : formato.TIPO_TRAMITE || 'Sin especificar';
+
+        const estado = formato.ESTADO || 'COMPLETO';
+        const colorEstado = estado === 'COMPLETO' ? '#28a745' : '#ffc107';
+
         tbody.innerHTML += `
         <tr>
             <td>${fechaCreacion}</td>
             <td>${formato.NOMB_CONTRI || 'Sin nombre'}</td>
             <td>${formato.UBICACION_LOTE || '-'}</td>
-            <td>${formato.TIPO_TRAMITE || 'Sin especificar'}</td>
-            <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
+            <td>${tipoTramite}</td>
+            <td>
+                <select onchange="cambiarEstadoFormato('${formato._id}', this.value)" 
+                        style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
+                    <option value="COMPLETO" ${estado === 'COMPLETO' ? 'selected' : ''}>COMPLETO</option>
+                    <option value="INCOMPLETO" ${estado === 'INCOMPLETO' ? 'selected' : ''}>INCOMPLETO</option>
+                </select>
+            </td>
             <td>
                 <div class="flexDiv" id="formato-${i}">
                     <button class="sec_btn" onclick="openMulti('formato-${i}')">Opciones</button>

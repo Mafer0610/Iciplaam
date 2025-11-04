@@ -58,6 +58,33 @@ async function buscarRegistro() {
     }
 }
 
+// ✅ NUEVA FUNCIÓN PARA CAMBIAR ESTADO
+async function cambiarEstadoLapida(id, nuevoEstado) {
+    console.log(`Cambiando estado de lápida ${id} a: ${nuevoEstado}`);
+    
+    try {
+        const res = await fetch(`http://localhost:5000/lapidas/${id}/estado`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estado: nuevoEstado })
+        });
+        
+        if (res.ok) {
+            mostrarMensaje(`Estado cambiado a ${nuevoEstado}`);
+            cargarTabla();
+        } else {
+            const error = await res.json();
+            console.error('Error del servidor:', error);
+            mostrarMensaje("Error al cambiar estado");
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        mostrarMensaje("Error en la solicitud");
+    }
+}
+
 function mostrarResultados(datos, filtro) {
     const tbody = document.getElementById("tabla-lapidas");
     tbody.innerHTML = "";
@@ -68,6 +95,9 @@ function mostrarResultados(datos, filtro) {
 
     datos.forEach((item, i) => {
         const menuId = `menu-${i}`;
+        const estado = item.ESTADO || 'ACTIVO';
+        const colorEstado = estado === 'ACTIVO' ? '#28a745' : '#dc3545';
+        
         tbody.innerHTML += `
         <tr>
             <td>${item.NOM_REG}</td>
@@ -78,22 +108,31 @@ function mostrarResultados(datos, filtro) {
             <td>${item.FILA}</td>
             <td>${item.X}</td>
             <td>${item.Y}</td>
-            <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">ACTIVO</span></td>
             <td>
-                    <div class="flexDiv" id="${menuId}">
-                        <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
-                        <div class="selectWrapper">
-                            <div class="multiSelect" id="${menuId}-0">
-                                <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>
-                                <div onclick="editarRegistro('${item.NOM_REG}')">Editar registro</div>
-                                <div onclick="eliminarRegistro('${item._id}')" style="color:#dc3545;">Eliminar registro</div>
-                            </div>
+                <select onchange="cambiarEstadoLapida('${item._id}', this.value)" 
+                        style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
+                    <option value="ACTIVO" ${estado === 'ACTIVO' ? 'selected' : ''}>ACTIVO</option>
+                    <option value="INACTIVO" ${estado === 'INACTIVO' ? 'selected' : ''}>INACTIVO</option>
+                </select>
+            </td>
+            <td>
+                <div class="flexDiv" id="${menuId}">
+                    <button class="sec_btn" onclick="openMulti('${menuId}')">Opciones</button>
+                    <div class="selectWrapper">
+                        <div class="multiSelect" id="${menuId}-0">
+                            <div onclick="verRegistro('${item.NOM_REG}')">Ver detalles</div>
+                            <div onclick="editarRegistro('${item.NOM_REG}')">Editar registro</div>
+                            <div onclick="eliminarRegistro('${item._id}')" style="color:#dc3545;">Eliminar registro</div>
                         </div>
                     </div>
-                </td>
-            </tr>`;
+                </div>
+            </td>
+        </tr>`;
     });
 }
+
+// ✅ Hacer función global para que el onclick del select funcione
+window.cambiarEstadoLapida = cambiarEstadoLapida;
 
 function verRegistro(nom) {
     window.location.href = `btn/verInfo.html?NOM_REG=${nom}`;

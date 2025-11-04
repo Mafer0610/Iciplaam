@@ -20,7 +20,12 @@ const LapidaSchema = new mongoose.Schema({
     CVE_PANTEO: String,
     CVE_ZONA: String,
     CVE_LOTE: String,
-    CUENTA: String
+    CUENTA: String,
+    ESTADO: {
+        type: String,
+        enum: ['ACTIVO', 'INACTIVO'],
+        default: 'ACTIVO'
+    }
 });
 
 module.exports = mongoose.model("Lapida", LapidaSchema);

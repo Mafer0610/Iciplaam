@@ -16,7 +16,12 @@ const fichaSchema = new mongoose.Schema({
     CONCEPTOS: [String],
     OBSER: String,
     FECHA_CREACION: { type: Date, default: Date.now },
-    FECHA_ACTUALIZACION: { type: Date, default: Date.now }
+    FECHA_ACTUALIZACION: { type: Date, default: Date.now },
+    ESTADO: {
+        type: String,
+        enum: ['COMPLETO', 'INCOMPLETO'],
+        default: 'COMPLETO'
+    }
 });
 
 module.exports = mongoose.model('Ficha', fichaSchema, 'docs');

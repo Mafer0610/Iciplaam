@@ -817,7 +817,6 @@ app.get('/debug/historial', async (req, res) => {
 });
 
 // CARGAR ARCHIVOS AL INICIAR EL SERVIDOR
-console.log('Iniciando carga de archivos de Google Drive...');
 cargarArchivosDelDrive().then(() => {
     console.log('Carga inicial completada');
 }).catch(error => {
@@ -1356,5 +1355,95 @@ app.delete('/fichas/:id', async (req, res) => {
     }
 });
 
+// ===== RUTAS PARA CAMBIAR ESTADO DE LÁPIDAS =====
+app.patch('/lapidas/:id/estado', async (req, res) => {
+    try {
+        const { estado } = req.body;
+        
+        if (!['ACTIVO', 'INACTIVO'].includes(estado)) {
+            return res.status(400).json({ error: 'Estado inválido' });
+        }
+
+        const lapidaActualizada = await Lapida.findByIdAndUpdate(
+            req.params.id,
+            { ESTADO: estado },
+            { new: true }
+        );
+
+        if (!lapidaActualizada) {
+            return res.status(404).json({ error: 'Lápida no encontrada' });
+        }
+
+        console.log(`Estado de lápida ${req.params.id} cambiado a: ${estado}`);
+        res.json({ 
+            mensaje: 'Estado actualizado correctamente', 
+            estado: estado,
+            lapida: lapidaActualizada 
+        });
+    } catch (err) {
+        console.error('Error al actualizar estado de lápida:', err);
+        res.status(500).json({ error: 'Error al actualizar el estado' });
+    }
+});
+
+// ===== RUTAS PARA CAMBIAR ESTADO DE FICHAS =====
+app.patch('/fichas/:id/estado', async (req, res) => {
+    try {
+        const { estado } = req.body;
+        
+        if (!['COMPLETO', 'INCOMPLETO'].includes(estado)) {
+            return res.status(400).json({ error: 'Estado inválido' });
+        }
+
+        const fichaActualizada = await Ficha.findByIdAndUpdate(
+            req.params.id,
+            { ESTADO: estado },
+            { new: true }
+        );
+
+        if (!fichaActualizada) {
+            return res.status(404).json({ error: 'Ficha no encontrada' });
+        }
+
+        console.log(`Estado de ficha ${req.params.id} cambiado a: ${estado}`);
+        res.json({ 
+            mensaje: 'Estado actualizado correctamente', 
+            estado: estado,
+            ficha: fichaActualizada 
+        });
+    } catch (err) {
+        console.error('Error al actualizar estado de ficha:', err);
+        res.status(500).json({ error: 'Error al actualizar el estado' });
+    }
+});
+
+// ===== RUTAS PARA CAMBIAR ESTADO DE FORMATOS =====
+app.patch('/formatos/:id/estado', async (req, res) => {
+    try {
+        const { estado } = req.body;
+        
+        if (!['COMPLETO', 'INCOMPLETO'].includes(estado)) {
+            return res.status(400).json({ error: 'Estado inválido' });
+        }
+
+        const formatoActualizado = await Control.findByIdAndUpdate(
+            req.params.id,
+            { ESTADO: estado },
+            { new: true }
+        );
+
+        if (!formatoActualizado) {
+            return res.status(404).json({ error: 'Formato no encontrado' });
+        }
+        res.json({ 
+            mensaje: 'Estado actualizado correctamente', 
+            estado: estado,
+            formato: formatoActualizado 
+        });
+    } catch (err) {
+        console.error('Error al actualizar estado de formato:', err);
+        res.status(500).json({ error: 'Error al actualizar el estado' });
+    }
+});
 
 app.listen(5000, () => console.log('Servidor en ejecución: http://localhost:5000'));

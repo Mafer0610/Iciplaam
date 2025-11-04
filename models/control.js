@@ -9,7 +9,12 @@ const controlSchema = new mongoose.Schema({
     DOCUMENTOS_ENTREGADOS: [String],
     OTROS: String,
     FECHA_CREACION: { type: Date, default: Date.now },
-    FECHA_ACTUALIZACION: { type: Date, default: Date.now }
+    FECHA_ACTUALIZACION: { type: Date, default: Date.now },
+    ESTADO: {
+        type: String,
+        enum: ['COMPLETO', 'INCOMPLETO'],
+        default: 'COMPLETO'
+    }
 });
 
 module.exports = mongoose.model('Control', controlSchema, 'control');

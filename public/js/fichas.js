@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function cargarContadores() {
     try {
-        // Cargar contador de fichas
         const resFichas = await fetch("http://localhost:5000/fichas/count/total");
         const dataFichas = await resFichas.json();
         document.getElementById("total-fichas").textContent = dataFichas.total;
@@ -34,6 +33,34 @@ async function cargarContadores() {
         document.getElementById("total-fichas").textContent = "Error";
     }
 }
+
+// ✅ NUEVA FUNCIÓN PARA CAMBIAR ESTADO DE FICHA
+async function cambiarEstadoFicha(id, estadoActual) {
+    const nuevoEstado = estadoActual === 'COMPLETO' ? 'INCOMPLETO' : 'COMPLETO';
+    
+    try {
+        const res = await fetch(`http://localhost:5000/fichas/${id}/estado`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estado: nuevoEstado })
+        });
+        
+        if (res.ok) {
+            mostrarMensaje(`Estado cambiado a ${nuevoEstado}`);
+            cargarFichas();
+        } else {
+            mostrarMensaje("Error al cambiar estado");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarMensaje("Error en la solicitud");
+    }
+}
+
+// ✅ Hacer función global
+window.cambiarEstadoFicha = cambiarEstadoFicha;
 
 async function cargarFichas() {
     const tbody = document.getElementById("tabla-fichas-body");
@@ -50,7 +77,6 @@ async function cargarFichas() {
 
         let htmlContent = '';
         fichas.forEach((ficha, i) => {
-            // Verificar que la ficha tenga _id
             if (!ficha._id) {
                 console.error('Ficha sin ID:', ficha);
                 return;
@@ -63,6 +89,9 @@ async function cargarFichas() {
                 ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
                 'Sin conceptos';
 
+            const estado = ficha.ESTADO || 'COMPLETO';
+            const colorEstado = estado === 'COMPLETO' ? '#28a745' : '#ffc107';
+
             htmlContent += `
             <tr>
                 <td>${ficha.NO_FICHI || 'S/N'}</td>
@@ -70,7 +99,13 @@ async function cargarFichas() {
                 <td>${ficha.LOTE_ACT || '-'}</td>
                 <td>${fechaInhu}</td>
                 <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
-                <td><span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">COMPLETADO</span></td>
+                <td>
+                    <select onchange="cambiarEstadoFicha('${ficha._id}', this.value)" 
+                            style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
+                        <option value="COMPLETO" ${estado === 'COMPLETO' ? 'selected' : ''}>COMPLETO</option>
+                        <option value="INCOMPLETO" ${estado === 'INCOMPLETO' ? 'selected' : ''}>INCOMPLETO</option>
+                    </select>
+                </td>
                 <td>
                     <div class="flexDiv" id="ficha-${i}">
                         <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
@@ -124,6 +159,9 @@ function mostrarResultadosFichas(fichas) {
             ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
             'Sin conceptos';
 
+        const estado = ficha.ESTADO || 'COMPLETO';
+        const colorEstado = estado === 'COMPLETO' ? '#28a745' : '#ffc107';
+
         tbody.innerHTML += `
         <tr>
             <td>${ficha.NO_FICHI || 'S/N'}</td>
@@ -131,6 +169,13 @@ function mostrarResultadosFichas(fichas) {
             <td>${ficha.LOTE_ACT || '-'}</td>
             <td>${fechaInhu}</td>
             <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
+            <td>
+                <select onchange="cambiarEstadoFicha('${ficha._id}', this.value)" 
+                        style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
+                    <option value="COMPLETO" ${estado === 'COMPLETO' ? 'selected' : ''}>COMPLETO</option>
+                    <option value="INCOMPLETO" ${estado === 'INCOMPLETO' ? 'selected' : ''}>INCOMPLETO</option>
+                </select>
+            </td>
             <td>
                 <div class="flexDiv" id="ficha-${i}">
                     <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
@@ -170,7 +215,6 @@ function editarFicha(id) {
 
 async function descargarFicha(id) {
     try {
-        // Primero obtener los datos de la ficha
         const resFicha = await fetch(`http://localhost:5000/fichas/${id}`);
         if (!resFicha.ok) {
             throw new Error('Error al obtener los datos de la ficha');
@@ -178,7 +222,6 @@ async function descargarFicha(id) {
         
         const fichaData = await resFicha.json();
         
-        // Convertir CONCEPTOS (array) a CONCEP (string) para el documento Word
         if (fichaData.CONCEPTOS && Array.isArray(fichaData.CONCEPTOS)) {
             fichaData.CONCEP = fichaData.CONCEPTOS.join(', ');
         } else {
@@ -187,7 +230,6 @@ async function descargarFicha(id) {
         
         console.log('Datos de ficha para generar documento:', fichaData);
         
-        // Luego generar el documento
         const response = await fetch('http://localhost:5000/generar-ficha', {
             method: 'POST',
             headers: {
