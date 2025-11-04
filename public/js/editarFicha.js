@@ -144,7 +144,7 @@ async function actualizarFicha(e) {
         if (response.ok) {
             mostrarMensaje('Ficha actualizada correctamente', 'success');
             setTimeout(() => {
-                window.location.href = `verFicha.html?id=${fichaId}`;
+                window.location.href = `../panelFichas.html?id=${fichaId}`;
             }, 1500);
         } else {
             const error = await response.json();

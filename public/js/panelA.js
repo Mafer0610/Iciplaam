@@ -185,52 +185,68 @@ async function cargarFichas() {
     tbody.innerHTML = "";
 
     try {
-    const res = await fetch("http://localhost:5000/fichas");
-    const fichas = await res.json();
+        const res = await fetch("http://localhost:5000/fichas");
+        const fichas = await res.json();
 
-    if (!fichas.length) {
-        tbody.innerHTML = '<tr><td colspan="6">Sin fichas registradas</td></tr>';
-        return;
-    }
+        if (!fichas.length) {
+            tbody.innerHTML = '<tr><td colspan="6">Sin fichas registradas</td></tr>';
+            return;
+        }
 
-    fichas.forEach((ficha, i) => {
-        const fechaInhu = ficha.FECHA_INHU ? 
-        new Date(ficha.FECHA_INHU).toLocaleDateString('es-MX') : '-';
-        
-        const conceptos = ficha.CONCEPTOS && ficha.CONCEPTOS.length > 0 ? 
-        ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
-        'Sin conceptos';
+        fichas.forEach((ficha, i) => {
+            if (!ficha._id) {
+                console.error('⚠️ Ficha sin ID detectada:', ficha);
+                return;
+            }
+            
+            const fechaInhu = ficha.FECHA_INHU ? 
+                new Date(ficha.FECHA_INHU).toLocaleDateString('es-MX') : '-';
+            
+            const conceptos = ficha.CONCEPTOS && ficha.CONCEPTOS.length > 0 ? 
+                ficha.CONCEPTOS.slice(0, 2).join(', ') + (ficha.CONCEPTOS.length > 2 ? '...' : '') : 
+                'Sin conceptos';
 
-        tbody.innerHTML += `
-        <tr>
-            <td>${ficha.NO_FICHI || 'S/N'}</td>
-            <td>${ficha.ACTU_PROPIE || 'Sin propietario'}</td>
-            <td>${ficha.LOTE_ACT || '-'}</td>
-            <td>${fechaInhu}</td>
-            <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
-            <td>
-            <div class="flexDiv" id="ficha-${i}">
-                <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
-                <div class="selectWrapper">
-                <div class="multiSelect" id="ficha-${i}-menu">
-                    <div onclick="verFicha('${ficha._id}')">Ver detalle</div>
-                    <div onclick="editarFicha('${ficha._id}')">Editar</div>
-                    <div onclick="descargarFicha('${ficha._id}')">Descargar</div>
-                    <div onclick="eliminarFicha('${ficha._id}')" style="color:#dc3545;">Eliminar</div>
-                </div>
-                </div>
-            </div>
-            </td>
-        </tr>`;
-    });
+            tbody.innerHTML += `
+            <tr>
+                <td>${ficha.NO_FICHI || 'S/N'}</td>
+                <td>${ficha.ACTU_PROPIE || 'Sin propietario'}</td>
+                <td>${ficha.LOTE_ACT || '-'}</td>
+                <td>${fechaInhu}</td>
+                <td title="${ficha.CONCEPTOS ? ficha.CONCEPTOS.join(', ') : ''}">${conceptos}</td>
+                <td>
+                    <div class="flexDiv" id="ficha-${i}">
+                        <button class="sec_btn" onclick="openMulti('ficha-${i}')">Opciones</button>
+                        <div class="selectWrapper">
+                            <div class="multiSelect" id="ficha-${i}-menu">
+                                <div onclick="verFicha('${ficha._id}')">Ver detalle</div>
+                                <div onclick="editarFicha('${ficha._id}')">Editar</div>
+                                <div onclick="descargarFicha('${ficha._id}')">Descargar</div>
+                                <div onclick="eliminarFicha('${ficha._id}')" style="color:#dc3545;">Eliminar</div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+        });
     } catch (error) {
-    console.error("Error al cargar fichas:", error);
-    tbody.innerHTML = '<tr><td colspan="6">Error al cargar fichas</td></tr>';
+        console.error("Error al cargar fichas:", error);
+        tbody.innerHTML = '<tr><td colspan="6">Error al cargar fichas</td></tr>';
     }
 }
 
 function verFicha(id) {
-    window.location.href = `btn/verFicha.html?id=${id}`;
+    console.log('Panel Admin - Navegando a ver ficha con ID:', id);
+    
+    if (!id || id === 'null' || id === 'undefined') {
+        alert('Error: ID de ficha no válido');
+        console.error('ID inválido recibido:', id);
+        return;
+    }
+    
+    const fichaId = String(id);
+    console.log('ID procesado:', fichaId);
+    
+    window.location.href = `btn/verFicha.html?id=${fichaId}`;
 }
 
 function editarFicha(id) {

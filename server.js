@@ -563,14 +563,58 @@ function generarDocumentoTramite(datos) {
 // Obtener una ficha específica por ID
 app.get('/fichas/:id', async (req, res) => {
     try {
-        const ficha = await Ficha.findById(req.params.id);
-        if (!ficha) {
-            return res.status(404).json({ error: "Ficha no encontrada" });
+        const fichaId = req.params.id;
+        
+        console.log('=== PETICIÓN GET /fichas/:id ===');
+        console.log('ID recibido:', fichaId);
+        console.log('Tipo:', typeof fichaId);
+
+        if (!fichaId || fichaId === 'null' || fichaId === 'undefined') {
+            console.error('❌ ID inválido recibido:', fichaId);
+            return res.status(400).json({ 
+                error: "ID de ficha no válido",
+                detalle: `ID recibido: "${fichaId}"`
+            });
         }
+        const mongoose = require('mongoose');
+        if (!mongoose.Types.ObjectId.isValid(fichaId)) {
+            console.error('❌ Formato de ObjectId inválido:', fichaId);
+            return res.status(400).json({ 
+                error: "Formato de ID inválido",
+                detalle: "El ID debe ser un ObjectId válido de MongoDB (24 caracteres hexadecimales)"
+            });
+        }
+        
+        console.log('✅ ID válido, buscando en base de datos...');
+        const ficha = await Ficha.findById(fichaId);
+        
+        if (!ficha) {
+            console.log('❌ Ficha no encontrada con ID:', fichaId);
+            return res.status(404).json({ 
+                error: "Ficha no encontrada",
+                id: fichaId
+            });
+        }
+        
+        console.log('✅ Ficha encontrada:', ficha.NO_FICHI || ficha._id);
         res.json(ficha);
+        
     } catch (err) {
-        console.error("Error al buscar ficha:", err);
-        res.status(500).json({ error: "Error en el servidor" });
+        console.error("💥 Error al buscar ficha:", err);
+        console.error("Stack:", err.stack);
+        
+        // Respuesta de error más específica
+        if (err.name === 'CastError') {
+            return res.status(400).json({ 
+                error: "Formato de ID inválido para MongoDB",
+                detalle: err.message
+            });
+        }
+        
+        res.status(500).json({ 
+            error: "Error interno del servidor",
+            detalle: err.message
+        });
     }
 });
 
