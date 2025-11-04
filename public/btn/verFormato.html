@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Formato - Panteón Municipal</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesVerFormato.css" />
+    <script src="../js/auth.js"></script>
+    <script src="../js/verFormato.js" defer></script>
+</head>
+<body>
+    <header class="custom-header">
+        <img src="../img/vivatux.png" alt="Viva Tuxtla" class="logo-izquierda" />
+        <img src="../img/logo.png" alt="Logo" class="logo-derecha" />
+    </header>
+    <div class="container">
+        <div class="header">
+            <h1>Detalle de Formato de Control</h1>
+            <div class="header-buttons">
+                <button onclick="window.history.back()" class="btn btn-secondary">← Volver</button>
+                <button onclick="editarFormato()" class="btn btn-primary">Editar</button>
+                <button onclick="descargarFormato()" class="btn btn-success">Descargar</button>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Cargando información del formato...</p>
+        </div>
+
+        <div id="formato-content" class="formato-content" style="display: none;">
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>Información del Contribuyente</h3>
+                    <div class="info-row">
+                        <span class="label">Nombre del Contribuyente:</span>
+                        <span class="value" id="NOMB_CONTRI">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Dirección:</span>
+                        <span class="value" id="DIRECCION">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Ubicación del Lote:</span>
+                        <span class="value" id="UBICACION_LOTE">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Medida:</span>
+                        <span class="value" id="MEDIDA_TRAMITE">-</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Tipo de Trámite</h3>
+                    <div class="tipo-tramite-list" id="tipo-tramite-list">
+                        <!-- Los tipos de trámite se cargarán dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="info-section full-width">
+                    <h3>Documentos Entregados</h3>
+                    <div class="documentos-list" id="documentos-list">
+                        <!-- Los documentos se cargarán dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="info-section full-width">
+                    <h3>Observaciones Adicionales</h3>
+                    <div class="info-row">
+                        <span class="label">Otros:</span>
+                        <span class="value" id="OTROS">-</span>
+                    </div>
+                </div>
+
+                <div class="info-section full-width">
+                    <h3>Fechas del Registro</h3>
+                    <div class="info-row">
+                        <span class="label">Fecha de Creación:</span>
+                        <span class="value" id="FECHA_CREACION">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Última Actualización:</span>
+                        <span class="value" id="FECHA_ACTUALIZACION">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Estado:</span>
+                        <span class="value" id="ESTADO">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-message" class="error-message" style="display: none;">
+            <h3>Error al cargar el formato</h3>
+            <p id="error-text">No se pudo cargar la información del formato.</p>
+        </div>
+    </div>
+</body>
+</html>

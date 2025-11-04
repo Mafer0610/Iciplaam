@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Formato - Panteón Municipal</title>
+    <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/stylesEditarFormato.css" />
+    <script src="../js/auth.js"></script>
+    <script src="../js/editarFormato.js" defer></script>
+</head>
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!verificarRolAdmin()) return;
+        });
+    </script>
+    <header class="header-banner">
+        <div class="header-left">
+            <img src="../img/vivatux.png" alt="Viva Tuxtla" />
+        </div>
+        <div class="header-center">
+            <h1>EDITAR FORMATO DE CONTROL</h1>
+            <p>Ayuntamiento de Tuxtla Gutiérrez · Administración 2024–2027</p>
+        </div>
+        <div class="header-right">
+            <img src="../img/logo.png" alt="Escudo Chiapas" />
+        </div>
+    </header>
+    
+    <div class="form-container">        
+        <div id="status-message" class="status-message"></div>
+        
+        <div id="loading" class="loading" style="text-align: center; padding: 40px;">
+            <p>Cargando información del formato...</p>
+        </div>
+
+        <form id="editarFormatoForm" style="display: none;">
+            <div class="form-grid">
+                <div>
+                    <label for="NOMB_CONTRI">Nombre del Contribuyente:</label>
+                    <input type="text" id="NOMB_CONTRI" name="NOMB_CONTRI" required>
+                </div>
+                <div>
+                    <label for="DIRECCION">Dirección:</label>
+                    <input type="text" id="DIRECCION" name="DIRECCION" required>
+                </div>
+                <div>
+                    <label for="UBICACION_LOTE">Ubicación del Lote:</label>
+                    <input type="text" id="UBICACION_LOTE" name="UBICACION_LOTE" required>
+                </div>
+                <div>
+                    <label for="MEDIDA_TRAMITE">Medida:</label>
+                    <input type="text" id="MEDIDA_TRAMITE" name="MEDIDA_TRAMITE" required>
+                </div>
+            </div>
+
+            <div class="checkbox-section">
+                <h3>Tipo de Trámite</h3>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="INHUMACION" value="INHUMACION">
+                        <label for="INHUMACION">Inhumación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="REP_BOLETA" value="REP_BOLETA">
+                        <label for="REP_BOLETA">Reposición de Boleta</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="TRASP_LOTE" value="TRASP_LOTE">
+                        <label for="TRASP_LOTE">Traspaso</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="TRASPA_SISTEMA" value="TRASPA_SISTEMA">
+                        <label for="TRASPA_SISTEMA">Alta en el Sistema</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CONSTRUC_GAVETA" value="CONSTRUC_GAVETA">
+                        <label for="CONSTRUC_GAVETA">Construcción</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CONSTRUC_DEPOSITO" value="CONSTRUC_DEPOSITO">
+                        <label for="CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="EXHUMA_CENIZAS" value="EXHUMA_CENIZAS">
+                        <label for="EXHUMA_CENIZAS">Exhumación</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkbox-section">
+                <h3>Documentos Entregados</h3>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="BOLETA_PROPIEDAD" value="BOLETA_PROPIEDAD">
+                        <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="PAGO_MANTENIMIENTO" value="PAGO_MANTENIMIENTO">
+                        <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="INE_PROPIETARIO" value="INE_PROPIETARIO">
+                        <label for="INE_PROPIETARIO">INE Propietario</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ACTA_DEFUNCION" value="ACTA_DEFUNCION">
+                        <label for="ACTA_DEFUNCION">Acta de Defunción</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ORDEN_INHUMACION" value="ORDEN_INHUMACION">
+                        <label for="ORDEN_INHUMACION">Orden de Inhumación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="OFICIO_SOLICITUD" value="OFICIO_SOLICITUD">
+                        <label for="OFICIO_SOLICITUD">Oficio de Solicitud</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ACTA_NACIMIENTO" value="ACTA_NACIMIENTO">
+                        <label for="ACTA_NACIMIENTO">Acta de Nacimiento</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ACTA_MATRIMONIO" value="ACTA_MATRIMONIO">
+                        <label for="ACTA_MATRIMONIO">Acta de Matrimonio</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CARTA_PODER" value="CARTA_PODER">
+                        <label for="CARTA_PODER">Carta Poder</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="FOTO_LOTE" value="FOTO_LOTE">
+                        <label for="FOTO_LOTE">Fotografía del Lote a Color</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="CARTA_RESPONSIVA" value="CARTA_RESPONSIVA">
+                        <label for="CARTA_RESPONSIVA">Carta Responsiva</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div>
+                    <label for="OTROS">Otros (especificar):</label>
+                    <textarea id="OTROS" name="OTROS" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-primary">Actualizar Formato</button>
+                <button type="button" class="btn-secondary" onclick="window.history.back()">Cancelar</button>
+            </div>
+        </form>
+
+        <div id="error-message" class="error-message" style="display: none;">
+            <h3>Error al cargar el formato</h3>
+            <p id="error-text">No se pudo cargar la información del formato.</p>
+        </div>
+    </div>
+</body>
+</html>
