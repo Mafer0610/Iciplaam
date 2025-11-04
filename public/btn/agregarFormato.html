@@ -6,6 +6,79 @@
     <title>Agregar Formato de Control</title>
     <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
     <link rel="stylesheet" href="../css/stylesFicha.css" />
+    <style>
+        /* Incluir CSS de documentos aquí o en archivo separado */
+        .upload-area {
+            border: 2px dashed #DA9B4A;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #c8874a;
+            background-color: #fff;
+        }
+        
+        .upload-area.drag-over {
+            background-color: #fff3cd;
+            border-color: #c8874a;
+        }
+        
+        .archivos-lista {
+            margin-top: 15px;
+        }
+        
+        .archivo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .archivo-nombre {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .btn-eliminar-archivo {
+            padding: 4px 8px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .upload-progress.active {
+            display: block;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #DA9B4A, #c8874a);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+    </style>
     <script src="../js/auth.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -34,161 +107,198 @@
     <div class="form-container">
         <div id="status-message" class="status-message"></div>
         
+        <!-- Pestañas -->
+        <div class="tab-container">
+            <button class="tab active" onclick="mostrarTab('datos')">Datos del Formato</button>
+            <button class="tab" onclick="mostrarTab('documentos')">Documentos</button>
+        </div>
+        
         <form id="formatoForm">
-            <div class="form-grid">
-                <div>
-                    <label for="NOMB_CONTRI">Nombre del Contribuyente:</label>
-                    <input type="text" id="NOMB_CONTRI" name="NOMB_CONTRI" required>
+            <!-- TAB 1: Datos del Formato -->
+            <div id="tab-datos" class="tab-content active">
+                <div class="form-grid">
+                    <div>
+                        <label for="NOMB_CONTRI">Nombre del Contribuyente:</label>
+                        <input type="text" id="NOMB_CONTRI" name="NOMB_CONTRI" required>
+                    </div>
+                    <div>
+                        <label for="DIRECCION">Dirección:</label>
+                        <input type="text" id="DIRECCION" name="DIRECCION" required>
+                    </div>
+                    <div>
+                        <label for="UBICACION_LOTE">Ubicación del Lote:</label>
+                        <input type="text" id="UBICACION_LOTE" name="UBICACION_LOTE" required>
+                    </div>
+                    <div>
+                        <label for="MEDIDA_TRAMITE">Medida:</label>
+                        <input type="text" id="MEDIDA_TRAMITE" name="MEDIDA_TRAMITE" required>
+                    </div>
                 </div>
-                <div>
-                    <label for="DIRECCION">Dirección:</label>
-                    <input type="text" id="DIRECCION" name="DIRECCION" required>
+
+                <div class="checkbox-section">
+                    <h3>Tipo de Trámite</h3>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="INHUMACION">
+                            <label for="INHUMACION">Inhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="REP_BOLETA">
+                            <label for="REP_BOLETA">Reposición de Boleta</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="TRASP_LOTE">
+                            <label for="TRASP_LOTE">Traspaso</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="TRASPA_SISTEMA">
+                            <label for="TRASPA_SISTEMA">Alta en el Sistema</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CONSTRUC_GAVETA">
+                            <label for="CONSTRUC_GAVETA">Construcción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CONSTRUC_DEPOSITO">
+                            <label for="CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="EXHUMA_CENIZAS">
+                            <label for="EXHUMA_CENIZAS">Exhumación</label>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="UBICACION_LOTE">Ubicación del Lote:</label>
-                    <input type="text" id="UBICACION_LOTE" name="UBICACION_LOTE" required>
-                </div>
-                <div>
-                    <label for="MEDIDA_TRAMITE">Medida:</label>
-                    <input type="text" id="MEDIDA_TRAMITE" name="MEDIDA_TRAMITE" required>
+                
+                <div class="checkbox-section">
+                    <h3>Documentos Entregados</h3>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="BOLETA_PROPIEDAD">
+                            <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="PAGO_MANTENIMIENTO">
+                            <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
+                        </div>
+                        <div class="checkbox-item rectificacion-container">
+                            <input type="checkbox" id="INE_PROPIETARIO" onchange="toggleIneOptions()">
+                            <label for="INE_PROPIETARIO">INE Propietario</label>
+                            <div id="ine-options" class="rectificacion-options" style="display: none;">
+                                <div class="rectificacion-sub-options">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="PARIENTE">
+                                        <label for="PARIENTE">Pariente</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="TESTIGOS">
+                                        <label for="TESTIGOS">Testigos</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="NVO_PROPIETARIO">
+                                        <label for="NVO_PROPIETARIO">Nvo. Propietario</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox-item rectificacion-container">
+                            <input type="checkbox" id="ACTA_DEFUNCION" onchange="toggleActaOptions()">
+                            <label for="ACTA_DEFUNCION">Acta de Defunción</label>
+                            <div id="acta-options" class="rectificacion-options" style="display: none;">
+                                <div class="rectificacion-sub-options">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="INHUMADO">
+                                        <label for="INHUMADO">Inhumado</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="PROPIETARIO_EXHUMADO">
+                                        <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ORDEN_INHUMACION">
+                            <label for="ORDEN_INHUMACION">Orden de Inhumación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="OFICIO_SOLICITUD">
+                            <label for="OFICIO_SOLICITUD">Oficio de Solicitud</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ACTA_NACIMIENTO">
+                            <label for="ACTA_NACIMIENTO">Acta de Nacimiento</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ACTA_MATRIMONIO">
+                            <label for="ACTA_MATRIMONIO">Acta de Matrimonio</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="CARTA_PODER">
+                            <label for="CARTA_PODER">Carta Poder</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="FOTO_LOTE">
+                            <label for="FOTO_LOTE">Fotografía del Lote a Color</label>
+                        </div>
+                        <div class="checkbox-item rectificacion-container">
+                            <input type="checkbox" id="CARTA_RESPONSIVA" onchange="toggleResponsivaOptions()">
+                            <label for="CARTA_RESPONSIVA">Carta Responsiva</label>
+                            <div id="responsiva-options" class="rectificacion-options" style="display: none;">
+                                <div class="rectificacion-sub-options">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="CONSTRUCCION_CARTA">
+                                        <label for="CONSTRUCCION_CARTA">Construcción</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="EXHUMACION_CARTA">
+                                        <label for="EXHUMACION_CARTA">Exhumación</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="TRASPASO_CARTA">
+                                        <label for="TRASPASO_CARTA">Traspaso</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox-item" style="flex-direction: column; align-items: flex-start;">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="OTROS_CHECK" onchange="toggleOtrosField()">
+                                <label for="OTROS_CHECK">Otros</label>
+                            </div>
+                            <textarea id="OTROS" name="OTROS" rows="2" placeholder="Especificar..." style="display: none; width: 100%; margin-top: 10px;"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="checkbox-section">
-                <h3>Tipo de Trámite</h3>
-                <div class="checkbox-grid">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="INHUMACION">
-                        <label for="INHUMACION">Inhumación</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="REP_BOLETA">
-                        <label for="REP_BOLETA">Reposición de Boleta</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="TRASP_LOTE">
-                        <label for="TRASP_LOTE">Traspaso</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="TRASPA_SISTEMA">
-                        <label for="TRASPA_SISTEMA">Alta en el Sistema</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="CONSTRUC_GAVETA">
-                        <label for="CONSTRUC_GAVETA">Construcción</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="CONSTRUC_DEPOSITO">
-                        <label for="CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="EXHUMA_CENIZAS">
-                        <label for="EXHUMA_CENIZAS">Exhumación</label>
-                    </div>
+            <!-- TAB 2: Documentos -->
+            <div id="tab-documentos" class="tab-content">
+                <h3>Documentos del Trámite</h3>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Sube los documentos correspondientes al tipo de trámite seleccionado. 
+                    Los archivos se guardarán en Google Drive.
+                </p>
+
+                <!-- Área de subida -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h4>Arrastra archivos aquí o haz clic para seleccionar</h4>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        Seleccionar Archivos
+                    </button>
+                    <p class="upload-text">Formatos aceptados: PDF, JPG, PNG, DOC, DOCX (Máx. 10MB por archivo)</p>
                 </div>
-            </div>
-            
-            <div class="checkbox-section">
-                <h3>Documentos Entregados</h3>
-                <div class="checkbox-grid">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="BOLETA_PROPIEDAD">
-                        <label for="BOLETA_PROPIEDAD">Boleta de Propiedad</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="PAGO_MANTENIMIENTO">
-                        <label for="PAGO_MANTENIMIENTO">Pago de Mantenimiento</label>
-                    </div>
-                    <div class="checkbox-item rectificacion-container">
-                        <input type="checkbox" id="INE_PROPIETARIO" onchange="toggleIneOptions()">
-                        <label for="INE_PROPIETARIO">INE Propietario</label>
-                        <div id="ine-options" class="rectificacion-options" style="display: none;">
-                            <div class="rectificacion-sub-options">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="PARIENTE">
-                                    <label for="PARIENTE">Pariente</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="TESTIGOS">
-                                    <label for="TESTIGOS">Testigos</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="NVO_PROPIETARIO">
-                                    <label for="NVO_PROPIETARIO">Nvo. Propietario</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="checkbox-item rectificacion-container">
-                        <input type="checkbox" id="ACTA_DEFUNCION" onchange="toggleActaOptions()">
-                        <label for="ACTA_DEFUNCION">Acta de Defunción</label>
-                        <div id="acta-options" class="rectificacion-options" style="display: none;">
-                            <div class="rectificacion-sub-options">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="INHUMADO">
-                                    <label for="INHUMADO">Inhumado</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="PROPIETARIO_EXHUMADO">
-                                    <label for="PROPIETARIO_EXHUMADO">Propietario Exhumado</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="ORDEN_INHUMACION">
-                        <label for="ORDEN_INHUMACION">Orden de Inhumación</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="OFICIO_SOLICITUD">
-                        <label for="OFICIO_SOLICITUD">Oficio de Solicitud</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="ACTA_NACIMIENTO">
-                        <label for="ACTA_NACIMIENTO">Acta de Nacimiento</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="ACTA_MATRIMONIO">
-                        <label for="ACTA_MATRIMONIO">Acta de Matrimonio</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="CARTA_PODER">
-                        <label for="CARTA_PODER">Carta Poder</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="FOTO_LOTE">
-                        <label for="FOTO_LOTE">Fotografía del Lote a Color</label>
-                    </div>
-                    <div class="checkbox-item rectificacion-container">
-                        <input type="checkbox" id="CARTA_RESPONSIVA" onchange="toggleResponsivaOptions()">
-                        <label for="CARTA_RESPONSIVA">Carta Responsiva</label>
-                        <div id="responsiva-options" class="rectificacion-options" style="display: none;">
-                            <div class="rectificacion-sub-options">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="CONSTRUCCION_CARTA">
-                                    <label for="CONSTRUCCION_CARTA">Construcción</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="EXHUMACION_CARTA">
-                                    <label for="EXHUMACION_CARTA">Exhumación</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="TRASPASO_CARTA">
-                                    <label for="TRASPASO_CARTA">Traspaso</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="checkbox-item" style="flex-direction: column; align-items: flex-start;">
-                        <div style="display: flex; align-items: center;">
-                            <input type="checkbox" id="OTROS_CHECK" onchange="toggleOtrosField()">
-                            <label for="OTROS_CHECK">Otros</label>
-                        </div>
-                        <textarea id="OTROS" name="OTROS" rows="2" placeholder="Especificar..." style="display: none; width: 100%; margin-top: 10px;"></textarea>
-                    </div>
+
+                <!-- Barra de progreso -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-progress-bar" id="uploadProgressBar"></div>
                 </div>
+
+                <!-- Lista de archivos seleccionados -->
+                <div id="archivosLista" class="archivos-lista"></div>
             </div>
-            
+
             <div class="button-container">
                 <button type="submit" class="btn-primary">Generar y Guardar Formato</button>
                 <button type="button" class="btn-success" onclick="guardarSoloFormato()">Solo Guardar</button>
@@ -200,6 +310,20 @@
 
     <script src="../js/agregarFormato.js"></script>
     <script>
+        // ===== FUNCIONES PARA PESTAÑAS =====
+        function mostrarTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tabBtn => {
+                tabBtn.classList.remove('active');
+            });
+            
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ===== FUNCIONES EXISTENTES =====
         function toggleIneOptions() {
             const checkbox = document.getElementById('INE_PROPIETARIO');
             const options = document.getElementById('ine-options');
@@ -260,6 +384,8 @@
                 option.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             });
             document.getElementById('OTROS').style.display = 'none';
+            document.getElementById('archivosLista').innerHTML = '';
+            archivosSeleccionados = [];
             mostrarMensaje('Formulario limpiado correctamente', 'success');
         }
 
@@ -272,6 +398,93 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
+        }
+
+        // ===== GESTIÓN DE ARCHIVOS =====
+        let archivosSeleccionados = [];
+
+        // Drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const files = Array.from(e.dataTransfer.files);
+            manejarArchivos(files);
+        });
+
+        // Selección de archivos
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            manejarArchivos(files);
+        });
+
+        function manejarArchivos(files) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 
+                                  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+            files.forEach(file => {
+                if (file.size > maxSize) {
+                    mostrarMensaje(`El archivo ${file.name} excede el tamaño máximo de 10MB`, 'error');
+                    return;
+                }
+
+                if (!allowedTypes.includes(file.type)) {
+                    mostrarMensaje(`El archivo ${file.name} no tiene un formato permitido`, 'error');
+                    return;
+                }
+
+                archivosSeleccionados.push(file);
+            });
+
+            actualizarListaArchivos();
+        }
+
+        function actualizarListaArchivos() {
+            const lista = document.getElementById('archivosLista');
+            lista.innerHTML = '';
+
+            if (archivosSeleccionados.length === 0) {
+                return;
+            }
+
+            archivosSeleccionados.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'archivo-item';
+                item.innerHTML = `
+                    <div class="archivo-info">
+                        <span class="archivo-nombre">📄 ${file.name}</span>
+                        <span style="color: #666; font-size: 12px;">(${formatearTamano(file.size)})</span>
+                    </div>
+                    <button type="button" class="btn-eliminar-archivo" onclick="eliminarArchivo(${index})">
+                        Eliminar
+                    </button>
+                `;
+                lista.appendChild(item);
+            });
+        }
+
+        function eliminarArchivo(index) {
+            archivosSeleccionados.splice(index, 1);
+            actualizarListaArchivos();
+        }
+
+        function formatearTamano(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
     </script>
 </body>

@@ -349,3 +349,228 @@ form textarea:focus {
     margin-bottom: 2px;
   }
 }
+
+/* ===== ESTILOS PARA MÓDULO DE DOCUMENTOS ===== */
+
+/* Contenedor del iframe de documentos */
+#documento-container {
+    margin-top: 20px;
+    border: 2px solid #999;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#documento-iframe {
+    border: none;
+    min-height: 500px;
+    background-color: #fff;
+}
+
+/* Área de subida de archivos */
+.upload-area {
+    border: 2px dashed #DA9B4A;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: #f9f9f9;
+    margin: 20px 0;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: #c8874a;
+    background-color: #fff;
+}
+
+.upload-area.drag-over {
+    background-color: #fff3cd;
+    border-color: #c8874a;
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: #DA9B4A;
+    margin-bottom: 15px;
+}
+
+.upload-area input[type="file"] {
+    display: none;
+}
+
+.upload-btn {
+    padding: 12px 24px;
+    background-color: #DA9B4A;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #c8874a;
+}
+
+.upload-text {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Lista de archivos subidos */
+.archivos-lista {
+    margin-top: 20px;
+}
+
+.archivo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.archivo-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.archivo-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.archivo-icon {
+    font-size: 24px;
+    color: #DA9B4A;
+}
+
+.archivo-detalles {
+    display: flex;
+    flex-direction: column;
+}
+
+.archivo-nombre {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.archivo-meta {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.archivo-acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-ver, .btn-descargar, .btn-eliminar {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.btn-ver {
+    background-color: #2E7FCF;
+    color: white;
+}
+
+.btn-ver:hover {
+    background-color: #1d6bb3;
+}
+
+.btn-descargar {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-descargar:hover {
+    background-color: #218838;
+}
+
+.btn-eliminar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background-color: #c82333;
+}
+
+/* Progress bar para subida */
+.upload-progress {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+    display: none;
+}
+
+.upload-progress.active {
+    display: block;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #DA9B4A, #c8874a);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Badge para tipo de trámite */
+.tramite-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #DA9B4A;
+    color: white;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 8px;
+}
+
+/* Mensaje de no documentos */
+.no-documentos {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .archivo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .archivo-acciones {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .upload-area {
+        padding: 20px;
+    }
+}

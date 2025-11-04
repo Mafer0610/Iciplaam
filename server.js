@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
 
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
@@ -65,6 +66,18 @@ async function cargarArchivosDelDrive() {
         return {};
     }
 }
+
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+
+const auth = new google.auth.GoogleAuth({
+    keyFile: 'path/to/service-account-key.json', // ← Necesitas crear esto
+    scopes: ['https://www.googleapis.com/auth/drive.file']
+});
+
+const driveService = google.drive({ version: 'v3', auth });
 
 // Crear directorio para documentos generados
 const dirDocumentos = path.join(__dirname, 'documentos_generados');
