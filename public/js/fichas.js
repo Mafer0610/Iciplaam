@@ -34,9 +34,9 @@ async function cargarContadores() {
     }
 }
 
-// ✅ NUEVA FUNCIÓN PARA CAMBIAR ESTADO DE FICHA
-async function cambiarEstadoFicha(id, estadoActual) {
-    const nuevoEstado = estadoActual === 'COMPLETO' ? 'INCOMPLETO' : 'COMPLETO';
+// CAMBIAR ESTADO DE FICHA
+async function cambiarEstadoFicha(id, nuevoEstado) {
+    console.log(`Cambiando estado de ficha ${id} a: ${nuevoEstado}`);
     
     try {
         const res = await fetch(`http://localhost:5000/fichas/${id}/estado`, {
@@ -49,12 +49,14 @@ async function cambiarEstadoFicha(id, estadoActual) {
         
         if (res.ok) {
             mostrarMensaje(`Estado cambiado a ${nuevoEstado}`);
-            cargarFichas();
+            cargarFichas(); // Recargar la tabla
         } else {
+            const error = await res.json();
+            console.error('Error del servidor:', error);
             mostrarMensaje("Error al cambiar estado");
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error en la solicitud:", error);
         mostrarMensaje("Error en la solicitud");
     }
 }
@@ -314,3 +316,5 @@ document.addEventListener("click", e => {
         });
     }
 });
+
+window.cambiarEstadoFicha = cambiarEstadoFicha;

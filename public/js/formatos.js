@@ -35,8 +35,8 @@ async function cargarContadores() {
 }
 
 // ✅ NUEVA FUNCIÓN PARA CAMBIAR ESTADO DE FORMATO
-async function cambiarEstadoFormato(id, estadoActual) {
-    const nuevoEstado = estadoActual === 'COMPLETO' ? 'INCOMPLETO' : 'COMPLETO';
+async function cambiarEstadoFormato(id, nuevoEstado) {
+    console.log(`Cambiando estado de formato ${id} a: ${nuevoEstado}`);
     
     try {
         const res = await fetch(`http://localhost:5000/formatos/${id}/estado`, {
@@ -49,12 +49,14 @@ async function cambiarEstadoFormato(id, estadoActual) {
         
         if (res.ok) {
             mostrarMensaje(`Estado cambiado a ${nuevoEstado}`);
-            cargarFormatos();
+            cargarFormatos(); // Recargar la tabla
         } else {
+            const error = await res.json();
+            console.error('Error del servidor:', error);
             mostrarMensaje("Error al cambiar estado");
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error en la solicitud:", error);
         mostrarMensaje("Error en la solicitud");
     }
 }
@@ -244,3 +246,5 @@ document.addEventListener("click", e => {
         });
     }
 });
+
+window.cambiarEstadoFormato = cambiarEstadoFormato;
