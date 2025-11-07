@@ -7,76 +7,52 @@
     <link rel="icon" href="../img/lapida.ico" type="image/x-icon" />
     <link rel="stylesheet" href="../css/stylesFicha.css" />
     <style>
-        /* Incluir CSS de documentos aquí o en archivo separado */
-        .upload-area {
-            border: 2px dashed #DA9B4A;
+        /* Estilos para requisitos */
+        .requisitos-container {
+            background-color: #f8f9fa;
+            border: 2px solid #DA9B4A;
             border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            background-color: #f9f9f9;
+            padding: 20px;
             margin: 20px 0;
-            transition: all 0.3s ease;
-            cursor: pointer;
         }
         
-        .upload-area:hover {
-            border-color: #c8874a;
-            background-color: #fff;
+        .requisitos-container h3 {
+            color: #DA9B4A;
+            margin-top: 0;
+            border-bottom: 2px solid #DA9B4A;
+            padding-bottom: 10px;
         }
         
-        .upload-area.drag-over {
-            background-color: #fff3cd;
-            border-color: #c8874a;
-        }
-        
-        .archivos-lista {
-            margin-top: 15px;
-        }
-        
-        .archivo-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .requisito-item {
             padding: 10px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
+            margin: 8px 0;
+            background: white;
+            border-left: 4px solid #DA9B4A;
             border-radius: 4px;
-            margin-bottom: 8px;
         }
         
-        .archivo-nombre {
-            font-weight: bold;
-            color: #333;
+        .requisito-item label {
+            font-weight: normal !important;
+            margin: 0 !important;
         }
         
-        .btn-eliminar-archivo {
-            padding: 4px 8px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .upload-progress {
-            width: 100%;
-            height: 6px;
-            background-color: #e0e0e0;
-            border-radius: 3px;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .upload-progress.active {
+        .requisito-item strong {
+            color: #2c3e50;
             display: block;
+            margin-bottom: 5px;
         }
         
-        .upload-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #DA9B4A, #c8874a);
-            transition: width 0.3s ease;
-            border-radius: 3px;
+        .nota-importante {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        
+        .nota-importante strong {
+            color: #856404;
         }
     </style>
     <script src="../js/auth.js"></script>
@@ -110,6 +86,7 @@
         <!-- Pestañas -->
         <div class="tab-container">
             <button class="tab active" onclick="mostrarTab('datos')">Datos del Formato</button>
+            <button class="tab" onclick="mostrarTab('requisitos')">Requisitos del Trámite</button>
             <button class="tab" onclick="mostrarTab('documentos')">Documentos</button>
         </div>
         
@@ -139,31 +116,31 @@
                     <h3>Tipo de Trámite</h3>
                     <div class="checkbox-grid">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="INHUMACION">
+                            <input type="checkbox" id="INHUMACION" onchange="actualizarRequisitos()">
                             <label for="INHUMACION">Inhumación</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="REP_BOLETA">
+                            <input type="checkbox" id="REP_BOLETA" onchange="actualizarRequisitos()">
                             <label for="REP_BOLETA">Reposición de Boleta</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="TRASP_LOTE">
+                            <input type="checkbox" id="TRASP_LOTE" onchange="actualizarRequisitos()">
                             <label for="TRASP_LOTE">Traspaso</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="TRASPA_SISTEMA">
+                            <input type="checkbox" id="TRASPA_SISTEMA" onchange="actualizarRequisitos()">
                             <label for="TRASPA_SISTEMA">Alta en el Sistema</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="CONSTRUC_GAVETA">
+                            <input type="checkbox" id="CONSTRUC_GAVETA" onchange="actualizarRequisitos()">
                             <label for="CONSTRUC_GAVETA">Construcción</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="CONSTRUC_DEPOSITO">
+                            <input type="checkbox" id="CONSTRUC_DEPOSITO" onchange="actualizarRequisitos()">
                             <label for="CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="EXHUMA_CENIZAS">
+                            <input type="checkbox" id="EXHUMA_CENIZAS" onchange="actualizarRequisitos()">
                             <label for="EXHUMA_CENIZAS">Exhumación</label>
                         </div>
                     </div>
@@ -271,7 +248,16 @@
                 </div>
             </div>
 
-            <!-- TAB 2: Documentos -->
+            <!-- TAB 2: Requisitos -->
+            <div id="tab-requisitos" class="tab-content">
+                <div id="requisitos-contenido">
+                    <p style="text-align: center; color: #666; padding: 40px;">
+                        Selecciona un tipo de trámite en la pestaña "Datos del Formato" para ver los requisitos correspondientes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB 3: Documentos -->
             <div id="tab-documentos" class="tab-content">
                 <h3>Documentos del Trámite</h3>
                 <p style="color: #666; margin-bottom: 20px;">
@@ -279,7 +265,6 @@
                     Los archivos se guardarán en Google Drive.
                 </p>
 
-                <!-- Área de subida -->
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-icon">📁</div>
                     <h4>Arrastra archivos aquí o haz clic para seleccionar</h4>
@@ -290,12 +275,10 @@
                     <p class="upload-text">Formatos aceptados: PDF, JPG, PNG, DOC, DOCX (Máx. 10MB por archivo)</p>
                 </div>
 
-                <!-- Barra de progreso -->
                 <div class="upload-progress" id="uploadProgress">
                     <div class="upload-progress-bar" id="uploadProgressBar"></div>
                 </div>
 
-                <!-- Lista de archivos seleccionados -->
                 <div id="archivosLista" class="archivos-lista"></div>
             </div>
 
@@ -310,7 +293,88 @@
 
     <script src="../js/agregarFormato.js"></script>
     <script>
-        // ===== FUNCIONES PARA PESTAÑAS =====
+        // ===== DEFINICIÓN DE REQUISITOS POR TIPO DE TRÁMITE =====
+        const requisitosPorTramite = {
+            TRASPA_SISTEMA: {
+                titulo: "Alta por Rezago de Pago",
+                requisitos: [
+                    "Orig. y 2 copias de boleta de propiedad",
+                    "2 copias de INE del titular del lote (si vive)",
+                    "2 copias de INE de quien realiza el trámite (familiar directo)",
+                    "2 copias del acta de defunción de la última persona inhumada",
+                    "2 fotografías a color del lote",
+                    "Hoja del libro de registro del panteón",
+                    "Original y 1 copia del oficio de solicitud"
+                ]
+            },
+            TRASP_LOTE: {
+                titulo: "Trámite de Traspaso",
+                requisitos: [
+                    "Orig. y 2 copias de boleta de propiedad",
+                    "Orig. y 2 copias del último pago de mantenimiento",
+                    "Carta poder (si vive el titular)",
+                    "2 copias de INE de los testigos de la carta poder",
+                    "2 copias de INE a color del titular del lote",
+                    "2 copias de INE a color del nuevo propietario",
+                    "2 copias del acta de defunción (si el titular ha fallecido)",
+                    "2 copias de acta de nacimiento o matrimonio (si familiar directo)",
+                    "2 fotos impresas a color del lote a traspasar",
+                    "Original y 1 copia de carta de responsabilidad",
+                    "Original y 1 copia del oficio de solicitud",
+                    "2 copias de recibo de exhumación (si es traspaso entre terceros)"
+                ],
+                nota: "Todo traspaso entre terceras personas (primo, tío, conocido, comprador) requerirá exhumar a las personas inhumadas en el lote, siempre y cuando hayan pasado 7 años de la inhumación."
+            },
+            INHUMACION: {
+                titulo: "Solicitud de Inhumación",
+                requisitos: [
+                    "Orig. y 2 copias de boleta de propiedad",
+                    "Orig. y 2 copias del último pago de mantenimiento",
+                    "2 copias de INE del titular del lote (si vive)",
+                    "2 copias de INE de quien realiza el trámite (familiar directo)",
+                    "Original y 1 copia de orden de inhumación",
+                    "2 copias del acta de defunción",
+                    "2 fotografías a color del lote (3ª clase)"
+                ],
+                nota: "EN CASO DE NO TENER BOLETA DE PROPEDAD ORIGINAL: Realizar oficio dirigido al Director y anexar 2 recibos de mantenimientos anteriores."
+            },
+            EXHUMA_CENIZAS: {
+                titulo: "Solicitud de Exhumación",
+                requisitos: [
+                    "Orig. y 2 copias de boleta de propiedad",
+                    "Orig. y 2 copias del último pago de mantenimiento",
+                    "2 copias de INE del titular del lote (si vive)",
+                    "2 copias de INE de quien realiza el trámite (familiar directo)",
+                    "2 copias del acta de defunción de la persona a exhumar",
+                    "Original y 1 copia del oficio de solicitud"
+                ]
+            },
+            REP_BOLETA: {
+                titulo: "Solicitud de Reposición de Boleta",
+                requisitos: [
+                    "Orig. y 2 copias del último pago de mantenimiento",
+                    "Orig. y 2 copias de 2 pagos de mantenimiento de años anteriores",
+                    "2 copias de INE del titular del lote (si vive)",
+                    "2 copias de INE de quien realiza el trámite (familiar directo)",
+                    "2 fotografías a color del lote (3ª clase)",
+                    "Original y 1 copia del oficio de solicitud"
+                ]
+            },
+            CONSTRUC_GAVETA: {
+                titulo: "Permiso de Construcción/Remodelación",
+                requisitos: [
+                    "Orig. y 2 copias de boleta de propiedad",
+                    "Orig. y 2 copias del último pago de mantenimiento",
+                    "2 copias de INE del titular del lote (si vive)",
+                    "2 copias de INE de quien realiza el trámite (familiar directo)",
+                    "Carta compromiso con 2 copias de INE del albañil",
+                    "2 fotografías a color del lote (3ª clase)"
+                ],
+                nota: "EN CASO DE NO TENER BOLETA DE PROPEDAD ORIGINAL: Realizar oficio dirigido al Director y anexar 2 recibos de mantenimientos anteriores."
+            }
+        };
+
+        // ===== FUNCIÓN PARA MOSTRAR PESTAÑAS =====
         function mostrarTab(tab) {
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
@@ -321,6 +385,52 @@
             
             document.getElementById(`tab-${tab}`).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        // ===== FUNCIÓN PARA ACTUALIZAR REQUISITOS =====
+        function actualizarRequisitos() {
+            const contenedorRequisitos = document.getElementById('requisitos-contenido');
+            let html = '';
+
+            // Obtener trámites seleccionados
+            const tramitesSeleccionados = [];
+            
+            if (document.getElementById('TRASPA_SISTEMA').checked) tramitesSeleccionados.push('TRASPA_SISTEMA');
+            if (document.getElementById('TRASP_LOTE').checked) tramitesSeleccionados.push('TRASP_LOTE');
+            if (document.getElementById('INHUMACION').checked) tramitesSeleccionados.push('INHUMACION');
+            if (document.getElementById('EXHUMA_CENIZAS').checked) tramitesSeleccionados.push('EXHUMA_CENIZAS');
+            if (document.getElementById('REP_BOLETA').checked) tramitesSeleccionados.push('REP_BOLETA');
+            if (document.getElementById('CONSTRUC_GAVETA').checked) tramitesSeleccionados.push('CONSTRUC_GAVETA');
+
+            if (tramitesSeleccionados.length === 0) {
+                html = `<p style="text-align: center; color: #666; padding: 40px;">
+                    Selecciona un tipo de trámite para ver los requisitos correspondientes.
+                </p>`;
+            } else {
+                tramitesSeleccionados.forEach(tramite => {
+                    const req = requisitosPorTramite[tramite];
+                    if (req) {
+                        html += `
+                            <div class="requisitos-container">
+                                <h3>📋 ${req.titulo}</h3>
+                                <p><strong>Sube los siguientes documentos:</strong></p>
+                                ${req.requisitos.map(r => `
+                                    <div class="requisito-item">
+                                        <label>• ${r}</label>
+                                    </div>
+                                `).join('')}
+                                ${req.nota ? `
+                                    <div class="nota-importante">
+                                        <strong>Nota:</strong> ${req.nota}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            contenedorRequisitos.innerHTML = html;
         }
 
         // ===== FUNCIONES EXISTENTES =====
@@ -385,7 +495,10 @@
             });
             document.getElementById('OTROS').style.display = 'none';
             document.getElementById('archivosLista').innerHTML = '';
-            archivosSeleccionados = [];
+            if (window.archivosSeleccionados) {
+                window.archivosSeleccionados = [];
+            }
+            actualizarRequisitos();
             mostrarMensaje('Formulario limpiado correctamente', 'success');
         }
 
@@ -398,93 +511,6 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
-        }
-
-        // ===== GESTIÓN DE ARCHIVOS =====
-        let archivosSeleccionados = [];
-
-        // Drag and drop
-        const uploadArea = document.getElementById('uploadArea');
-        
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('drag-over');
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('drag-over');
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-            const files = Array.from(e.dataTransfer.files);
-            manejarArchivos(files);
-        });
-
-        // Selección de archivos
-        document.getElementById('fileInput').addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            manejarArchivos(files);
-        });
-
-        function manejarArchivos(files) {
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 
-                                  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-
-            files.forEach(file => {
-                if (file.size > maxSize) {
-                    mostrarMensaje(`El archivo ${file.name} excede el tamaño máximo de 10MB`, 'error');
-                    return;
-                }
-
-                if (!allowedTypes.includes(file.type)) {
-                    mostrarMensaje(`El archivo ${file.name} no tiene un formato permitido`, 'error');
-                    return;
-                }
-
-                archivosSeleccionados.push(file);
-            });
-
-            actualizarListaArchivos();
-        }
-
-        function actualizarListaArchivos() {
-            const lista = document.getElementById('archivosLista');
-            lista.innerHTML = '';
-
-            if (archivosSeleccionados.length === 0) {
-                return;
-            }
-
-            archivosSeleccionados.forEach((file, index) => {
-                const item = document.createElement('div');
-                item.className = 'archivo-item';
-                item.innerHTML = `
-                    <div class="archivo-info">
-                        <span class="archivo-nombre">📄 ${file.name}</span>
-                        <span style="color: #666; font-size: 12px;">(${formatearTamano(file.size)})</span>
-                    </div>
-                    <button type="button" class="btn-eliminar-archivo" onclick="eliminarArchivo(${index})">
-                        Eliminar
-                    </button>
-                `;
-                lista.appendChild(item);
-            });
-        }
-
-        function eliminarArchivo(index) {
-            archivosSeleccionados.splice(index, 1);
-            actualizarListaArchivos();
-        }
-
-        function formatearTamano(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
     </script>
 </body>

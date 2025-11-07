@@ -4,6 +4,8 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const { JWT } = require('google-auth-library');
+const stream = require('stream');
 
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
@@ -1456,6 +1458,159 @@ app.patch('/formatos/:id/estado', async (req, res) => {
     } catch (err) {
         console.error('Error al actualizar estado de formato:', err);
         res.status(500).json({ error: 'Error al actualizar el estado' });
+    }
+});
+
+const serviceAccountAuth = new JWT({
+    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: process.env.GOOGLE_SERVICE_ACCOUNT_KEY.replace(/\\n/g, '\n'),
+    scopes: ['https://www.googleapis.com/auth/drive.file']
+});
+
+const driveWithAuth = google.drive({ version: 'v3', auth: serviceAccountAuth });
+
+// ID de la carpeta de Google Drive donde se subirán los documentos
+const DOCUMENTOS_FOLDER_ID = '1o_Iq1xX_J8HFZxecjATmMZRIHNIhHG-p'; // Del .env
+
+// ===== RUTA PARA SUBIR DOCUMENTOS A GOOGLE DRIVE =====
+app.post('/subir-documento-drive', upload.single('file'), async (req, res) => {
+    try {
+        const file = req.file;
+        const { formatoId, tipoTramite } = req.body;
+
+        if (!file) {
+            return res.status(400).json({ error: 'No se proporcionó ningún archivo' });
+        }
+
+        console.log(`📤 Subiendo archivo: ${file.originalname}`);
+        console.log(`Formato ID: ${formatoId}, Tipo: ${tipoTramite}`);
+
+        // Crear stream del buffer
+        const bufferStream = new stream.PassThrough();
+        bufferStream.end(file.buffer);
+
+        // Metadatos del archivo para Google Drive
+        const fileMetadata = {
+            name: file.originalname,
+            parents: [DOCUMENTOS_FOLDER_ID]
+        };
+
+        const media = {
+            mimeType: file.mimetype,
+            body: bufferStream
+        };
+
+        // Subir archivo a Google Drive
+        const driveResponse = await driveWithAuth.files.create({
+            requestBody: fileMetadata,
+            media: media,
+            fields: 'id, name, webViewLink, webContentLink'
+        });
+
+        console.log(`✅ Archivo subido a Drive: ${driveResponse.data.name}`);
+        console.log(`ID: ${driveResponse.data.id}`);
+
+        // Hacer el archivo público (opcional)
+        await driveWithAuth.permissions.create({
+            fileId: driveResponse.data.id,
+            requestBody: {
+                role: 'reader',
+                type: 'anyone'
+            }
+        });
+
+        // Guardar información del documento en MongoDB
+        const documentoInfo = {
+            nombre_archivo: file.originalname,
+            tipo_tramite: tipoTramite,
+            drive_file_id: driveResponse.data.id,
+            drive_url: driveResponse.data.webViewLink,
+            tamano: file.size,
+            tipo_mime: file.mimetype,
+            fecha_subida: new Date()
+        };
+
+        // Actualizar el formato en MongoDB para agregar el documento
+        await Control.findByIdAndUpdate(
+            formatoId,
+            {
+                $push: { DOCUMENTOS_SUBIDOS: documentoInfo }
+            }
+        );
+
+        console.log(`✅ Información del documento guardada en MongoDB`);
+
+        res.json({
+            mensaje: 'Archivo subido exitosamente',
+            documento: documentoInfo
+        });
+
+    } catch (error) {
+        console.error('❌ Error al subir archivo a Drive:', error);
+        res.status(500).json({ 
+            error: 'Error al subir el archivo',
+            detalle: error.message 
+        });
+    }
+});
+
+// ===== RUTA PARA OBTENER DOCUMENTOS DE UN FORMATO =====
+app.get('/formatos/:id/documentos', async (req, res) => {
+    try {
+        const formato = await Control.findById(req.params.id);
+        
+        if (!formato) {
+            return res.status(404).json({ error: 'Formato no encontrado' });
+        }
+
+        res.json({
+            documentos: formato.DOCUMENTOS_SUBIDOS || []
+        });
+
+    } catch (error) {
+        console.error('Error al obtener documentos:', error);
+        res.status(500).json({ error: 'Error al obtener documentos' });
+    }
+});
+
+// ===== RUTA PARA ELIMINAR DOCUMENTO DE DRIVE =====
+app.delete('/formatos/:formatoId/documentos/:documentoId', async (req, res) => {
+    try {
+        const { formatoId, documentoId } = req.params;
+
+        // Buscar el formato y el documento
+        const formato = await Control.findById(formatoId);
+        
+        if (!formato) {
+            return res.status(404).json({ error: 'Formato no encontrado' });
+        }
+
+        const documento = formato.DOCUMENTOS_SUBIDOS.id(documentoId);
+        
+        if (!documento) {
+            return res.status(404).json({ error: 'Documento no encontrado' });
+        }
+
+        // Eliminar de Google Drive
+        try {
+            await driveWithAuth.files.delete({
+                fileId: documento.drive_file_id
+            });
+            console.log(`✅ Archivo eliminado de Drive: ${documento.nombre_archivo}`);
+        } catch (driveError) {
+            console.error('Error al eliminar de Drive:', driveError);
+            // Continuar aunque falle la eliminación de Drive
+        }
+
+        // Eliminar de MongoDB
+        formato.DOCUMENTOS_SUBIDOS.pull(documentoId);
+        await formato.save();
+
+        res.json({ mensaje: 'Documento eliminado correctamente' });
+
+    } catch (error) {
+        console.error('Error al eliminar documento:', error);
+        res.status(500).json({ error: 'Error al eliminar documento' });
     }
 });
 
