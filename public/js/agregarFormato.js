@@ -1,4 +1,4 @@
-// agregarFormato.js - Versión Completa con Gestión de Archivos
+// agregarFormato.js - Versión Corregida con Gestión de Archivos
 
 let archivosSeleccionados = [];
 
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
 
     if (uploadArea) {
+        // Drag and drop
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('drag-over');
@@ -46,21 +47,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function manejarArchivos(files) {
     const maxSize = 10 * 1024 * 1024; // 10MB
-    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 
-                          'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+        'application/pdf', 
+        'image/jpeg', 
+        'image/png', 
+        'image/jpg',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
 
     files.forEach(file => {
+        // Validar tamaño
         if (file.size > maxSize) {
             mostrarMensaje(`El archivo ${file.name} excede el tamaño máximo de 10MB`, 'error');
             return;
         }
 
+        // Validar tipo
         if (!allowedTypes.includes(file.type)) {
             mostrarMensaje(`El archivo ${file.name} no tiene un formato permitido`, 'error');
             return;
         }
 
-        archivosSeleccionados.push(file);
+        // Evitar duplicados
+        const existe = archivosSeleccionados.some(f => 
+            f.name === file.name && f.size === file.size
+        );
+        
+        if (!existe) {
+            archivosSeleccionados.push(file);
+        } else {
+            mostrarMensaje(`El archivo ${file.name} ya fue agregado`, 'error');
+            return;
+        }
     });
 
     actualizarListaArchivos();
@@ -79,22 +98,37 @@ function actualizarListaArchivos() {
     archivosSeleccionados.forEach((file, index) => {
         const item = document.createElement('div');
         item.className = 'archivo-item';
+        
+        // Icono según tipo de archivo
+        const extension = file.name.split('.').pop().toLowerCase();
+        let icono = '📄';
+        if (['jpg', 'jpeg', 'png'].includes(extension)) icono = '🖼️';
+        if (extension === 'pdf') icono = '📕';
+        if (['doc', 'docx'].includes(extension)) icono = '📘';
+        
         item.innerHTML = `
             <div class="archivo-info">
-                <span class="archivo-nombre">📄 ${file.name}</span>
-                <span style="color: #666; font-size: 12px;">(${formatearTamano(file.size)})</span>
+                <span class="archivo-icon">${icono}</span>
+                <div class="archivo-detalles">
+                    <span class="archivo-nombre">${file.name}</span>
+                    <span class="archivo-meta">${formatearTamano(file.size)}</span>
+                </div>
             </div>
-            <button type="button" class="btn-eliminar-archivo" onclick="eliminarArchivo(${index})">
-                Eliminar
+            <button type="button" class="btn-eliminar" onclick="eliminarArchivo(${index})">
+                ✕ Eliminar
             </button>
         `;
         lista.appendChild(item);
     });
+
+    console.log(`📎 Total de archivos seleccionados: ${archivosSeleccionados.length}`);
 }
 
 function eliminarArchivo(index) {
+    const archivoEliminado = archivosSeleccionados[index];
     archivosSeleccionados.splice(index, 1);
     actualizarListaArchivos();
+    mostrarMensaje(`Archivo "${archivoEliminado.name}" eliminado de la lista`, 'success');
 }
 
 function formatearTamano(bytes) {
@@ -103,6 +137,101 @@ function formatearTamano(bytes) {
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// ===== SUBIR ARCHIVOS A GOOGLE DRIVE =====
+async function subirArchivos(formatoId) {
+    if (archivosSeleccionados.length === 0) {
+        console.log('No hay archivos para subir');
+        return { exito: true, mensaje: 'No hay archivos para subir' };
+    }
+
+    console.log(`📤 Iniciando subida de ${archivosSeleccionados.length} archivos...`);
+    
+    const tiposTramite = recopilarTiposTramite();
+    const tipoTramiteStr = tiposTramite.join(', ') || 'General';
+    
+    let archivosSubidos = 0;
+    let errores = [];
+
+    const progressBar = document.getElementById('uploadProgressBar');
+    const uploadProgress = document.getElementById('uploadProgress');
+    uploadProgress.style.display = 'block';
+
+    for (let i = 0; i < archivosSeleccionados.length; i++) {
+        const file = archivosSeleccionados[i];
+        
+        try {
+            console.log(`Subiendo archivo ${i + 1}/${archivosSeleccionados.length}: ${file.name}`);
+            
+            // Crear FormData para cada archivo
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('formatoId', formatoId);
+            formData.append('tipoTramite', tipoTramiteStr);
+
+            // Subir a servidor
+            const response = await fetch('http://localhost:5000/subir-documento-drive', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Error al subir archivo');
+            }
+
+            const resultado = await response.json();
+            console.log(`✅ Archivo "${file.name}" subido exitosamente`);
+            console.log('Drive ID:', resultado.documento.drive_file_id);
+            
+            archivosSubidos++;
+            
+            // Actualizar barra de progreso
+            const progreso = ((i + 1) / archivosSeleccionados.length) * 100;
+            progressBar.style.width = `${progreso}%`;
+            
+        } catch (error) {
+            console.error(`❌ Error al subir "${file.name}":`, error);
+            errores.push(`${file.name}: ${error.message}`);
+        }
+    }
+
+    // Ocultar barra de progreso
+    setTimeout(() => {
+        uploadProgress.style.display = 'none';
+        progressBar.style.width = '0%';
+    }, 2000);
+
+    if (errores.length > 0) {
+        console.error('Errores durante la subida:', errores);
+        return {
+            exito: false,
+            mensaje: `Se subieron ${archivosSubidos} de ${archivosSeleccionados.length} archivos. Errores: ${errores.join('; ')}`
+        };
+    }
+
+    return {
+        exito: true,
+        mensaje: `${archivosSubidos} archivos subidos exitosamente`
+    };
+}
+
+function recopilarTiposTramite() {
+    const tipos = [];
+    const checkboxes = [
+        'INHUMACION', 'REP_BOLETA', 'TRASP_LOTE', 'TRASPA_SISTEMA',
+        'CONSTRUC_GAVETA', 'CONSTRUC_DEPOSITO', 'EXHUMA_CENIZAS'
+    ];
+    
+    checkboxes.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox && checkbox.checked) {
+            tipos.push(id);
+        }
+    });
+    
+    return tipos;
 }
 
 // ===== RECOPILAR DATOS DEL FORMATO =====
@@ -174,7 +303,7 @@ function recopilarDatosFormato() {
 // ===== GUARDAR FORMATO EN BD =====
 async function guardarFormato(datos) {
     try {
-        console.log('Enviando formato a BD:', datos);
+        console.log('💾 Guardando formato en base de datos...');
         const response = await fetch('http://localhost:5000/control', {
             method: 'POST',
             headers: {
@@ -185,8 +314,8 @@ async function guardarFormato(datos) {
         
         if (response.ok) {
             const result = await response.json();
-            console.log('Formato guardado en base de datos:', result);
-            mostrarMensaje('Formato guardado en base de datos correctamente', 'success');
+            console.log('✅ Formato guardado - ID:', result.id);
+            mostrarMensaje('Formato guardado en base de datos', 'success');
             return result.id;
         } else {
             const error = await response.json();
@@ -195,7 +324,7 @@ async function guardarFormato(datos) {
             return null;
         }
     } catch (error) {
-        console.error('Error al guardar formato:', error);
+        console.error('Error de conexión:', error);
         mostrarMensaje('Error de conexión al guardar formato', 'error');
         return null;
     }
@@ -204,7 +333,7 @@ async function guardarFormato(datos) {
 // ===== GENERAR DOCUMENTO WORD =====
 async function generarFormato(datos) {
     try {
-        mostrarMensaje('Generando Formato de Control...', 'success');
+        mostrarMensaje('Generando documento...', 'success');
         
         const response = await fetch('http://localhost:5000/generar-tramite', {
             method: 'POST',
@@ -219,13 +348,13 @@ async function generarFormato(datos) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Formato_de_Control_${new Date().toISOString().split('T')[0]}.docx`;
+            a.download = `Formato_Control_${new Date().toISOString().split('T')[0]}.docx`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
             
-            mostrarMensaje('Formato de control generado y descargado correctamente', 'success');
+            mostrarMensaje('Documento generado y descargado', 'success');
             return true;
         } else {
             const error = await response.json();
@@ -234,24 +363,45 @@ async function generarFormato(datos) {
         }
     } catch (error) {
         console.error('Error:', error);
-        mostrarMensaje('Error al generar el formato de control', 'error');
+        mostrarMensaje('Error al generar el documento', 'error');
         return false;
     }
 }
 
-// ===== GUARDAR SOLO FORMATO (SIN GENERAR DOCUMENTO) =====
+// ===== GUARDAR SOLO FORMATO =====
 async function guardarSoloFormato() {
-    console.log('=== GUARDANDO SOLO FORMATO ===');
-    const datos = recopilarDatosFormato();
-    console.log('Datos de formato recopilados:', datos);
+    console.log('=== GUARDANDO FORMATO CON ARCHIVOS ===');
     
+    if (!validarFormulario()) {
+        return;
+    }
+    
+    const datos = recopilarDatosFormato();
     const formatoId = await guardarFormato(datos);
     
-    if (formatoId) {
-        setTimeout(() => {
-            window.location.href = '../panelFormatos.html';
-        }, 2000);
+    if (!formatoId) {
+        mostrarMensaje('Error: No se pudo guardar el formato', 'error');
+        return;
     }
+    
+    // Subir archivos si hay
+    if (archivosSeleccionados.length > 0) {
+        mostrarMensaje(`Subiendo ${archivosSeleccionados.length} archivos...`, 'success');
+        const resultadoSubida = await subirArchivos(formatoId);
+        
+        if (!resultadoSubida.exito) {
+            mostrarMensaje(resultadoSubida.mensaje, 'error');
+            return;
+        }
+        
+        mostrarMensaje('Formato y archivos guardados exitosamente', 'success');
+    } else {
+        mostrarMensaje('Formato guardado sin archivos', 'success');
+    }
+    
+    setTimeout(() => {
+        window.location.href = '../panelFormatos.html';
+    }, 2000);
 }
 
 function validarFormulario() {
@@ -274,21 +424,13 @@ function validarFormulario() {
         }
     });
     
-    // Validar que al menos un tipo de trámite esté seleccionado
-    const tiposSeleccionados = [];
-    ['INHUMACION', 'REP_BOLETA', 'TRASP_LOTE', 'TRASPA_SISTEMA', 
-     'CONSTRUC_GAVETA', 'CONSTRUC_DEPOSITO', 'EXHUMA_CENIZAS'].forEach(tipo => {
-        if (document.getElementById(tipo)?.checked) {
-            tiposSeleccionados.push(tipo);
-        }
-    });
-    
+    const tiposSeleccionados = recopilarTiposTramite();
     if (tiposSeleccionados.length === 0) {
         errores.push('Debe seleccionar al menos un tipo de trámite');
     }
     
     if (errores.length > 0) {
-        mostrarMensaje(`Por favor complete los siguientes campos: ${errores.join(', ')}`, 'error');
+        mostrarMensaje(`Complete los campos: ${errores.join(', ')}`, 'error');
         return false;
     }
     
@@ -303,25 +445,36 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Validar antes de procesar
             if (!validarFormulario()) {
                 return;
             }
             
-            console.log('=== ENVIANDO FORMATO DE CONTROL ===');
+            console.log('=== ENVIANDO FORMATO COMPLETO ===');
             const datos = recopilarDatosFormato();
-            console.log('Datos de formato recopilados:', datos);
             
-            const guardado = await guardarFormato(datos);
+            // 1. Guardar formato en BD
+            const formatoId = await guardarFormato(datos);
             
-            if (guardado) {
-                const generado = await generarFormato(datos);
-                
-                if (generado) {
-                    setTimeout(() => {
-                        window.location.href = '../panelFormatos.html';
-                    }, 2000);
+            if (!formatoId) {
+                mostrarMensaje('Error al guardar formato en base de datos', 'error');
+                return;
+            }
+            
+            // 2. Subir archivos si hay
+            if (archivosSeleccionados.length > 0) {
+                const resultadoSubida = await subirArchivos(formatoId);
+                if (!resultadoSubida.exito) {
+                    mostrarMensaje(resultadoSubida.mensaje, 'error');
                 }
+            }
+            
+            // 3. Generar documento Word
+            const generado = await generarFormato(datos);
+            
+            if (generado) {
+                setTimeout(() => {
+                    window.location.href = '../panelFormatos.html';
+                }, 2000);
             }
         });
     }
@@ -337,5 +490,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    console.log('Sistema de generación de formatos iniciado');
+    console.log('✅ Sistema de formatos con archivos iniciado');
 });
