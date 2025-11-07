@@ -254,6 +254,47 @@ async function guardarSoloFormato() {
     }
 }
 
+function validarFormulario() {
+    const camposRequeridos = [
+        { id: 'NOMB_CONTRI', nombre: 'Nombre del Contribuyente' },
+        { id: 'DIRECCION', nombre: 'Dirección' },
+        { id: 'UBICACION_LOTE', nombre: 'Ubicación del Lote' },
+        { id: 'MEDIDA_TRAMITE', nombre: 'Medida' }
+    ];
+    
+    let errores = [];
+    
+    camposRequeridos.forEach(campo => {
+        const input = document.getElementById(campo.id);
+        if (!input || !input.value.trim()) {
+            errores.push(campo.nombre);
+            if (input) input.style.borderColor = '#e74c3c';
+        } else {
+            if (input) input.style.borderColor = '#27ae60';
+        }
+    });
+    
+    // Validar que al menos un tipo de trámite esté seleccionado
+    const tiposSeleccionados = [];
+    ['INHUMACION', 'REP_BOLETA', 'TRASP_LOTE', 'TRASPA_SISTEMA', 
+     'CONSTRUC_GAVETA', 'CONSTRUC_DEPOSITO', 'EXHUMA_CENIZAS'].forEach(tipo => {
+        if (document.getElementById(tipo)?.checked) {
+            tiposSeleccionados.push(tipo);
+        }
+    });
+    
+    if (tiposSeleccionados.length === 0) {
+        errores.push('Debe seleccionar al menos un tipo de trámite');
+    }
+    
+    if (errores.length > 0) {
+        mostrarMensaje(`Por favor complete los siguientes campos: ${errores.join(', ')}`, 'error');
+        return false;
+    }
+    
+    return true;
+}
+
 // ===== EVENT LISTENER PRINCIPAL =====
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('formatoForm');
@@ -261,6 +302,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Validar antes de procesar
+            if (!validarFormulario()) {
+                return;
+            }
+            
             console.log('=== ENVIANDO FORMATO DE CONTROL ===');
             const datos = recopilarDatosFormato();
             console.log('Datos de formato recopilados:', datos);
