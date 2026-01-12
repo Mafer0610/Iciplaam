@@ -9,10 +9,9 @@ const controlSchema = new mongoose.Schema({
     DOCUMENTOS_ENTREGADOS: [String],
     OTROS: String,
     
-    // ✨ NUEVO: Array para almacenar documentos subidos
     DOCUMENTOS_SUBIDOS: [{
         nombre_archivo: String,
-        tipo_tramite: String, // 'INHUMACION', 'TRASPASO', etc.
+        tipo_tramite: String,
         drive_file_id: String,
         drive_url: String,
         fecha_subida: {
