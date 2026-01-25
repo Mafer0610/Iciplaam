@@ -25,7 +25,7 @@ html, body {
 
 .header-left img,
 .header-right img {
-  height: 50px;
+  height: 60px;
   object-fit: contain;
 }
 
