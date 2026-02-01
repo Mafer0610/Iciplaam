@@ -1,6 +1,6 @@
 /* 🎨 Variables globales */
 :root {
-  --bgColor: #000000; /* letras y boton de opciones */
+  --bgColor: #000000;
   --txtColor: #ffffff;
   --borColor: rgba(0, 0, 0, 0);
   --sizeVar: 8px;
@@ -20,16 +20,12 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-/* 📦 Contenido principal */
+
+/* stylesAdminRegis.css */
 .main-content {
-  margin-top: 80px; /* igual a la altura del header */
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  margin-top: 0;          /* ← evita duplicación y quita el espacio gris */
   padding: 20px;
 }
-
 
 .contenedor-tabla,
 .table-container {
@@ -43,7 +39,6 @@ html, body {
 }
 
 /* 🔍 Barra de búsqueda */
-/* ✅ Consolidado: se eliminaron definiciones duplicadas */
 .barra-busqueda {
   display: flex;
   justify-content: space-between;
@@ -76,7 +71,6 @@ html, body {
 }
 
 /* 📊 Botones de pestañas */
-/* ✅ Consolidado: se eliminaron duplicados y se agruparon estilos comunes */
 .botones-tabla {
   display: flex;
   justify-content: center;
@@ -88,33 +82,39 @@ html, body {
   position: relative;
 }
 
-.botones-tabla button {
+/* Convertir los botones en enlaces sin perder estilo */
+.botones-tabla a {
   flex: 1;
   padding: 12px 0;
   font-size: 16px;
   font-weight: bold;
-  border: none;
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
   border-radius: 0;
   background: linear-gradient(135deg, #DA9B4A 0%, #DA9B4A 100%);
   color: rgb(0, 0, 0);
+  text-align: center;
+  display: inline-block;
+  border: none;
 }
 
-.botones-tabla button:not(:last-child) {
+.botones-tabla a:not(:last-child)
+{
   border-right: 1px solid rgb(0, 0, 0);
 }
 
-.botones-tabla button:hover {
+.botones-tabla a:hover
+{
   opacity: 0.9;
 }
-/* Boton Registros-Ficha */
+
 .botones-tabla button.active {
   background: linear-gradient(135deg, #DA9B4A 0%, #A55108 100%);
 }
 
+
 /* 📈 Tablas */
-/* ✅ Consolidado: se eliminó table-layout duplicado y se unificaron estilos */
 #tabla-registros,
 #tabla-fichas {
   width: 100%;
@@ -135,7 +135,7 @@ table {
   border-collapse: collapse;
   font-size: 15px;
 }
-/* Color de la tabla */
+
 table th,
 table td {
   padding: 8px;
@@ -144,13 +144,13 @@ table td {
   border-bottom: 0px solid #000000;
   background-color: #b3b3b3;
 }
-/* columna acciones */
+
 table td:last-child {
   padding: 8px;
 }
 
 table td:last-child .flexDiv {
-  display: inline-flex; /* ✅ más controlado que flex */
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -339,54 +339,14 @@ thead th {
   transition: background-color 0.3s ease;
 }
 
-/* ✅ Consolidado: se eliminaron duplicados y se usaron variables para consistencia */
 .sec_btn:focus {
   --borColor: rgba(0, 0, 0, 0.4);
 }
-/* boton opciones poniendo encima el raton*/
+
 .sec_btn:hover {
   background-color: #443f3f;
 }
-/* boton opciones dando click*/
+
 .sec_btn:active {
   background-color: #919090;
-}
-.custom-header {
-  background-color: #fff;
-  height: 80px; /* altura del header */
-  display: flex;
-  justify-content: space-between; /* izquierda y derecha */
-  align-items: center;
-  padding: 0 40px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  z-index: 1000;
-}
-
-.custom-header .logo-izquierda {
-  max-height: 80px;   /* nunca más alto que el header */
-  width: auto;
-  object-fit: contain;
-  margin-left: -1%;    /* mueve el logo un poco hacia la derecha */
-}
-
-
-.custom-header .logo-derecha {
-  max-height: 80px;   /* nunca más alto que el header */
-  width: auto;
-  object-fit: contain;
-  margin-right: 4%;
-}
-
-.custom-header img {
-  display: block;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-  transition: transform 0.3s ease;
-}
-
-.custom-header img:hover {
-  transform: scale(1.05);
 }

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
   <title>Gestión de Fichas</title>
+  <link rel="stylesheet" href="css/Header.css" />
   <link rel="stylesheet" href="css/stylesAdminIns.css" />
   <link rel="stylesheet" href="css/stylesAdmin.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
@@ -34,9 +35,10 @@
 
         <div class="menu adaptado">
           <div class="acciones horizontal">
-            <a href="btn/FichaInspeccion.html" onclick="event.stopPropagation()">Agregar Ficha</a>
-            <a href="opc/tramites.html" onclick="event.stopPropagation()">Trámites</a>
-            <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+          <a href="btn/FichaInspeccion.html" onclick="event.stopPropagation()">Agregar Ficha</a>
+          <a href="opc/tramites.html">Trámites</a>
+          <a href="Panel.html">Panel</a>
+          <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
           </div>
           <div class="container">
             <div class="toggle"></div>
@@ -54,9 +56,7 @@
 
       <div class="bloque-tabla">
         <div class="botones-tabla" style="margin-bottom: 0; padding-bottom: 0;">
-          <button onclick="location.href='panelRegistros.html'" id="btn-registros">Registros</button>
           <button class="active" id="btn-fichas">Fichas</button>
-          <button onclick="location.href='panelFormatos.html'" id="btn-formatos">Formatos</button>
         </div>
 
         <div id="tabla-fichas" class="active" style="margin-top: 0; padding-top: 0;">

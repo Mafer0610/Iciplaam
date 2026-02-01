@@ -4,11 +4,12 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  margin: 0 0 10px 0;
-  padding-right: 60px;
+  margin: 0 0 5px 0;
+  padding-right: 0;
 }
 
-.contador-registros {
+.contador-registros,
+.registro-info {
   font-size: 16px;
   font-weight: 500;
   color: #333;
@@ -20,118 +21,41 @@
 /* 📱 Responsive */
 @media (max-width: 768px) {
   .top-bar {
-    padding-right: 50px;
-  }
-
-  .menu.adaptado {
-    right: 5px;
-  }
-
-  .acciones.horizontal {
-    right: 50px;
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
+  .button-group {
+    flex-wrap: wrap;
+  }
 }
 
-/* 📂 Menú Adaptado */
-.menu.adaptado {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  width: 48px;
-  height: 48px;
-  z-index: 10;
+/* 🎛 Botones ficha */
+.button-group {
   display: flex;
-  flex-direction: row-reverse;
+  gap: 15px;
   align-items: center;
-  background: transparent;
 }
 
-/* ☰ Toggle */
-.toggle {
-  width: 30px;
-  height: 20px;
-  position: relative;
+.button-group a {
+  color: #000;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+.button-group a:hover {
+  color: #DA9B4A;
+  border-bottom: 2px solid #DA9B4A;
   cursor: pointer;
 }
-/* ☰ Toggle de opciones = */
-.toggle::before,
-.toggle::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  background-color: #000000;
-  border-radius: 2px;
-  transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease;
-}
 
-.toggle::before {
-  top: 0;
-}
-
-.toggle::after {
-  bottom: 0;
-}
-
-.toggle.close::before {
-  transform: rotate(45deg);
-  top: 8.5px;
-}
-
-.toggle.close::after {
-  transform: rotate(-45deg);
-  bottom: 8.5px;
-}
-
-/* 🎛 Acciones Horizontal */
-.acciones.horizontal {
-  position: absolute;
-  top: 50%;
-  right: 56px;
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: right;
-  background-color: white;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: max-content;
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.35s ease, opacity 0.35s ease;
-  z-index: 30;
-}
-
-.menu.adaptado.expanded .acciones.horizontal {
-  transform: translateY(-50%) scaleX(1);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.acciones.horizontal a {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s;
-  white-space: nowrap;
-  padding: 6px 8px;
-  border-radius: 4px;
-}
-
-.acciones.horizontal a:hover {
-  color: #1D90F5;
-  background-color: #f8f9fa;
-}
-
-.acciones.horizontal span {
-  color: #bbb;
-  font-weight: 500;
-  font-size: 14px;
-  user-select: none;
+.button-group a:active {
+  color: #A55108;
+  border-bottom: 2px solid #A55108;
 }
 
 /* 🧩 Selectores personalizados */
@@ -140,17 +64,17 @@
 }
 
 .selectWrapper {
-  z-index: 25 !important;
   position: absolute !important;
   right: 0;
   top: 100%;
   min-width: 160px;
+  z-index: 25 !important;
 }
 
 .multiSelect {
   border: 1px solid #ddd;
   border-radius: 6px;
-  background: white;
+  background: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
@@ -176,21 +100,23 @@
   position: relative;
   overflow: visible;
 }
+
 .main-content {
-  margin-top: 80px; /* Ajusta según el alto real del header */
+  margin-top: 80px;
 }
-/* Contenedor general con borde */
+
+/* 🗂 Bloque tabla */
 .bloque-tabla {
-  border: 2px solid black;
+  border: 2px solid #000;
   margin-top: 20px;
   padding: 0;
 }
 
-/* Botones alineados y separados por borde inferior */
+/* 🔘 Botones tabla */
 .botones-tabla {
   display: flex;
   justify-content: center;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #000;
   margin: 0;
   padding: 0;
 }
@@ -207,7 +133,7 @@
   background-color: #ddd;
 }
 
-/* Tabla con bordes horizontales */
+/* 📊 Tabla estilizada */
 .tabla-estilizada {
   width: 100%;
   border-collapse: collapse;
@@ -217,9 +143,43 @@
 .tabla-estilizada th,
 .tabla-estilizada td {
   vertical-align: middle;
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000000;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
   text-align: center;
-  padding: 12px 8px; /* Aumenta el padding para igualar altura */
-  min-height: 48px;   /* ✅ Uniforma la altura visual */
+  padding: 12px 8px;
+  min-height: 48px;
+}
+
+/* 📋 Menú adaptado */
+.menu.adaptado {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* 🔗 Acciones horizontales */
+.acciones.horizontal {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.acciones.horizontal a {
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: 0.25s ease;
+}
+
+.acciones.horizontal a:hover {
+  color: #DA9B4A;
+  border-bottom: 2px solid #DA9B4A;
+  cursor: pointer;
+}
+
+.acciones.horizontal a:active {
+  color: #7a3b05;
+  border-bottom: 2px solid #7a3b05;
 }

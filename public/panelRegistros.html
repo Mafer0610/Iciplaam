@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="img/navegador.ico" type="image/x-icon" />
   <title>Gestión de Datos</title>
+  <link rel="stylesheet" href="css/Header.css" />
   <link rel="stylesheet" href="css/stylesAdminRegis.css" />
   <link rel="stylesheet" href="css/stylesAdmin.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
@@ -26,22 +27,14 @@
   <div class="main-content">
     <div class="contenedor-tabla">
       <div class="top-bar">
-        <div class="contador-registros">
-          <div class="contador-item">
-            Registros de Lápidas: <span class="numero" id="total-lapidas">Cargando...</span>
-          </div>
+        <div class="registro-info">Registros de lápidas: <span id="total-lapidas">Cargando...</span></div>
+        <div class="button-group">
+          <a href="btn/agregarInfo.html">Nuevo Registro</a>
+          <a href="opc/tramites.html">Trámites</a>
+          <a href="Panel.html">Panel</a>
+          <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
         </div>
-
-        <div class="menu adaptado">
-          <div class="acciones horizontal">
-            <a href="btn/agregarInfo.html" onclick="event.stopPropagation()">Agregar Registro</a>
-            <a href="opc/tramites.html" onclick="event.stopPropagation()">Trámites</a>
-            <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
-          </div>
-          <div class="container">
-            <div class="toggle"></div>
-          </div>
-        </div>
+      </div>
       </div>
 
       <div class="barra-busqueda">
@@ -52,12 +45,10 @@
           onkeyup="buscarRegistro()" />
       </div>
 
-      <div class="bloque-tabla">
-      <div class="botones-tabla" style="margin-bottom: 0; padding-bottom: 0;">
-        <button class="active" id="btn-registros">Registros</button>
-        <button onclick="location.href='panelFichas.html'" id="btn-fichas">Fichas</button>
-        <button onclick="location.href='panelFormatos.html'" id="btn-formatos">Formatos</button>
-      </div>
+        <div class="bloque-tabla">
+        <div class="botones-tabla" style="margin-bottom: 0; padding-bottom: 0;">
+          <a class="tab-btn active" id="btn-registros">Registros</a>
+        </div>
 
         <div id="tabla-registros" class="active" style="margin-top: 0; padding-top: 0;">
           <table class="tabla-estilizada">
@@ -66,11 +57,10 @@
                 <th>REGISTRO</th>
                 <th>PROPIETARIO</th>
                 <th>TITULAR</th>
-                <th>MEDIDAS</th>
                 <th>ZONA</th>
                 <th>FILA</th>
-                <th>X</th>
-                <th>Y</th>
+                <th>LOTE</th>
+                <th>MEDIDAS</th>
                 <th>ACTIVIDAD</th>
                 <th>ACCIONES</th>
               </tr>

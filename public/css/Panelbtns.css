@@ -1,0 +1,117 @@
+/* img dere*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #b3b3b3;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #b3b3b3;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-box img {
+  width: 100px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 60px;
+  margin-right: 25px;
+}
+
+.form-box {
+  width: 90%;
+  max-width: 400px;
+}
+
+.form-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+input,
+button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: 0.3s ease;
+}
+
+input {
+  border: 1px solid #ccc;
+}
+
+input:focus {
+  border-color: #000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #333;
+  transform: scale(1.03);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+/*cuadros */
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px); /* resta el alto del header */
+  padding-top: 80px; /* evita que los cuadros se escondan detrás del header */
+}
+
+.cuadros-container {
+  display: flex;
+  gap: 20px; /* espacio entre cuadros */
+}
+
+.cuadro {
+  width: 220px;   /* antes 150px */
+  height: 220px;  /* antes 150px */
+  background-color: #DA9B4A;
+  border: 2px solid #000;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: black;
+}
+
+.cuadro:hover { 
+  background-color: #A55108; 
+  color: #fff;  
+  transform: scale(1.05); 
+}

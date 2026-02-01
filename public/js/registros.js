@@ -103,11 +103,10 @@ function mostrarResultados(datos, filtro) {
             <td>${item.NOM_REG}</td>
             <td>${item.NOMBRE_PROPIE}</td>
             <td>${item.EDO_CONTRI}</td>
-            <td>${item.MEDIDAS}</td>
             <td>${item.ZONA}</td>
             <td>${item.FILA}</td>
-            <td>${item.X}</td>
-            <td>${item.Y}</td>
+            <td>${item.LOTE}</td>
+            <td>${item.MEDIDAS}</td>
             <td>
                 <select onchange="cambiarEstadoLapida('${item._id}', this.value)" 
                         style="background-color: ${colorEstado}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; border: none; cursor: pointer;">
