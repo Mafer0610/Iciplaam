@@ -52,9 +52,14 @@
                     <label for="INHU_CADA">Inhumación de Cadáver del(a):</label>
                     <input type="text" id="INHU_CADA" name="INHU_CADA" required>
                 </div>
+                <!-- fecha manual -->
                 <div>
                     <label for="FECHA_INHU">Fecha de Inhumación:</label>
                     <input type="date" id="FECHA_INHU" name="FECHA_INHU" required>
+                </div>
+                <div>
+                    <label for="FECHA_FICHA">Fecha de la Ficha:</label>
+                    <input type="date" id="FECHA_FICHA" name="FECHA_FICHA">
                 </div>
                 <div>
                     <label for="FOLIO">Folio:</label>
@@ -97,18 +102,118 @@
                     <div>
                         <label>Conceptos:</label>
                         <div class="checkbox-grid" id="conceptos-container">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_INHUMACION" name="CONCEP" value="INHUMACION">
+
+                            <!-- INHUMACIÓN -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_INHUMACION" name="CONCEP" value="INHUMACION" onchange="toggleInhumacionFields()">
                                 <label for="CONC_INHUMACION">Inhumación</label>
+                                <div id="inhumacion-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <div style="display:flex; flex-direction:column; gap:6px; padding: 4px 0;">
+                                            <label style="font-weight:bold;">Nombre de la persona a inhumar:</label>
+                                            <input type="text" id="NOMBRE_INHUMADO" name="NOMBRE_INHUMADO" placeholder="Nombre completo" style="padding:6px; border:1px solid #666; border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_REP_BOLETA" name="CONCEP" value="REP_BOLETA">
+
+                            <!-- REPOSICIÓN DE BOLETA con razón -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_REP_BOLETA" name="CONCEP" value="REP_BOLETA" onchange="toggleRepBoletaFields()">
                                 <label for="CONC_REP_BOLETA">Reposición de Boleta</label>
+                                <div id="rep-boleta-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <div style="display:flex; flex-direction:column; gap:10px; padding: 4px 0;">
+                                            <label style="font-weight:bold;">Razón de la solicitud:</label>
+                                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                                <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                    <input type="radio" id="BOLETA_EXTRAVIO" name="RAZON_BOLETA" value="EXTRAVIO" onchange="toggleActualizacionOptions()">
+                                                    <label for="BOLETA_EXTRAVIO">Extravío</label>
+                                                </div>
+                                                <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                    <input type="radio" id="BOLETA_ACTUALIZACION" name="RAZON_BOLETA" value="ACTUALIZACION_DATOS" onchange="toggleActualizacionOptions()">
+                                                    <label for="BOLETA_ACTUALIZACION">Actualización de datos</label>
+                                                </div>
+                                            </div>
+                                            <!-- Sub-opciones de actualización de datos -->
+                                            <div id="actualizacion-options" style="display:none; margin-left:16px; border-left: 3px solid #aaa; padding-left:10px;">
+                                                <label style="font-weight:bold; font-size:0.9em;">Tipo de actualización:</label>
+                                                <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                                                    <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                        <input type="checkbox" id="ACT_CORR_NOMBRE" name="TIPO_ACTUALIZACION" value="CORRECCION_NOMBRE" onchange="toggleActualizacionDetalle(this)">
+                                                        <label for="ACT_CORR_NOMBRE">Corrección de nombre</label>
+                                                        <div id="detalle-CORRECCION_NOMBRE" class="rectificacion-options" style="display:none; margin-top:6px;">
+                                                            <input type="text" name="DETALLE_CORRECCION_NOMBRE" placeholder="Especifique la corrección de nombre" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; box-sizing:border-box;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                        <input type="checkbox" id="ACT_CAMB_DOMICILIO" name="TIPO_ACTUALIZACION" value="CAMBIO_DOMICILIO" onchange="toggleActualizacionDetalle(this)">
+                                                        <label for="ACT_CAMB_DOMICILIO">Cambio de domicilio</label>
+                                                        <div id="detalle-CAMBIO_DOMICILIO" class="rectificacion-options" style="display:none; margin-top:6px;">
+                                                            <input type="text" name="DETALLE_CAMBIO_DOMICILIO" placeholder="Especifique el nuevo domicilio" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; box-sizing:border-box;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                        <input type="checkbox" id="ACT_RECT_UBICACION" name="TIPO_ACTUALIZACION" value="RECT_UBICACION_BOLETA" onchange="toggleActualizacionDetalle(this)">
+                                                        <label for="ACT_RECT_UBICACION">Rectificación de ubicación</label>
+                                                        <div id="detalle-RECT_UBICACION_BOLETA" class="rectificacion-options" style="display:none; margin-top:6px;">
+                                                            <input type="text" name="DETALLE_RECT_UBICACION" placeholder="Especifique la ubicación correcta" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; box-sizing:border-box;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                        <input type="checkbox" id="ACT_RECT_NUMERO" name="TIPO_ACTUALIZACION" value="RECT_NUMERO_BOLETA" onchange="toggleActualizacionDetalle(this)">
+                                                        <label for="ACT_RECT_NUMERO">Rectificación de número</label>
+                                                        <div id="detalle-RECT_NUMERO_BOLETA" class="rectificacion-options" style="display:none; margin-top:6px;">
+                                                            <input type="text" name="DETALLE_RECT_NUMERO" placeholder="Especifique el número correcto" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; box-sizing:border-box;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                        <input type="checkbox" id="ACT_RECT_FILA" name="TIPO_ACTUALIZACION" value="RECT_FILA_BOLETA" onchange="toggleActualizacionDetalle(this)">
+                                                        <label for="ACT_RECT_FILA">Rectificación de fila</label>
+                                                        <div id="detalle-RECT_FILA_BOLETA" class="rectificacion-options" style="display:none; margin-top:6px;">
+                                                            <input type="text" name="DETALLE_RECT_FILA" placeholder="Especifique la fila correcta" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; box-sizing:border-box;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_TRASP_LOTE" name="CONCEP" value="TRASP_LOTE">
+
+                            <!-- TRASPASO -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_TRASP_LOTE" name="CONCEP" value="TRASP_LOTE" onchange="toggleTraspasoFields()">
                                 <label for="CONC_TRASP_LOTE">Traspaso</label>
+                                <div id="traspaso-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <div style="display:flex; flex-direction:column; gap:10px; padding: 4px 0;">
+                                            <div>
+                                                <label style="font-weight:bold;">Tipo de traspaso:</label>
+                                                <div style="display:flex; gap:16px; margin-top:6px;">
+                                                    <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                        <input type="radio" id="TRASP_FAMILIAR" name="TIPO_TRASPASO" value="ENTRE_FAMILIARES">
+                                                        <label for="TRASP_FAMILIAR">Entre familiares</label>
+                                                    </div>
+                                                    <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                        <input type="radio" id="TRASP_TERCEROS" name="TIPO_TRASPASO" value="ENTRE_TERCEROS">
+                                                        <label for="TRASP_TERCEROS">Entre terceros</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label style="font-weight:bold;">Nombre de quien cede los derechos:</label>
+                                                <input type="text" id="NOMBRE_CEDENTE" name="NOMBRE_CEDENTE" placeholder="Nombre completo del cedente" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:4px; box-sizing:border-box;">
+                                            </div>
+                                            <div>
+                                                <label style="font-weight:bold;">Nombre de quien recibe los derechos:</label>
+                                                <input type="text" id="NOMBRE_RECEPTOR" name="NOMBRE_RECEPTOR" placeholder="Nombre completo del receptor" style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:4px; box-sizing:border-box;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="checkbox-item">
                                 <input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA">
                                 <label for="CONC_TRASPA_SISTEMA">Alta en el Sistema</label>
@@ -117,13 +222,30 @@
                                 <input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA">
                                 <label for="CONC_CONSTRUC_GAVETA">Construcción</label>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO">
+                            <!-- DEPÓSITO DE CENIZAS con personas -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO" onchange="toggleDepositoFields()">
                                 <label for="CONC_CONSTRUC_DEPOSITO">Depósito de Cenizas</label>
+                                <div id="deposito-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <label style="font-weight:bold;">Personas a depositar:</label>
+                                        <div id="deposito-personas-list" style="display:flex; flex-direction:column; gap:10px; margin-top:8px;"></div>
+                                        <button type="button" onclick="agregarPersonaDeposito()" style="margin-top:8px; padding:5px 12px; background:#4a7c59; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.85em;">+ Agregar persona</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_EXHUMA_CENIZAS" name="CONCEP" value="EXHUMA_CENIZAS">
+
+                            <!-- EXHUMACIÓN con personas múltiples -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_EXHUMA_CENIZAS" name="CONCEP" value="EXHUMA_CENIZAS" onchange="toggleExhumacionFields()">
                                 <label for="CONC_EXHUMA_CENIZAS">Exhumación</label>
+                                <div id="exhumacion-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <label style="font-weight:bold;">Personas a exhumar:</label>
+                                        <div id="exhumacion-personas-list" style="display:flex; flex-direction:column; gap:10px; margin-top:8px;"></div>
+                                        <button type="button" onclick="agregarPersonaExhumacion()" style="margin-top:8px; padding:5px 12px; background:#4a7c59; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.85em;">+ Agregar persona</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="checkbox-item rectificacion-container">
                                 <input type="checkbox" id="CONC_RECTIFICACION" name="CONCEP" value="RECTIFICACION" onchange="toggleRectificacionFicha()">
@@ -168,5 +290,192 @@
             <p id="error-text">No se pudo cargar la información de la ficha.</p>
         </div>
     </div>
+
+    <script>
+        function toggleRectificacionFicha() {
+            const checkbox = document.getElementById('CONC_RECTIFICACION');
+            const options = document.getElementById('rectificacion-ficha-options');
+            const subOptions = document.querySelectorAll('input[name="FICHA_RECT_TIPO"]');
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                subOptions.forEach(cb => cb.checked = false);
+            }
+        }
+
+        function toggleInhumacionFields() {
+            const checkbox = document.getElementById('CONC_INHUMACION');
+            const fields = document.getElementById('inhumacion-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+            } else {
+                fields.style.display = 'none';
+                document.getElementById('NOMBRE_INHUMADO').value = '';
+            }
+        }
+
+        function toggleRepBoletaFields() {
+            const checkbox = document.getElementById('CONC_REP_BOLETA');
+            const fields = document.getElementById('rep-boleta-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+            } else {
+                fields.style.display = 'none';
+                document.querySelectorAll('input[name="RAZON_BOLETA"]').forEach(r => r.checked = false);
+                document.getElementById('actualizacion-options').style.display = 'none';
+                document.querySelectorAll('input[name="TIPO_ACTUALIZACION"]').forEach(cb => {
+                    cb.checked = false;
+                    const detalle = document.getElementById('detalle-' + cb.value);
+                    if (detalle) {
+                        detalle.style.display = 'none';
+                        const input = detalle.querySelector('input[type="text"]');
+                        if (input) input.value = '';
+                    }
+                });
+            }
+        }
+
+        function toggleActualizacionOptions() {
+            const seleccionado = document.querySelector('input[name="RAZON_BOLETA"]:checked');
+            const actualizacionOpts = document.getElementById('actualizacion-options');
+            if (seleccionado && seleccionado.value === 'ACTUALIZACION_DATOS') {
+                actualizacionOpts.style.display = 'block';
+            } else {
+                actualizacionOpts.style.display = 'none';
+                document.querySelectorAll('input[name="TIPO_ACTUALIZACION"]').forEach(cb => {
+                    cb.checked = false;
+                    const detalle = document.getElementById('detalle-' + cb.value);
+                    if (detalle) {
+                        detalle.style.display = 'none';
+                        const input = detalle.querySelector('input[type="text"]');
+                        if (input) input.value = '';
+                    }
+                });
+            }
+        }
+
+        function toggleActualizacionDetalle(checkbox) {
+            const detalle = document.getElementById('detalle-' + checkbox.value);
+            if (detalle) {
+                detalle.style.display = checkbox.checked ? 'block' : 'none';
+                if (!checkbox.checked) {
+                    const input = detalle.querySelector('input[type="text"]');
+                    if (input) input.value = '';
+                }
+            }
+        }
+
+        // ── EXHUMACIÓN ──────────────────────────────────────────────────────
+        function toggleExhumacionFields() {
+            const checkbox = document.getElementById('CONC_EXHUMA_CENIZAS');
+            const fields = document.getElementById('exhumacion-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+                if (document.getElementById('exhumacion-personas-list').children.length === 0) {
+                    agregarPersonaExhumacion();
+                }
+            } else {
+                fields.style.display = 'none';
+                document.getElementById('exhumacion-personas-list').innerHTML = '';
+                exhumacionCounter = 0;
+            }
+        }
+
+        let exhumacionCounter = 0;
+        function agregarPersonaExhumacion(nombre = '', fecha = '') {
+            exhumacionCounter++;
+            const idx = exhumacionCounter;
+            const container = document.getElementById('exhumacion-personas-list');
+            const div = document.createElement('div');
+            div.id = `exhumacion-persona-${idx}`;
+            div.style.cssText = 'background:#f5f5f5; border:1px solid #ccc; border-radius:6px; padding:10px; position:relative;';
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:0.9em;">Persona ${idx}</span>
+                    ${idx > 1 ? `<button type="button" onclick="eliminarPersonaExhumacion(${idx})" style="background:#c0392b; color:#fff; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; font-size:0.8em;">✕ Eliminar</button>` : ''}
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div>
+                        <label style="font-size:0.9em; font-weight:bold;">Nombre completo:</label>
+                        <input type="text" name="EXHUMA_NOMBRE_${idx}" value="${nombre}" placeholder="Nombre de la persona a exhumar"
+                            style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:3px; box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.9em; font-weight:bold;">Fecha de inhumación:</label>
+                        <input type="date" name="EXHUMA_FECHA_INHU_${idx}" value="${fecha}"
+                            style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:3px; box-sizing:border-box;">
+                    </div>
+                </div>`;
+            container.appendChild(div);
+        }
+
+        function eliminarPersonaExhumacion(idx) {
+            const el = document.getElementById(`exhumacion-persona-${idx}`);
+            if (el) el.remove();
+        }
+
+        // ── DEPÓSITO DE CENIZAS ─────────────────────────────────────────────
+        function toggleDepositoFields() {
+            const checkbox = document.getElementById('CONC_CONSTRUC_DEPOSITO');
+            const fields = document.getElementById('deposito-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+                if (document.getElementById('deposito-personas-list').children.length === 0) {
+                    agregarPersonaDeposito();
+                }
+            } else {
+                fields.style.display = 'none';
+                document.getElementById('deposito-personas-list').innerHTML = '';
+                depositoCounter = 0;
+            }
+        }
+
+        let depositoCounter = 0;
+        function agregarPersonaDeposito(nombre = '', fecha = '') {
+            depositoCounter++;
+            const idx = depositoCounter;
+            const container = document.getElementById('deposito-personas-list');
+            const div = document.createElement('div');
+            div.id = `deposito-persona-${idx}`;
+            div.style.cssText = 'background:#f5f5f5; border:1px solid #ccc; border-radius:6px; padding:10px; position:relative;';
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:0.9em;">Persona ${idx}</span>
+                    ${idx > 1 ? `<button type="button" onclick="eliminarPersonaDeposito(${idx})" style="background:#c0392b; color:#fff; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; font-size:0.8em;">✕ Eliminar</button>` : ''}
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div>
+                        <label style="font-size:0.9em; font-weight:bold;">Nombre completo:</label>
+                        <input type="text" name="DEPOSITO_NOMBRE_${idx}" value="${nombre}" placeholder="Nombre de la persona"
+                            style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:3px; box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.9em; font-weight:bold;">Fecha de defunción:</label>
+                        <input type="date" name="DEPOSITO_FECHA_DEF_${idx}" value="${fecha}"
+                            style="padding:6px; border:1px solid #666; border-radius:4px; width:100%; margin-top:3px; box-sizing:border-box;">
+                    </div>
+                </div>`;
+            container.appendChild(div);
+        }
+
+        function eliminarPersonaDeposito(idx) {
+            const el = document.getElementById(`deposito-persona-${idx}`);
+            if (el) el.remove();
+        }
+
+        function toggleTraspasoFields() {
+            const checkbox = document.getElementById('CONC_TRASP_LOTE');
+            const fields = document.getElementById('traspaso-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+            } else {
+                fields.style.display = 'none';
+                document.querySelectorAll('input[name="TIPO_TRASPASO"]').forEach(r => r.checked = false);
+                document.getElementById('NOMBRE_CEDENTE').value = '';
+                document.getElementById('NOMBRE_RECEPTOR').value = '';
+            }
+        }
+    </script>
 </body>
 </html>

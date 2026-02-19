@@ -50,7 +50,84 @@ function recopilarDatosFicha() {
         datos.FICHA_RECT_TIPO.push(cb.value);
     });
 
-    // Fecha de actualización
+    // ── NUEVO: datos de exhumación (múltiples personas) ────────────────────
+    const exhumacionChecked = document.getElementById('CONC_EXHUMA_CENIZAS')?.checked;
+    if (exhumacionChecked) {
+        datos.PERSONAS_EXHUMACION = [];
+        const personas = document.querySelectorAll('#exhumacion-personas-list > div[id^="exhumacion-persona-"]');
+        personas.forEach(div => {
+            const idx = div.id.split('-').pop();
+            const nombre = div.querySelector(`[name="EXHUMA_NOMBRE_${idx}"]`)?.value?.trim() || '';
+            const fecha  = div.querySelector(`[name="EXHUMA_FECHA_INHU_${idx}"]`)?.value || '';
+            if (nombre || fecha) datos.PERSONAS_EXHUMACION.push({ nombre, fecha_inhumacion: fecha });
+        });
+    } else {
+        datos.PERSONAS_EXHUMACION = [];
+    }
+
+    // ── NUEVO: datos de depósito de cenizas (múltiples personas) ───────────
+    const depositoChecked = document.getElementById('CONC_CONSTRUC_DEPOSITO')?.checked;
+    if (depositoChecked) {
+        datos.PERSONAS_DEPOSITO = [];
+        const personas = document.querySelectorAll('#deposito-personas-list > div[id^="deposito-persona-"]');
+        personas.forEach(div => {
+            const idx = div.id.split('-').pop();
+            const nombre = div.querySelector(`[name="DEPOSITO_NOMBRE_${idx}"]`)?.value?.trim() || '';
+            const fecha  = div.querySelector(`[name="DEPOSITO_FECHA_DEF_${idx}"]`)?.value || '';
+            if (nombre || fecha) datos.PERSONAS_DEPOSITO.push({ nombre, fecha_defuncion: fecha });
+        });
+    } else {
+        datos.PERSONAS_DEPOSITO = [];
+    }
+
+    // ── NUEVO: datos de reposición de boleta ────────────────────────────────
+    const repBoletaChecked = document.getElementById('CONC_REP_BOLETA')?.checked;
+    if (repBoletaChecked) {
+        const razonEl = document.querySelector('input[name="RAZON_BOLETA"]:checked');
+        datos.RAZON_BOLETA = razonEl ? razonEl.value : '';
+        // Tipos de actualización seleccionados y sus detalles
+        datos.TIPO_ACTUALIZACION = [];
+        datos.DETALLES_ACTUALIZACION = {};
+        document.querySelectorAll('input[name="TIPO_ACTUALIZACION"]:checked').forEach(cb => {
+            datos.TIPO_ACTUALIZACION.push(cb.value);
+            const detalle = document.querySelector(`input[name="DETALLE_${cb.value.replace('_BOLETA', '')}"]`)
+                         || document.querySelector(`[name="DETALLE_${cb.value}"]`);
+            datos.DETALLES_ACTUALIZACION[cb.value] = detalle ? detalle.value.trim() : '';
+        });
+    } else {
+        datos.RAZON_BOLETA = '';
+        datos.TIPO_ACTUALIZACION = [];
+        datos.DETALLES_ACTUALIZACION = {};
+    }
+
+    // ── NUEVO: datos de inhumación ──────────────────────────────────────────
+    const inhumacionChecked = document.getElementById('CONC_INHUMACION')?.checked;
+    if (inhumacionChecked) {
+        datos.NOMBRE_INHUMADO = document.getElementById('NOMBRE_INHUMADO')?.value?.trim() || '';
+    } else {
+        datos.NOMBRE_INHUMADO = '';
+    }
+
+    // ── NUEVO: datos de traspaso ────────────────────────────────────────────
+    const traspasoChecked = document.getElementById('CONC_TRASP_LOTE')?.checked;
+    if (traspasoChecked) {
+        const tipoTraspasoEl = document.querySelector('input[name="TIPO_TRASPASO"]:checked');
+        datos.TIPO_TRASPASO = tipoTraspasoEl ? tipoTraspasoEl.value : '';
+        datos.NOMBRE_CEDENTE  = document.getElementById('NOMBRE_CEDENTE')?.value?.trim()  || '';
+        datos.NOMBRE_RECEPTOR = document.getElementById('NOMBRE_RECEPTOR')?.value?.trim() || '';
+    } else {
+        datos.TIPO_TRASPASO   = '';
+        datos.NOMBRE_CEDENTE  = '';
+        datos.NOMBRE_RECEPTOR = '';
+    }
+
+    // ── NUEVO: fecha manual de la ficha ────────────────────────────────────
+    // FECHA_FICHA ya viene en formData, pero la aseguramos por si acaso
+    if (!datos.FECHA_FICHA) {
+        datos.FECHA_FICHA = '';
+    }
+
+    // Fecha de actualización para la plantilla Word (legible)
     const hoy = new Date();
     const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
     datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
