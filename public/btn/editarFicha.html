@@ -52,7 +52,6 @@
                     <label for="INHU_CADA">Inhumación de Cadáver del(a):</label>
                     <input type="text" id="INHU_CADA" name="INHU_CADA" required>
                 </div>
-                <!-- fecha manual -->
                 <div>
                     <label for="FECHA_INHU">Fecha de Inhumación:</label>
                     <input type="date" id="FECHA_INHU" name="FECHA_INHU" required>
@@ -135,7 +134,6 @@
                                                     <label for="BOLETA_ACTUALIZACION">Actualización de datos</label>
                                                 </div>
                                             </div>
-                                            <!-- Sub-opciones de actualización de datos -->
                                             <div id="actualizacion-options" style="display:none; margin-left:16px; border-left: 3px solid #aaa; padding-left:10px;">
                                                 <label style="font-weight:bold; font-size:0.9em;">Tipo de actualización:</label>
                                                 <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
@@ -214,14 +212,117 @@
                                 </div>
                             </div>
 
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA">
+                            <!-- ============================================================ -->
+                            <!-- ALTA EN EL SISTEMA con sub-conceptos                        -->
+                            <!-- ============================================================ -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_TRASPA_SISTEMA" name="CONCEP" value="TRASPA_SISTEMA" onchange="toggleAltaSistemaFields()">
                                 <label for="CONC_TRASPA_SISTEMA">Alta en el Sistema</label>
+                                <div id="alta-sistema-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <label style="font-weight:bold; font-size:0.9em;">Conceptos incluidos en este trámite:</label>
+                                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+
+                                            <!-- Pago de rezago de mantenimiento -->
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="checkbox" id="ALTA_PAGO_REZAGO" name="ALTA_SISTEMA_CONCEPTOS" value="PAGO_REZAGO_MANTENIMIENTO">
+                                                <label for="ALTA_PAGO_REZAGO">Pago de rezago de mantenimiento</label>
+                                            </div>
+
+                                            <!-- Reposición de constancia -->
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="checkbox" id="ALTA_REP_CONSTANCIA" name="ALTA_SISTEMA_CONCEPTOS" value="REPOSICION_CONSTANCIA">
+                                                <label for="ALTA_REP_CONSTANCIA">Reposición de constancia</label>
+                                            </div>
+
+                                            <!-- Búsqueda de información -->
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="checkbox" id="ALTA_BUSQUEDA_INFO" name="ALTA_SISTEMA_CONCEPTOS" value="BUSQUEDA_INFORMACION">
+                                                <label for="ALTA_BUSQUEDA_INFO">Búsqueda de información</label>
+                                            </div>
+
+                                            <!-- Rectificación con sub-opciones -->
+                                            <div class="checkbox-item rectificacion-container" style="background:transparent; border:none; padding:0;">
+                                                <input type="checkbox" id="ALTA_RECTIFICACION" name="ALTA_SISTEMA_CONCEPTOS" value="RECTIFICACION" onchange="toggleAltaRectificacionOptions()">
+                                                <label for="ALTA_RECTIFICACION">Rectificación</label>
+                                                <div id="alta-rectificacion-options" class="rectificacion-options" style="display:none; margin-left:16px; border-left: 3px solid #aaa; padding-left:10px; margin-top:6px;">
+                                                    <label style="font-weight:bold; font-size:0.9em;">Tipo de rectificación:</label>
+                                                    <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                                                        <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                            <input type="radio" id="ALTA_RECT_UBICACION" name="ALTA_TIPO_RECTIFICACION" value="RECT_UBICACION">
+                                                            <label for="ALTA_RECT_UBICACION">Ubicación</label>
+                                                        </div>
+                                                        <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                            <input type="radio" id="ALTA_RECT_NUMERO" name="ALTA_TIPO_RECTIFICACION" value="RECT_NUMERO">
+                                                            <label for="ALTA_RECT_NUMERO">Número</label>
+                                                        </div>
+                                                        <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                            <input type="radio" id="ALTA_RECT_FILA" name="ALTA_TIPO_RECTIFICACION" value="RECT_FILA">
+                                                            <label for="ALTA_RECT_FILA">Fila</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA">
+
+                            <!-- ============================================================ -->
+                            <!-- CONSTRUCCIÓN con tipos                                      -->
+                            <!-- ============================================================ -->
+                            <div class="checkbox-item rectificacion-container">
+                                <input type="checkbox" id="CONC_CONSTRUC_GAVETA" name="CONCEP" value="CONSTRUC_GAVETA" onchange="toggleConstruccionFields()">
                                 <label for="CONC_CONSTRUC_GAVETA">Construcción</label>
+                                <div id="construccion-fields" class="rectificacion-options" style="display: none;">
+                                    <div class="rectificacion-sub-options">
+                                        <label style="font-weight:bold; font-size:0.9em;">Tipo de construcción:</label>
+                                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_MESA_CHICA" name="TIPO_CONSTRUCCION" value="MESA_CHICA">
+                                                <label for="CONST_MESA_CHICA">Mesa chica</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_MESA_GRANDE" name="TIPO_CONSTRUCCION" value="MESA_GRANDE">
+                                                <label for="CONST_MESA_GRANDE">Mesa grande</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_CAPILLA_IND" name="TIPO_CONSTRUCCION" value="CAPILLA_INDIVIDUAL">
+                                                <label for="CONST_CAPILLA_IND">Capilla individual</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_CAPILLA_FAM" name="TIPO_CONSTRUCCION" value="CAPILLA_FAMILIAR">
+                                                <label for="CONST_CAPILLA_FAM">Capilla familiar</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_CAPILLA_FAM_AMP" name="TIPO_CONSTRUCCION" value="CAPILLA_FAMILIAR_AMPLIACION">
+                                                <label for="CONST_CAPILLA_FAM_AMP">Capilla familiar con ampliación</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_PERGOLA_IND" name="TIPO_CONSTRUCCION" value="PERGOLA_INDIVIDUAL">
+                                                <label for="CONST_PERGOLA_IND">Pérgola individual</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_PERGOLA_FAM" name="TIPO_CONSTRUCCION" value="PERGOLA_FAMILIAR">
+                                                <label for="CONST_PERGOLA_FAM">Pérgola familiar</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_PERGOLA_FAM_AMP" name="TIPO_CONSTRUCCION" value="PERGOLA_FAMILIAR_AMPLIACION">
+                                                <label for="CONST_PERGOLA_FAM_AMP">Pérgola familiar con ampliación</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_CRIPTA" name="TIPO_CONSTRUCCION" value="CRIPTA">
+                                                <label for="CONST_CRIPTA">Cripta</label>
+                                            </div>
+                                            <div class="checkbox-item" style="background:transparent; border:none; padding:0;">
+                                                <input type="radio" id="CONST_TANQUE_GAVETA" name="TIPO_CONSTRUCCION" value="TANQUE_GAVETA">
+                                                <label for="CONST_TANQUE_GAVETA">Tanque/Gaveta</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <!-- DEPÓSITO DE CENIZAS con personas -->
                             <div class="checkbox-item rectificacion-container">
                                 <input type="checkbox" id="CONC_CONSTRUC_DEPOSITO" name="CONCEP" value="CONSTRUC_DEPOSITO" onchange="toggleDepositoFields()">
@@ -247,6 +348,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="checkbox-item rectificacion-container">
                                 <input type="checkbox" id="CONC_RECTIFICACION" name="CONCEP" value="RECTIFICACION" onchange="toggleRectificacionFicha()">
                                 <label for="CONC_RECTIFICACION">Rectificación</label>
@@ -363,6 +465,43 @@
                     const input = detalle.querySelector('input[type="text"]');
                     if (input) input.value = '';
                 }
+            }
+        }
+
+        /* ── ALTA EN EL SISTEMA ─────────────────────────────────────────── */
+        function toggleAltaSistemaFields() {
+            const checkbox = document.getElementById('CONC_TRASPA_SISTEMA');
+            const fields   = document.getElementById('alta-sistema-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+            } else {
+                fields.style.display = 'none';
+                document.querySelectorAll('input[name="ALTA_SISTEMA_CONCEPTOS"]').forEach(cb => cb.checked = false);
+                document.getElementById('alta-rectificacion-options').style.display = 'none';
+                document.querySelectorAll('input[name="ALTA_TIPO_RECTIFICACION"]').forEach(r => r.checked = false);
+            }
+        }
+
+        function toggleAltaRectificacionOptions() {
+            const checkbox = document.getElementById('ALTA_RECTIFICACION');
+            const options  = document.getElementById('alta-rectificacion-options');
+            if (checkbox.checked) {
+                options.style.display = 'block';
+            } else {
+                options.style.display = 'none';
+                document.querySelectorAll('input[name="ALTA_TIPO_RECTIFICACION"]').forEach(r => r.checked = false);
+            }
+        }
+
+        /* ── CONSTRUCCIÓN ───────────────────────────────────────────────── */
+        function toggleConstruccionFields() {
+            const checkbox = document.getElementById('CONC_CONSTRUC_GAVETA');
+            const fields   = document.getElementById('construccion-fields');
+            if (checkbox.checked) {
+                fields.style.display = 'block';
+            } else {
+                fields.style.display = 'none';
+                document.querySelectorAll('input[name="TIPO_CONSTRUCCION"]').forEach(r => r.checked = false);
             }
         }
 

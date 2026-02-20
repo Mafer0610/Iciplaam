@@ -1,17 +1,43 @@
 // agregarFicha.js - Lógica para agregar fichas de inspección
 
 const conceptosMap = {
-    REP_BOLETA: 'Reposición de Boleta',
-    INHUMACION: 'Inhumación',
-    TRASP_LOTE: 'Traspaso',
-    TRASPA_SISTEMA: 'Alta en el Sistema',
-    CONSTRUC_GAVETA: 'Construcción',
+    REP_BOLETA:        'Reposición de Boleta',
+    INHUMACION:        'Inhumación',
+    TRASP_LOTE:        'Traspaso',
+    TRASPA_SISTEMA:    'Alta en el Sistema',
+    CONSTRUC_GAVETA:   'Construcción',
     CONSTRUC_DEPOSITO: 'Depósito de Cenizas',
-    EXHUMA_CENIZAS: 'Exhumación',
-    RECTIFICACION: 'Rectificación',
-    RECT_NUMERO: 'Rectificación de Número',
-    RECT_FILA: 'Rectificación de Fila',
-    RECT_UBICACION: 'Rectificación de Ubicación'
+    EXHUMA_CENIZAS:    'Exhumación',
+    RECTIFICACION:     'Rectificación',
+    RECT_NUMERO:       'Rectificación de Número',
+    RECT_FILA:         'Rectificación de Fila',
+    RECT_UBICACION:    'Rectificación de Ubicación'
+};
+
+const altaSistemaConceptosMap = {
+    PAGO_REZAGO_MANTENIMIENTO: 'Pago de rezago de mantenimiento',
+    REPOSICION_CONSTANCIA:     'Reposición de constancia',
+    BUSQUEDA_INFORMACION:      'Búsqueda de información',
+    RECTIFICACION:             'Rectificación'
+};
+
+const tipoConstruccionMap = {
+    MESA_CHICA:                  'Mesa chica',
+    MESA_GRANDE:                 'Mesa grande',
+    CAPILLA_INDIVIDUAL:          'Capilla individual',
+    CAPILLA_FAMILIAR:            'Capilla familiar',
+    CAPILLA_FAMILIAR_AMPLIACION: 'Capilla familiar con ampliación',
+    PERGOLA_INDIVIDUAL:          'Pérgola individual',
+    PERGOLA_FAMILIAR:            'Pérgola familiar',
+    PERGOLA_FAMILIAR_AMPLIACION: 'Pérgola familiar con ampliación',
+    CRIPTA:                      'Cripta',
+    TANQUE_GAVETA:               'Tanque/Gaveta'
+};
+
+const altaRectificacionMap = {
+    RECT_UBICACION: 'Ubicación',
+    RECT_NUMERO:    'Número',
+    RECT_FILA:      'Fila'
 };
 
 function mostrarMensaje(mensaje, tipo) {
@@ -34,7 +60,7 @@ function recopilarDatosFicha() {
         datos[key] = value;
     }
 
-    // Recopilar conceptos seleccionados
+    // ── Conceptos principales seleccionados ────────────────────────────────
     const conceptosSeleccionados = [];
     document.querySelectorAll('input[name="CONCEP"]:checked').forEach(cb => {
         const valorLegible = conceptosMap[cb.value] || cb.value;
@@ -44,19 +70,61 @@ function recopilarDatosFicha() {
     datos.CONCEPTOS = conceptosSeleccionados;
     datos.CONCEP = conceptosSeleccionados.join(', ') || 'Sin conceptos especificados';
 
-    // Recopilar tipos de rectificación
+    // ── Tipos de rectificación general ─────────────────────────────────────
     datos.FICHA_RECT_TIPO = [];
     document.querySelectorAll('input[name="FICHA_RECT_TIPO"]:checked').forEach(cb => {
         datos.FICHA_RECT_TIPO.push(cb.value);
     });
 
-    // ── NUEVO: datos de exhumación (múltiples personas) ────────────────────
+    // ── ALTA EN EL SISTEMA: sub-conceptos ─────────────────────────────────
+    const altaSistemaChecked = document.getElementById('CONC_TRASPA_SISTEMA')?.checked;
+    if (altaSistemaChecked) {
+        datos.ALTA_SISTEMA_CONCEPTOS = [];
+        document.querySelectorAll('input[name="ALTA_SISTEMA_CONCEPTOS"]:checked').forEach(cb => {
+            const legible = altaSistemaConceptosMap[cb.value] || cb.value;
+            datos.ALTA_SISTEMA_CONCEPTOS.push(legible);
+        });
+        datos.ALTA_SISTEMA_CONCEPTOS_STR = datos.ALTA_SISTEMA_CONCEPTOS.join(', ');
+
+        // Sub-opción de rectificación dentro de Alta en el Sistema
+        const altaRectChecked = document.getElementById('ALTA_RECTIFICACION')?.checked;
+        if (altaRectChecked) {
+            const altaRectTipoEl = document.querySelector('input[name="ALTA_TIPO_RECTIFICACION"]:checked');
+            datos.ALTA_TIPO_RECTIFICACION       = altaRectTipoEl ? altaRectTipoEl.value : '';
+            datos.ALTA_TIPO_RECTIFICACION_LABEL = altaRectTipoEl
+                ? (altaRectificacionMap[altaRectTipoEl.value] || altaRectTipoEl.value)
+                : '';
+        } else {
+            datos.ALTA_TIPO_RECTIFICACION       = '';
+            datos.ALTA_TIPO_RECTIFICACION_LABEL = '';
+        }
+    } else {
+        datos.ALTA_SISTEMA_CONCEPTOS     = [];
+        datos.ALTA_SISTEMA_CONCEPTOS_STR = '';
+        datos.ALTA_TIPO_RECTIFICACION    = '';
+        datos.ALTA_TIPO_RECTIFICACION_LABEL = '';
+    }
+
+    // ── CONSTRUCCIÓN: tipo seleccionado ────────────────────────────────────
+    const construccionChecked = document.getElementById('CONC_CONSTRUC_GAVETA')?.checked;
+    if (construccionChecked) {
+        const tipoConstruccionEl = document.querySelector('input[name="TIPO_CONSTRUCCION"]:checked');
+        datos.TIPO_CONSTRUCCION       = tipoConstruccionEl ? tipoConstruccionEl.value : '';
+        datos.TIPO_CONSTRUCCION_LABEL = tipoConstruccionEl
+            ? (tipoConstruccionMap[tipoConstruccionEl.value] || tipoConstruccionEl.value)
+            : '';
+    } else {
+        datos.TIPO_CONSTRUCCION       = '';
+        datos.TIPO_CONSTRUCCION_LABEL = '';
+    }
+
+    // ── EXHUMACIÓN: múltiples personas ─────────────────────────────────────
     const exhumacionChecked = document.getElementById('CONC_EXHUMA_CENIZAS')?.checked;
     if (exhumacionChecked) {
         datos.PERSONAS_EXHUMACION = [];
         const personas = document.querySelectorAll('#exhumacion-personas-list > div[id^="exhumacion-persona-"]');
         personas.forEach(div => {
-            const idx = div.id.split('-').pop();
+            const idx    = div.id.split('-').pop();
             const nombre = div.querySelector(`[name="EXHUMA_NOMBRE_${idx}"]`)?.value?.trim() || '';
             const fecha  = div.querySelector(`[name="EXHUMA_FECHA_INHU_${idx}"]`)?.value || '';
             if (nombre || fecha) datos.PERSONAS_EXHUMACION.push({ nombre, fecha_inhumacion: fecha });
@@ -65,13 +133,13 @@ function recopilarDatosFicha() {
         datos.PERSONAS_EXHUMACION = [];
     }
 
-    // ── NUEVO: datos de depósito de cenizas (múltiples personas) ───────────
+    // ── DEPÓSITO DE CENIZAS: múltiples personas ────────────────────────────
     const depositoChecked = document.getElementById('CONC_CONSTRUC_DEPOSITO')?.checked;
     if (depositoChecked) {
         datos.PERSONAS_DEPOSITO = [];
         const personas = document.querySelectorAll('#deposito-personas-list > div[id^="deposito-persona-"]');
         personas.forEach(div => {
-            const idx = div.id.split('-').pop();
+            const idx    = div.id.split('-').pop();
             const nombre = div.querySelector(`[name="DEPOSITO_NOMBRE_${idx}"]`)?.value?.trim() || '';
             const fecha  = div.querySelector(`[name="DEPOSITO_FECHA_DEF_${idx}"]`)?.value || '';
             if (nombre || fecha) datos.PERSONAS_DEPOSITO.push({ nombre, fecha_defuncion: fecha });
@@ -80,13 +148,12 @@ function recopilarDatosFicha() {
         datos.PERSONAS_DEPOSITO = [];
     }
 
-    // ── NUEVO: datos de reposición de boleta ────────────────────────────────
+    // ── REPOSICIÓN DE BOLETA ───────────────────────────────────────────────
     const repBoletaChecked = document.getElementById('CONC_REP_BOLETA')?.checked;
     if (repBoletaChecked) {
         const razonEl = document.querySelector('input[name="RAZON_BOLETA"]:checked');
         datos.RAZON_BOLETA = razonEl ? razonEl.value : '';
-        // Tipos de actualización seleccionados y sus detalles
-        datos.TIPO_ACTUALIZACION = [];
+        datos.TIPO_ACTUALIZACION    = [];
         datos.DETALLES_ACTUALIZACION = {};
         document.querySelectorAll('input[name="TIPO_ACTUALIZACION"]:checked').forEach(cb => {
             datos.TIPO_ACTUALIZACION.push(cb.value);
@@ -95,24 +162,22 @@ function recopilarDatosFicha() {
             datos.DETALLES_ACTUALIZACION[cb.value] = detalle ? detalle.value.trim() : '';
         });
     } else {
-        datos.RAZON_BOLETA = '';
-        datos.TIPO_ACTUALIZACION = [];
+        datos.RAZON_BOLETA           = '';
+        datos.TIPO_ACTUALIZACION     = [];
         datos.DETALLES_ACTUALIZACION = {};
     }
 
-    // ── NUEVO: datos de inhumación ──────────────────────────────────────────
+    // ── INHUMACIÓN ─────────────────────────────────────────────────────────
     const inhumacionChecked = document.getElementById('CONC_INHUMACION')?.checked;
-    if (inhumacionChecked) {
-        datos.NOMBRE_INHUMADO = document.getElementById('NOMBRE_INHUMADO')?.value?.trim() || '';
-    } else {
-        datos.NOMBRE_INHUMADO = '';
-    }
+    datos.NOMBRE_INHUMADO = inhumacionChecked
+        ? (document.getElementById('NOMBRE_INHUMADO')?.value?.trim() || '')
+        : '';
 
-    // ── NUEVO: datos de traspaso ────────────────────────────────────────────
+    // ── TRASPASO ───────────────────────────────────────────────────────────
     const traspasoChecked = document.getElementById('CONC_TRASP_LOTE')?.checked;
     if (traspasoChecked) {
         const tipoTraspasoEl = document.querySelector('input[name="TIPO_TRASPASO"]:checked');
-        datos.TIPO_TRASPASO = tipoTraspasoEl ? tipoTraspasoEl.value : '';
+        datos.TIPO_TRASPASO   = tipoTraspasoEl ? tipoTraspasoEl.value : '';
         datos.NOMBRE_CEDENTE  = document.getElementById('NOMBRE_CEDENTE')?.value?.trim()  || '';
         datos.NOMBRE_RECEPTOR = document.getElementById('NOMBRE_RECEPTOR')?.value?.trim() || '';
     } else {
@@ -121,16 +186,12 @@ function recopilarDatosFicha() {
         datos.NOMBRE_RECEPTOR = '';
     }
 
-    // ── NUEVO: fecha manual de la ficha ────────────────────────────────────
-    // FECHA_FICHA ya viene en formData, pero la aseguramos por si acaso
-    if (!datos.FECHA_FICHA) {
-        datos.FECHA_FICHA = '';
-    }
+    // ── Fecha de ficha ─────────────────────────────────────────────────────
+    if (!datos.FECHA_FICHA) datos.FECHA_FICHA = '';
 
-    // Fecha de actualización para la plantilla Word (legible)
+    // ── Fecha de actualización legible ─────────────────────────────────────
     const hoy = new Date();
-    const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
-    datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', opcionesFecha);
+    datos.FECHA_ACTU = hoy.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
 
     return datos;
 }
@@ -140,9 +201,7 @@ async function guardarFicha(datos) {
         console.log('Enviando ficha a BD:', datos);
         const response = await fetch('http://localhost:5000/fichas', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
         
@@ -170,9 +229,7 @@ async function generarFicha(datos) {
         
         const response = await fetch('http://localhost:5000/generar-ficha', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
         
@@ -186,7 +243,6 @@ async function generarFicha(datos) {
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
-            
             mostrarMensaje('Ficha de inspección generada y descargada correctamente', 'success');
             return true;
         } else {
@@ -207,11 +263,8 @@ async function guardarSoloFicha() {
     console.log('Datos de ficha recopilados:', datos);
     
     const guardado = await guardarFicha(datos);
-    
     if (guardado) {
-        setTimeout(() => {
-            window.location.href = '../panelFichas.html';
-        }, 2000);
+        setTimeout(() => { window.location.href = '../panelFichas.html'; }, 2000);
     }
 }
 
@@ -223,17 +276,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const datos = recopilarDatosFicha();
         console.log('Datos de ficha recopilados:', datos);
         
-        // Generar documento
         const generado = await generarFicha(datos);
-        
-        // Guardar en base de datos
         if (generado) {
             const guardado = await guardarFicha(datos);
-            
             if (guardado) {
-                setTimeout(() => {
-                    window.location.href = '../panelFichas.html';
-                }, 2000);
+                setTimeout(() => { window.location.href = '../panelFichas.html'; }, 2000);
             }
         }
     });
@@ -241,11 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validación en tiempo real
     document.querySelectorAll('input[required]').forEach(input => {
         input.addEventListener('blur', function() {
-            if (this.value.trim() === '') {
-                this.style.borderColor = '#e74c3c';
-            } else {
-                this.style.borderColor = '#27ae60';
-            }
+            this.style.borderColor = this.value.trim() === '' ? '#e74c3c' : '#27ae60';
         });
     });
 
